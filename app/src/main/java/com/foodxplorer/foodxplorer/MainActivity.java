@@ -31,6 +31,13 @@ public class MainActivity extends AppCompatActivity {
 
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
 
+        /************************************
+         */
+        Fragment fragment = new Fragment1();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.content_frame, fragment)
+                .commit();
+        drawerLayout.closeDrawers();
         /*
         //Eventos del Drawer Layout
         drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
@@ -77,12 +84,6 @@ public class MainActivity extends AppCompatActivity {
                             case R.id.menu_seccion_3:
                                 fragment = new Fragment3();
                                 fragmentTransaction = true;
-                                break;
-                            case R.id.menu_opcion_1:
-                                Log.i("NavigationView", "Pulsada opción 1");
-                                break;
-                            case R.id.menu_opcion_2:
-                                Log.i("NavigationView", "Pulsada opción 2");
                                 break;
                         }
 
