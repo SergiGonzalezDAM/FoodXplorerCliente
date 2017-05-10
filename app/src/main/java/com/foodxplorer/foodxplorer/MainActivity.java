@@ -8,9 +8,11 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,7 +21,8 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -33,11 +36,12 @@ public class MainActivity extends AppCompatActivity {
 
         /************************************
          */
-        Fragment fragment = new Fragment1();
+        Fragment fragment = new FragmentPromociones();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_frame, fragment)
                 .commit();
         drawerLayout.closeDrawers();
+
         /*
         //Eventos del Drawer Layout
         drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
@@ -74,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
                         switch (menuItem.getItemId()) {
                             case R.id.menu_seccion_1:
-                                fragment = new Fragment1();
+                                fragment = new FragmentPromociones();
                                 fragmentTransaction = true;
                                 break;
                             case R.id.menu_seccion_2:
