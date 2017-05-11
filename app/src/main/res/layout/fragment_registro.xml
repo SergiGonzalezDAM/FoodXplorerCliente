@@ -39,53 +39,56 @@
         android:layout_below="@+id/editTextUserRegistro"
         android:layout_centerHorizontal="true" />
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/logopizzaxplorer"
+        android:id="@+id/imageView"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/editTextUserRegistro"
+        android:layout_alignStart="@+id/editTextUserRegistro" />
+
+    <TextView
+        android:text="Correo Electrónico"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:id="@+id/textView"
+        android:textSize="18sp"
+        android:textColor="@android:color/background_dark"
+        android:layout_below="@+id/editTextPasswordRegistro"
+        android:layout_centerHorizontal="true" />
+
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:ems="10"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="12dp"
         android:id="@+id/editTextPasswordRegistro"
         android:layout_below="@+id/textViewLoginPassword"
-        android:layout_alignLeft="@+id/imageView"
-        android:layout_alignStart="@+id/imageView" />
+        android:layout_alignLeft="@+id/editTextUserRegistro"
+        android:layout_alignStart="@+id/editTextUserRegistro" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:layout_marginTop="12dp"
+        android:id="@+id/editTextCorreoRegistro"
+        android:layout_below="@+id/textView"
+        android:layout_alignLeft="@+id/editTextPasswordRegistro"
+        android:layout_alignStart="@+id/editTextPasswordRegistro" />
 
     <Button
-        android:text="Registrarse"
+        android:text="Registro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btnRegistrar"
-        android:layout_alignBaseline="@+id/btnLogin"
-        android:layout_alignBottom="@+id/btnLogin"
-        android:layout_toRightOf="@+id/textViewLoginUser"
-        android:layout_toEndOf="@+id/textViewLoginUser" />
+        android:id="@+id/btnRegistrarRegistro"
+        android:layout_below="@+id/editTextCorreoRegistro"
+        android:layout_alignLeft="@+id/textViewLoginPassword"
+        android:layout_alignStart="@+id/textViewLoginPassword"
+        android:layout_marginTop="37dp" />
 
-    <Button
-        android:text="Login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnLogin"
-        android:layout_below="@+id/textViewOlvidarPassword"
-        android:layout_toLeftOf="@+id/textViewLoginPassword"
-        android:layout_toStartOf="@+id/textViewLoginPassword"
-        android:layout_marginTop="27dp" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/logopizzaxplorer"
-        android:layout_marginTop="18dp"
-        android:id="@+id/imageView"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:text="¿Has olvidado tu contraseña?"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewOlvidarPassword"
-        android:layout_marginTop="22dp"
-        android:clickable="true"
-        android:layout_below="@+id/editTextPasswordRegistro"
-        android:layout_centerHorizontal="true" />
 </RelativeLayout>

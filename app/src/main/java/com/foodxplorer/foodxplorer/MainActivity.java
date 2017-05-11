@@ -79,11 +79,11 @@ public class MainActivity extends AppCompatActivity {
                                 fragmentTransaction = true;
                                 break;
                             case R.id.menu_seccion_2:
-                                fragment = new Login();
+                                fragment = new FragmentLogin();
                                 fragmentTransaction = true;
                                 break;
                             case R.id.menu_seccion_3:
-                                fragment = new Fragment3();
+                                fragment = new FragmentSeguimientoPedido();
                                 fragmentTransaction = true;
                                 break;
                         }
