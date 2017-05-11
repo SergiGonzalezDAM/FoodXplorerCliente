@@ -1,9 +1,41 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.foodxplorer.foodxplorer.FragmentSeguimientoPedido">
+    tools:context="com.foodxplorer.foodxplorer.MainActivity">
 
-    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="@string/fragment3" />
+    <Button
+        android:text="VER"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnBuscarPedido"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="97dp" />
 
-</FrameLayout>
+    <TextView
+        android:text="Numero de Pedido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="93dp"
+        android:id="@+id/textViewNumeroPedido"
+        android:textSize="18sp"
+        android:textColor="@android:color/background_dark"
+        android:textAlignment="center"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:layout_marginTop="24dp"
+        android:id="@+id/editTextNumeroPedido"
+        android:layout_below="@+id/textViewNumeroPedido"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>
+

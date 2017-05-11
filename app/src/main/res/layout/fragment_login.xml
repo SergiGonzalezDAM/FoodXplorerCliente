@@ -11,17 +11,17 @@
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         android:ems="10"
-        android:layout_below="@+id/textViewLoginUser"
+        android:layout_below="@+id/textViewNumeroPedido"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
-        android:id="@+id/editTextUserRegistro" />
+        android:id="@+id/editTextNumeroPedido" />
 
     <TextView
         android:text="Usuario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
-        android:id="@+id/textViewLoginUser"
+        android:id="@+id/textViewNumeroPedido"
         android:textSize="18sp"
         android:textColor="@android:color/background_dark"
         android:textAlignment="center"
@@ -36,7 +36,7 @@
         android:id="@+id/textViewLoginPassword"
         android:textColor="@android:color/background_dark"
         android:textSize="18sp"
-        android:layout_below="@+id/editTextUserRegistro"
+        android:layout_below="@+id/editTextNumeroPedido"
         android:layout_centerHorizontal="true" />
 
     <EditText
@@ -57,8 +57,8 @@
         android:id="@+id/btnRegistrar"
         android:layout_alignBaseline="@+id/btnLogin"
         android:layout_alignBottom="@+id/btnLogin"
-        android:layout_toRightOf="@+id/textViewLoginUser"
-        android:layout_toEndOf="@+id/textViewLoginUser" />
+        android:layout_toRightOf="@+id/textViewNumeroPedido"
+        android:layout_toEndOf="@+id/textViewNumeroPedido" />
 
     <Button
         android:text="Login"
