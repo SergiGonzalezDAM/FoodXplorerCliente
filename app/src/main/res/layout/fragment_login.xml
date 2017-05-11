@@ -1,0 +1,91 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.foodxplorer.foodxplorer.MainActivity">
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:layout_below="@+id/textViewLoginUser"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:id="@+id/editTextUser" />
+
+    <TextView
+        android:text="Usuario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:id="@+id/textViewLoginUser"
+        android:textSize="18sp"
+        android:textColor="@android:color/background_dark"
+        android:textAlignment="center"
+        android:layout_below="@+id/imageView"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="Contraseña"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="21dp"
+        android:id="@+id/textViewLoginPassword"
+        android:textColor="@android:color/background_dark"
+        android:textSize="18sp"
+        android:layout_below="@+id/editTextUser"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:layout_marginTop="26dp"
+        android:id="@+id/editTextPassword"
+        android:layout_below="@+id/textViewLoginPassword"
+        android:layout_alignLeft="@+id/imageView"
+        android:layout_alignStart="@+id/imageView" />
+
+    <Button
+        android:text="Registrarse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnRegistrar"
+        android:layout_alignBaseline="@+id/btnLogin"
+        android:layout_alignBottom="@+id/btnLogin"
+        android:layout_toRightOf="@+id/textViewLoginUser"
+        android:layout_toEndOf="@+id/textViewLoginUser" />
+
+    <Button
+        android:text="Login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnLogin"
+        android:layout_below="@+id/textViewOlvidarPassword"
+        android:layout_toLeftOf="@+id/textViewLoginPassword"
+        android:layout_toStartOf="@+id/textViewLoginPassword"
+        android:layout_marginTop="27dp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/logopizzaxplorer"
+        android:layout_marginTop="18dp"
+        android:id="@+id/imageView"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="¿Has olvidado tu contraseña?"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewOlvidarPassword"
+        android:layout_marginTop="22dp"
+        android:clickable="true"
+        android:layout_below="@+id/editTextPassword"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>

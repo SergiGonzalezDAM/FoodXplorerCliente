@@ -10,9 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -82,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                                 fragmentTransaction = true;
                                 break;
                             case R.id.menu_seccion_2:
-                                fragment = new Fragment2();
+                                fragment = new Login();
                                 fragmentTransaction = true;
                                 break;
                             case R.id.menu_seccion_3:
