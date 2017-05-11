@@ -26,11 +26,11 @@ public class FragmentPromociones extends Fragment {
         Promociones promocion;
 
         // Introduzco los datos
-        promocion = new Promociones(getResources().getDrawable(R.drawable.pizza1), "Vectorial");
+        promocion = new Promociones(getResources().getDrawable(R.drawable.pizza2), "4 Quesos");
         arraydir.add(promocion);
-        promocion = new Promociones(getResources().getDrawable(R.drawable.pizza2), "Bitmap");
+        promocion = new Promociones(getResources().getDrawable(R.drawable.pizza2), "4 Quesos");
         arraydir.add(promocion);
-        promocion = new Promociones(getResources().getDrawable(R.drawable.pizza3), "3D");
+        promocion = new Promociones(getResources().getDrawable(R.drawable.pizza2), "4 Quesos");
         arraydir.add(promocion);
         AdaptadorMenu adaptador = new AdaptadorMenu(getActivity(), arraydir);
         lista.setAdapter(adaptador);

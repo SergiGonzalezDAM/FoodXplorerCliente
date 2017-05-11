@@ -51,7 +51,7 @@ public class AdaptadorMenu extends BaseAdapter
         if(convertView == null)
         {
             LayoutInflater inf = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = inf.inflate(R.layout.itemlista, null);
+            v = inf.inflate(R.layout.listaproductos, null);
         }
 
         Promociones dir = items.get(position);

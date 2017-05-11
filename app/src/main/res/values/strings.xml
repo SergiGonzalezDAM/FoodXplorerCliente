@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name">NavigationView</string>
+    <string name="app_name">FoodXplorer</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-    <string name="seccion_1">Sección 1</string>
-    <string name="seccion_2">Sección 2</string>
+    <string name="action_settings">Carrito</string>
+    <string name="seccion_1">Promociones</string>
+    <string name="seccion_2">Login</string>
     <string name="otras_opciones">Otras opciones</string>
     <string name="opcion_1">Opción 1</string>
     <string name="opcion_2">Opción 2</string>
