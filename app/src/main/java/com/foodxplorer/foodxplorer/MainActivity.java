@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         /************************************
          */
-        Fragment fragment = new FragmentPromociones();
+        Fragment fragment = new FragmentResumenPedido();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_frame, fragment)
                 .commit();

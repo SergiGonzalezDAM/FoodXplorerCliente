@@ -16,7 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".FragmentRegistro"></activity>
+        <activity android:name=".FragmentRegistro" />
+        <activity android:name=".FragmentResumenPedido"></activity>
     </application>
 
 </manifest>
