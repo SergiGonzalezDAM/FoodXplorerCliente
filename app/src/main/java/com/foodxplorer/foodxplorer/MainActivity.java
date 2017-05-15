@@ -4,12 +4,14 @@ package com.foodxplorer.foodxplorer;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,11 +35,11 @@ public class MainActivity extends AppCompatActivity {
 
         /************************************
          */
-        Fragment fragment = new FragmentProductos();
+        /*ListFragment fragment = new FragmentPromociones();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_frame, fragment)
                 .commit();
-        drawerLayout.closeDrawers();
+        drawerLayout.closeDrawers();*/
 
         /*
         //Eventos del Drawer Layout
@@ -71,14 +73,14 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
 
                         boolean fragmentTransaction = false;
-                        Fragment fragment = null;
+                        ListFragment fragment = null;
 
                         switch (menuItem.getItemId()) {
                             case R.id.menu_seccion_1:
                                 fragment = new FragmentPromociones();
                                 fragmentTransaction = true;
                                 break;
-                            case R.id.menu_seccion_2:
+                            /*case R.id.menu_seccion_2:
                                 fragment = new FragmentLogin();
                                 fragmentTransaction = true;
                                 break;
@@ -93,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                             case R.id.menu_seccion_5:
                                 fragment = new FragmentProductos();
                                 fragmentTransaction = true;
-                                break;
+                                break;*/
                         }
 
                         if(fragmentTransaction) {
