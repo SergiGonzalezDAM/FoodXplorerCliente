@@ -32,7 +32,7 @@ public class FragmentPromociones extends Fragment {
         arraydir.add(promocion);
         promocion = new Promociones(getResources().getDrawable(R.drawable.pizza2), "4 Quesos");
         arraydir.add(promocion);
-        AdaptadorMenu adaptador = new AdaptadorMenu(getActivity(), arraydir);
+        AdaptadorPromociones adaptador = new AdaptadorPromociones(getActivity(), arraydir);
         lista.setAdapter(adaptador);
         return view;
 

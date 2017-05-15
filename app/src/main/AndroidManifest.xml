@@ -18,7 +18,8 @@
         </activity>
         <activity android:name=".FragmentRegistro" />
         <activity android:name=".FragmentResumenPedido" />
-        <activity android:name=".FragmentPedidos"></activity>
+        <activity android:name=".FragmentPedidos" />
+        <activity android:name=".FragmentProductos"></activity>
     </application>
 
 </manifest>

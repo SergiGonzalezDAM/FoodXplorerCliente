@@ -15,14 +15,14 @@ import java.util.ArrayList;
  * Created by ALUMNEDAM on 10/05/2017.
  */
 
-public class AdaptadorMenu extends BaseAdapter
+public class AdaptadorPromociones extends BaseAdapter
 {
     protected Activity activity;
     //ARRAYLIST CON TODOS LOS ITEMS
     protected ArrayList<Promociones> items;
 
     //CONSTRUCTOR
-    public AdaptadorMenu(Activity activity, ArrayList<Promociones> items) {
+    public AdaptadorPromociones(Activity activity, ArrayList<Promociones> items) {
         this.activity = activity;
         this.items = items;
     }
@@ -51,7 +51,7 @@ public class AdaptadorMenu extends BaseAdapter
         if(convertView == null)
         {
             LayoutInflater inf = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = inf.inflate(R.layout.listaproductos, null);
+            v = inf.inflate(R.layout.listapromociones, null);
         }
 
         Promociones dir = items.get(position);
