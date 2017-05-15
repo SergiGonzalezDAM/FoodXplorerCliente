@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="93dp"
-        android:id="@+id/textViewNumeroPedido"
+        android:id="@+id/textViewShowNumeroPedido"
         android:textSize="18sp"
         android:textColor="@android:color/background_dark"
         android:textAlignment="center"
@@ -34,7 +34,7 @@
         android:ems="10"
         android:layout_marginTop="24dp"
         android:id="@+id/editTextNumeroPedido"
-        android:layout_below="@+id/textViewNumeroPedido"
+        android:layout_below="@+id/textViewShowNumeroPedido"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

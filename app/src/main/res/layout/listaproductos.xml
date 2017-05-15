@@ -5,8 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:clickable="true"
-    tools:context=".MainActivity"
-    tools:showIn="@layout/activity_main">
+    tools:context=".MainActivity">
 
     <ImageView android:id="@+id/imageItem"
         android:layout_width="wrap_content"

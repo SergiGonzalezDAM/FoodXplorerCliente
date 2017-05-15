@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         /************************************
          */
-        Fragment fragment = new FragmentResumenPedido();
+        Fragment fragment = new FragmentPedidos();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_frame, fragment)
                 .commit();
@@ -86,6 +86,11 @@ public class MainActivity extends AppCompatActivity {
                                 fragment = new FragmentSeguimientoPedido();
                                 fragmentTransaction = true;
                                 break;
+                            case R.id.menu_seccion_4:
+                                fragment = new FragmentPedidos();
+                                fragmentTransaction = true;
+                                break;
+
                         }
 
                         if(fragmentTransaction) {
