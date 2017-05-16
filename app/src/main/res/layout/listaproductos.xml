@@ -21,10 +21,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Error Precio"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="25dp"
         android:layout_alignTop="@+id/imagenProducto"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_toRightOf="@+id/btnSumarProducto"
+        android:layout_toEndOf="@+id/btnSumarProducto"
+        android:layout_marginLeft="19dp"
+        android:layout_marginStart="19dp" />
 
     <TextView
         android:id="@+id/textViewNombreProducto"
@@ -56,5 +58,15 @@
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/btnSumarProducto"
         android:text="-" />
+
+    <TextView
+        android:id="@+id/textViewDescripcionProducto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnSumarProducto"
+        android:layout_alignLeft="@+id/textViewNombreProducto"
+        android:layout_alignStart="@+id/textViewNombreProducto"
+        android:layout_marginBottom="16dp"
+        android:text="Descripcion" />
 
 </RelativeLayout>
