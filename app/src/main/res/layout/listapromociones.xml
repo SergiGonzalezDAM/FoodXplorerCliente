@@ -4,16 +4,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:clickable="true"
+    android:clickable="false"
     tools:context=".MainActivity">
 
     <ImageView android:id="@+id/imageItem"
         android:layout_width="wrap_content"
+
         android:layout_height="wrap_content"
         android:src="@drawable/navheader" />
 
     <TextView
         android:layout_width="wrap_content"
+        
         android:layout_height="wrap_content"
         android:id="@+id/textoItem"/>
 
