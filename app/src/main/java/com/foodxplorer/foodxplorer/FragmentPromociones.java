@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class FragmentPromociones extends ListFragment {
+public class FragmentPromociones extends Fragment implements AdapterView.OnItemClickListener{
 
     public FragmentPromociones()
     {
@@ -29,6 +29,7 @@ public class FragmentPromociones extends ListFragment {
         View view = inflater.inflate(R.layout.fragment_promociones, container, false);
 
         ListView lista = (ListView) view.findViewById(R.id.listViewPromociones);
+        lista.setOnItemClickListener(this);
         ArrayList<Promociones> arraydir = new ArrayList<>();
         Promociones promocion;
 
@@ -43,7 +44,9 @@ public class FragmentPromociones extends ListFragment {
         lista.setAdapter(adaptador);
         return view;
     }
-    public void onListItemClick (ListView l, View v, int position, long id) {
-        Toast.makeText(getContext(),"asdasdasda", Toast.LENGTH_LONG).show();
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Toast.makeText(getContext(),"asdadasd", Toast.LENGTH_LONG).show();
     }
 }
