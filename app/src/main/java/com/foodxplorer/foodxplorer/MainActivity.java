@@ -35,11 +35,11 @@ public class MainActivity extends AppCompatActivity {
 
         /************************************
          */
-        /*ListFragment fragment = new FragmentPromociones();
+        Fragment fragment = new FragmentLogin();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_frame, fragment)
                 .commit();
-        drawerLayout.closeDrawers();*/
+        drawerLayout.closeDrawers();
 
         /*
         //Eventos del Drawer Layout
@@ -73,14 +73,14 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
 
                         boolean fragmentTransaction = false;
-                        ListFragment fragment = null;
+                        Fragment fragment = null;
 
                         switch (menuItem.getItemId()) {
                             case R.id.menu_seccion_1:
                                 fragment = new FragmentPromociones();
                                 fragmentTransaction = true;
                                 break;
-                            /*case R.id.menu_seccion_2:
+                            case R.id.menu_seccion_2:
                                 fragment = new FragmentLogin();
                                 fragmentTransaction = true;
                                 break;
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                             case R.id.menu_seccion_5:
                                 fragment = new FragmentProductos();
                                 fragmentTransaction = true;
-                                break;*/
+                                break;
                         }
 
                         if(fragmentTransaction) {
