@@ -56,10 +56,14 @@ public class AdaptadorPromociones extends BaseAdapter
 
         Promociones dir = items.get(position);
         //RELLENAMOS LA IMAGEN Y EL TEXTO
-        ImageView foto = (ImageView) v.findViewById(R.id.imageItem);
-        foto.setImageDrawable(dir.getImagen());
-        TextView nombre = (TextView) v.findViewById(R.id.textoItem);
-        nombre.setText(dir.getTexto());
+        ImageView foto = (ImageView) v.findViewById(R.id.imagenPromocion);
+        foto.setImageDrawable(dir.getImagenProducto());
+        TextView nombre = (TextView) v.findViewById(R.id.textViewNombrePromocion);
+        nombre.setText(dir.getNombreProducto());
+        TextView precio = (TextView) v.findViewById(R.id.textViewPrecioPromocion);
+        precio.setText(""+dir.getPrecio()+" €");
+        TextView descripcion = (TextView) v.findViewById(R.id.textViewDescripcionPromociones);
+        descripcion.setText(dir.getDescripcion());
 
         // DEVOLVEMOS VISTA
         return v;

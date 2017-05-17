@@ -25,11 +25,11 @@ public class FragmentProductos extends Fragment {
         Producto producto;
 
         // Introduzco los datos
-        producto = new Producto(getResources().getDrawable(R.drawable.pizza2), "4 Quesos",12.2);
+        producto = new Producto(getResources().getDrawable(R.drawable.pizza2), "4 Quesos",12.2,"Test 1");
         arraydira.add(producto);
-        producto = new Producto(getResources().getDrawable(R.drawable.pizza2), "4 Quesos",12.2);
+        producto = new Producto(getResources().getDrawable(R.drawable.pizza2), "4 Quesos",12.2,"Test 2");
         arraydira.add(producto);
-        producto = new Producto(getResources().getDrawable(R.drawable.pizza2), "4 Quesos",12.2);
+        producto = new Producto(getResources().getDrawable(R.drawable.pizza2), "4 Quesos",12.2,"Test 3");
         arraydira.add(producto);
         AdaptadorProducto adaptador = new AdaptadorProducto(getActivity(), arraydira);
         lista.setAdapter(adaptador);

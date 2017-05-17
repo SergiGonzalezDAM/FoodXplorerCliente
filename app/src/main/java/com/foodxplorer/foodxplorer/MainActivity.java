@@ -9,29 +9,29 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements FragmentPromociones.OnAddToCart {
 
     private Toolbar appbar;
     private DrawerLayout drawerLayout;
     private NavigationView navView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        appbar = (Toolbar)findViewById(R.id.appbar);
+        appbar = (Toolbar) findViewById(R.id.appbar);
         setSupportActionBar(appbar);
 
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_nav_menu);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         /************************************
          */
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         });
         */
 
-        navView = (NavigationView)findViewById(R.id.navview);
+        navView = (NavigationView) findViewById(R.id.navview);
         navView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                                 break;
                         }
 
-                        if(fragmentTransaction) {
+                        if (fragmentTransaction) {
                             getSupportFragmentManager().beginTransaction()
                                     .replace(R.id.content_frame, fragment)
                                     .commit();
@@ -127,12 +127,17 @@ public class MainActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
 
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onAddToCart(Promociones promociones) {
+        Log.i("ON_ADD_TO_CART", promociones.toString() + "");
     }
 }

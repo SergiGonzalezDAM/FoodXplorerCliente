@@ -7,24 +7,28 @@ public class Producto
     private Drawable imagenProducto;
     private String nombreProducto;
     private int idProducto;
-    double precioProducto;
+    private double precio;
+    String descripcion;
 
     public Producto()
     {
 
     }
-    public Producto(Drawable imagenProducto, String nombreProducto, double precioProducto, int idProducto)
+    public Producto(Drawable imagenProducto, String nombreProducto, int idProducto, double precio,String descripcion)
     {
         this.nombreProducto = nombreProducto;
         this.imagenProducto = imagenProducto;
-        this.precioProducto = precioProducto;
         this.idProducto = idProducto;
+        this.precio = precio;
+        this.descripcion = descripcion;
     }
-    public Producto(Drawable imagenProducto, String nombreProducto, double precioProducto)
+    public Producto(Drawable imagenProducto, String nombreProducto, double precio,String descripcion)
     {
+
         this.nombreProducto = nombreProducto;
         this.imagenProducto = imagenProducto;
-        this.precioProducto = precioProducto;
+        this.precio = precio;
+        this.descripcion = descripcion;
     }
 
     public Drawable getImagenProducto() {
@@ -51,11 +55,19 @@ public class Producto
         this.idProducto = idProducto;
     }
 
-    public double getPrecioProducto() {
-        return precioProducto;
+    public double getPrecio() {
+        return precio;
     }
 
-    public void setPrecioProducto(double precioProducto) {
-        this.precioProducto = precioProducto;
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 }

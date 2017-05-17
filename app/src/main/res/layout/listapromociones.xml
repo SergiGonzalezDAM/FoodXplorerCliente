@@ -1,22 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
+    android:descendantFocusability="blocksDescendants"
+    android:focusable="false"
     android:clickable="false"
     tools:context=".MainActivity">
 
-    <ImageView android:id="@+id/imageItem"
-        android:layout_width="wrap_content"
-
-        android:layout_height="wrap_content"
-        android:src="@drawable/navheader" />
+    <ImageView android:id="@+id/imagenPromocion"
+        android:layout_width="158dp"
+        android:layout_height="143dp"
+        android:src="@drawable/navheader"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="41dp"
+        android:layout_alignRight="@+id/btnRestarProducto"
+        android:layout_alignEnd="@+id/btnRestarProducto" />
 
     <TextView
+        android:id="@+id/textViewPrecioPromocion"
         android:layout_width="wrap_content"
-
         android:layout_height="wrap_content"
-        android:id="@+id/textoItem"/>
+        android:text="Error Precio"
+        android:layout_marginBottom="25dp"
+        android:layout_alignBottom="@+id/imagenPromocion"
+        android:layout_toRightOf="@+id/imagenPromocion"
+        android:layout_toEndOf="@+id/imagenPromocion" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/textViewNombrePromocion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Producto"
+        android:layout_alignBaseline="@+id/textViewCantidadPromociones"
+        android:layout_alignBottom="@+id/textViewCantidadPromociones"
+        android:layout_toRightOf="@+id/imagenPromocion"
+        android:layout_toEndOf="@+id/imagenPromocion" />
+
+    <Button
+        android:id="@+id/btnSumarPromocion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+"
+        android:layout_alignBaseline="@+id/btnRestarPromocion"
+        android:layout_alignBottom="@+id/btnRestarPromocion"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/btnRestarPromocion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-"
+        android:layout_marginTop="42dp"
+        android:layout_marginLeft="11dp"
+        android:layout_marginStart="11dp"
+        android:layout_below="@+id/imagenPromocion"
+        android:layout_toRightOf="@+id/btnSumarPromocion"
+        android:layout_toEndOf="@+id/btnSumarPromocion" />
+
+    <TextView
+        android:id="@+id/textViewDescripcionPromociones"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Descripcion"
+        android:layout_marginTop="28dp"
+        android:layout_below="@+id/btnSumarPromocion"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/textViewCantidadPromociones"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cantidad"
+        android:layout_alignTop="@+id/imagenPromocion"
+        android:layout_alignLeft="@+id/btnAñadirPromocion"
+        android:layout_alignStart="@+id/btnAñadirPromocion"
+        android:layout_marginTop="24dp" />
+
+    <Button
+        android:id="@+id/btnAñadirPromocion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Añadir"
+        android:layout_alignBaseline="@+id/btnRestarPromocion"
+        android:layout_alignBottom="@+id/btnRestarPromocion"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+</RelativeLayout>

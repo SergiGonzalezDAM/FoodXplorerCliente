@@ -58,10 +58,12 @@ public class AdaptadorProducto extends BaseAdapter
         //RELLENAMOS LA IMAGEN Y EL TEXTO
         ImageView foto = (ImageView) v.findViewById(R.id.imagenProducto);
         foto.setImageDrawable(dir.getImagenProducto());
-        TextView cosa = (TextView) v.findViewById(R.id.textViewNombreProducto);
-        cosa.setText(dir.getNombreProducto());
+        TextView nombre = (TextView) v.findViewById(R.id.textViewNombreProducto);
+        nombre.setText(dir.getNombreProducto());
         TextView precio = (TextView) v.findViewById(R.id.precioProducto);
-        precio.setText(""+dir.getPrecioProducto()+" €");
+        precio.setText(""+dir.getPrecio()+" €");
+        TextView descripcion = (TextView) v.findViewById(R.id.textViewDescripcionProducto);
+        descripcion.setText(dir.getDescripcion());
 
         // DEVOLVEMOS VISTA
         return v;
