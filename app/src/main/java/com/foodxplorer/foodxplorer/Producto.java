@@ -24,10 +24,25 @@ public class Producto
     }
     public Producto(Drawable imagenProducto, String nombreProducto, double precio,String descripcion)
     {
-
         this.nombreProducto = nombreProducto;
         this.imagenProducto = imagenProducto;
         this.precio = precio;
+        this.descripcion = descripcion;
+    }
+
+    public double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
 
@@ -55,19 +70,14 @@ public class Producto
         this.idProducto = idProducto;
     }
 
-    public double getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(double precio) {
-        this.precio = precio;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    @Override
+    public String toString() {
+        return "Promociones{" +
+                "imagenProducto=" + imagenProducto +
+                ", nombreProducto='" + nombreProducto + '\'' +
+                ", idProducto=" + idProducto +
+                ", precio=" + precio +
+                ", descripcion='" + descripcion + '\'' +
+                '}';
     }
 }

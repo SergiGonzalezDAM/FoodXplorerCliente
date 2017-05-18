@@ -1,23 +1,16 @@
 package com.foodxplorer.foodxplorer;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.support.v4.app.ListFragment;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -61,28 +54,21 @@ public class FragmentPromociones extends Fragment implements AdapterView.OnItemC
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-
-        /*Promociones promocion = arraydir.get(position);
-        ArrayList<Promociones> promociones = new ArrayList();
-        promociones.add(promocion);
-
-        AdaptadorPromociones adaptadorSec = new AdaptadorPromociones(getActivity(), promociones);
-        lista.setAdapter(adaptadorSec);*/
-
         final Promociones promocion = arraydir.get(position);
 
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());
-        View mView = getLayoutInflater(null).inflate(R.layout.listapromociones,null);
+        View mView = getLayoutInflater(null).inflate(R.layout.activity_dialog,null);
 
         ImageView foto = (ImageView) mView.findViewById(R.id.imagenPromocion);
         foto.setImageDrawable(promocion.getImagenProducto());
         TextView nombre = (TextView)mView.findViewById(R.id.textViewNombrePromocion);
         nombre.setText(promocion.getNombreProducto());
         TextView precio = (TextView) mView.findViewById(R.id.textViewPrecioPromocion);
-        precio.setText(""+promocion.getPrecio());
+        precio.setText(promocion.getPrecio()+" €");
         TextView descripcion = (TextView)mView.findViewById(R.id.textViewDescripcionPromociones);
         descripcion.setText(promocion.getDescripcion());
-        mView.findViewById(R.id.btnAñadirPromocion).setOnClickListener(new View.OnClickListener() {
+
+        mView.findViewById(R.id.btnAddCart).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mOnAddToCart.onAddToCart(promocion);
@@ -92,11 +78,6 @@ public class FragmentPromociones extends Fragment implements AdapterView.OnItemC
 
         mBuilder.setView(mView);
         AlertDialog dialog = mBuilder.create();
-
-        //TextView hola = (TextView) dialog.findViewById(R.id.textViewDescripcionPromociones);
-        //hola.setText("Hola");
-
-        //AlertDialog dialog = mBuilder.create();
 
         dialog.show();
 

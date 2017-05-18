@@ -51,18 +51,18 @@ public class AdaptadorProducto extends BaseAdapter
         if(convertView == null)
         {
             LayoutInflater inf = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = inf.inflate(R.layout.listaproductos, null);
+            v = inf.inflate(R.layout.listapromociones, null);
         }
 
         Producto dir = items.get(position);
         //RELLENAMOS LA IMAGEN Y EL TEXTO
-        ImageView foto = (ImageView) v.findViewById(R.id.imagenProducto);
+        ImageView foto = (ImageView) v.findViewById(R.id.imagenPromocion);
         foto.setImageDrawable(dir.getImagenProducto());
-        TextView nombre = (TextView) v.findViewById(R.id.textViewNombreProducto);
+        TextView nombre = (TextView) v.findViewById(R.id.textViewNombrePromocion);
         nombre.setText(dir.getNombreProducto());
-        TextView precio = (TextView) v.findViewById(R.id.precioProducto);
+        TextView precio = (TextView) v.findViewById(R.id.textViewPrecioPromocion);
         precio.setText(""+dir.getPrecio()+" €");
-        TextView descripcion = (TextView) v.findViewById(R.id.textViewDescripcionProducto);
+        TextView descripcion = (TextView) v.findViewById(R.id.textViewDescripcionPromociones);
         descripcion.setText(dir.getDescripcion());
 
         // DEVOLVEMOS VISTA
