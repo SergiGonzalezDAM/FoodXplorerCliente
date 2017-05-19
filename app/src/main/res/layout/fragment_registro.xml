@@ -11,17 +11,17 @@
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         android:ems="10"
-        android:layout_below="@+id/textViewShowNumeroPedido"
+        android:layout_below="@+id/textViewShowUsername"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
-        android:id="@+id/editTextNumeroPedido" />
+        android:id="@+id/editTextLoginUsuario" />
 
     <TextView
         android:text="Usuario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
-        android:id="@+id/textViewShowNumeroPedido"
+        android:id="@+id/textViewShowUsername"
         android:textSize="18sp"
         android:textColor="@android:color/background_dark"
         android:textAlignment="center"
@@ -36,7 +36,7 @@
         android:id="@+id/textViewLoginPassword"
         android:textColor="@android:color/background_dark"
         android:textSize="18sp"
-        android:layout_below="@+id/editTextNumeroPedido"
+        android:layout_below="@+id/editTextLoginUsuario"
         android:layout_centerHorizontal="true" />
 
     <ImageView
@@ -45,8 +45,8 @@
         app:srcCompat="@drawable/logopizzaxplorer"
         android:id="@+id/imageView"
         android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/editTextNumeroPedido"
-        android:layout_alignStart="@+id/editTextNumeroPedido" />
+        android:layout_alignLeft="@+id/editTextLoginUsuario"
+        android:layout_alignStart="@+id/editTextLoginUsuario" />
 
     <TextView
         android:text="Correo Electrónico"
@@ -56,7 +56,7 @@
         android:id="@+id/textView"
         android:textSize="18sp"
         android:textColor="@android:color/background_dark"
-        android:layout_below="@+id/editTextPasswordRegistro"
+        android:layout_below="@+id/editTextPasswordLogin"
         android:layout_centerHorizontal="true" />
 
     <EditText
@@ -65,10 +65,10 @@
         android:inputType="textPassword"
         android:ems="10"
         android:layout_marginTop="12dp"
-        android:id="@+id/editTextPasswordRegistro"
+        android:id="@+id/editTextPasswordLogin"
         android:layout_below="@+id/textViewLoginPassword"
-        android:layout_alignLeft="@+id/editTextNumeroPedido"
-        android:layout_alignStart="@+id/editTextNumeroPedido" />
+        android:layout_alignLeft="@+id/editTextLoginUsuario"
+        android:layout_alignStart="@+id/editTextLoginUsuario" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -78,8 +78,8 @@
         android:layout_marginTop="12dp"
         android:id="@+id/editTextCorreoRegistro"
         android:layout_below="@+id/textView"
-        android:layout_alignLeft="@+id/editTextPasswordRegistro"
-        android:layout_alignStart="@+id/editTextPasswordRegistro" />
+        android:layout_alignLeft="@+id/editTextPasswordLogin"
+        android:layout_alignStart="@+id/editTextPasswordLogin" />
 
     <Button
         android:text="Registro"

@@ -11,17 +11,17 @@
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         android:ems="10"
-        android:layout_below="@+id/textViewShowNumeroPedido"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
-        android:id="@+id/editTextNumeroPedido" />
+        android:id="@+id/editTextLoginUsuario"
+        android:layout_below="@+id/textViewShowUsername"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:text="Usuario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
-        android:id="@+id/textViewShowNumeroPedido"
+        android:id="@+id/textViewShowUsername"
         android:textSize="18sp"
         android:textColor="@android:color/background_dark"
         android:textAlignment="center"
@@ -36,7 +36,7 @@
         android:id="@+id/textViewLoginPassword"
         android:textColor="@android:color/background_dark"
         android:textSize="18sp"
-        android:layout_below="@+id/editTextNumeroPedido"
+        android:layout_below="@+id/editTextLoginUsuario"
         android:layout_centerHorizontal="true" />
 
     <EditText
@@ -45,7 +45,7 @@
         android:inputType="textPassword"
         android:ems="10"
         android:layout_marginTop="26dp"
-        android:id="@+id/editTextPasswordRegistro"
+        android:id="@+id/editTextPasswordLogin"
         android:layout_below="@+id/textViewLoginPassword"
         android:layout_alignLeft="@+id/imageView"
         android:layout_alignStart="@+id/imageView" />
@@ -57,8 +57,8 @@
         android:id="@+id/btnRegistrar"
         android:layout_alignBaseline="@+id/btnLogin"
         android:layout_alignBottom="@+id/btnLogin"
-        android:layout_toRightOf="@+id/textViewShowNumeroPedido"
-        android:layout_toEndOf="@+id/textViewShowNumeroPedido" />
+        android:layout_toRightOf="@+id/textViewShowUsername"
+        android:layout_toEndOf="@+id/textViewShowUsername" />
 
     <Button
         android:text="Login"
@@ -86,6 +86,6 @@
         android:id="@+id/textViewOlvidarPassword"
         android:layout_marginTop="22dp"
         android:clickable="true"
-        android:layout_below="@+id/editTextPasswordRegistro"
+        android:layout_below="@+id/editTextPasswordLogin"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

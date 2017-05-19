@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -56,7 +55,7 @@ public class AdaptadorPedido extends BaseAdapter
 
         Pedidos dir = items.get(position);
         //RELLENAMOS LA IMAGEN Y EL TEXTO
-        TextView foto = (TextView) v.findViewById(R.id.textViewShowNumeroPedido);
+        TextView foto = (TextView) v.findViewById(R.id.textViewShowUsername);
         foto.setText(dir.getNumeroPedido());
         TextView nombre = (TextView) v.findViewById(R.id.textViewShowFechaPedido);
         nombre.setText(dir.getFechaPedido());
