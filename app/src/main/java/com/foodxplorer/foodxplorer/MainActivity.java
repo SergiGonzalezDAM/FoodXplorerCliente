@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
 
         /************************************
          */
-        Fragment fragment = new FragmentLogin();
+        Fragment fragment = new FragmentPromociones();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_frame, fragment)
                 .commit();
