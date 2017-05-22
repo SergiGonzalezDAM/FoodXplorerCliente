@@ -57,8 +57,10 @@ public class FragmentLogin extends Fragment implements View.OnClickListener, Asy
 
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         drawerLayout = (DrawerLayout) view.findViewById(R.id.drawer_layout);
-        Button button = (Button) view.findViewById(R.id.btnLogin);
-        button.setOnClickListener(this);
+        Button btnLogin = (Button) view.findViewById(R.id.btnLogin);
+        btnLogin.setOnClickListener(this);
+        Button btnRegister = (Button) view.findViewById(R.id.btnRegistrar);
+        btnRegister.setOnClickListener(this);
 
         etUsuario = (EditText) view.findViewById(R.id.editTextLoginUsuario);
         etPassword = (EditText) view.findViewById(R.id.editTextPasswordLogin);
@@ -70,6 +72,7 @@ public class FragmentLogin extends Fragment implements View.OnClickListener, Asy
     @Override
     public void onClick(View view) {
         if (R.id.btnRegistrar == view.getId()) {
+            System.out.println("Joderrrr");
             Fragment fragment = new FragmentRegistro();
             getFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
             // drawerLayout.closeDrawers();
