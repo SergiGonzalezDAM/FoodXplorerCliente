@@ -104,20 +104,23 @@ class TareaWScomprobarLogin extends AsyncTask<Object, Integer, Boolean> {
             //conn.setConnectTimeout(5000);
             conn.setRequestProperty("Content-Type", "application/json");
             osw = new OutputStreamWriter(conn.getOutputStream());
-            //JSONObject jsonUser = new JSONObject();
-            //jsonUser.put("usuario", "Roger");
-            //osw.write(jsonUser.toString());
-            //osw.flush();
-            // osw.close();
-            //System.out.println(jsonUser.toString());
-           // System.err.println(conn.getResponseMessage());
-        } catch (java.io.IOException ex) {
+            JSONObject jsonUser = new JSONObject();
+            jsonUser.put("usuario", "Roger");
+            osw.write(jsonUser.toString());
+            osw.flush();
+             osw.close();
+            System.out.println(jsonUser.toString());
+           System.err.println(conn.getResponseMessage());
+        }catch (java.net.ProtocolException ex){
+            Log.e(Settings.LOGTAG, "Error de protocol: " + ex);
+        }
+        catch (java.io.IOException ex) {
             Log.e(Settings.LOGTAG, "Temps d'espera esgotat al iniciar la conexio amb la BBDD extena" + ex);
             insertadoEnDBexterna = false;
-        } /*catch (org.json.JSONException ex) {
+        } catch (org.json.JSONException ex) {
             Log.e(Settings.LOGTAG, "Error en la transformacio de l'objecte JSON: " + ex);
             insertadoEnDBexterna = false;
-        }*/
+        }
 
          //   delegate.processFinish(insertadoEnDBexterna);
         return insertadoEnDBexterna;
