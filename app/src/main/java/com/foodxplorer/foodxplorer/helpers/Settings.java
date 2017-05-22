@@ -1,4 +1,4 @@
-package com.foodxplorer.foodxplorer;
+package com.foodxplorer.foodxplorer.helpers;
 
 /**
  * Projecte FoodXplorer

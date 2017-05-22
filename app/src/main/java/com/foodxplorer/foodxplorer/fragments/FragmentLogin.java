@@ -1,4 +1,4 @@
-package com.foodxplorer.foodxplorer;
+package com.foodxplorer.foodxplorer.fragments;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,11 +9,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.Toast;
+
+import com.foodxplorer.foodxplorer.FragmentRegistro;
+import com.foodxplorer.foodxplorer.MainActivity;
+import com.foodxplorer.foodxplorer.R;
+import com.foodxplorer.foodxplorer.helpers.Settings;
 
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -57,9 +59,10 @@ public class FragmentLogin extends Fragment implements View.OnClickListener, Asy
 
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         drawerLayout = (DrawerLayout) view.findViewById(R.id.drawer_layout);
-        Button button = (Button) view.findViewById(R.id.btnLogin);
-        button.setOnClickListener(this);
-
+        Button btnLogin = (Button) view.findViewById(R.id.btnLogin);
+        btnLogin.setOnClickListener(this);
+        Button btnRegister = (Button) view.findViewById(R.id.btnRegistrar);
+        btnRegister.setOnClickListener(this);
         etUsuario = (EditText) view.findViewById(R.id.editTextLoginUsuario);
         etPassword = (EditText) view.findViewById(R.id.editTextPasswordLogin);
 
@@ -70,6 +73,7 @@ public class FragmentLogin extends Fragment implements View.OnClickListener, Asy
     @Override
     public void onClick(View view) {
         if (R.id.btnRegistrar == view.getId()) {
+            System.out.println("Joderrrr");
             Fragment fragment = new FragmentRegistro();
             getFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
             // drawerLayout.closeDrawers();

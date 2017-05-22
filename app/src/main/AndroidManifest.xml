@@ -20,9 +20,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".FragmentRegistro" />
-        <activity android:name=".FragmentResumenPedido" />
-        <activity android:name=".FragmentPedidos" />
-        <activity android:name=".FragmentProductos"></activity>
+        <activity android:name=".fragments.FragmentResumenPedido" />
+        <activity android:name=".fragments.FragmentPedidos" />
+        <activity android:name=".fragments.FragmentProductos"></activity>
     </application>
 
 </manifest>
