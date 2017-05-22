@@ -12,8 +12,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.foodxplorer.foodxplorer.adapters.AdaptadorPromociones;
-import com.foodxplorer.foodxplorer.Promociones;
 import com.foodxplorer.foodxplorer.R;
 
 import java.util.ArrayList;

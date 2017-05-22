@@ -9,7 +9,7 @@
     android:clickable="false"
     tools:context=".MainActivity">
 
-<include layout="@layout/listapromociones" />
+<include layout="@layout/listaproductos" />
 
     <RelativeLayout
         android:layout_width="match_parent"
