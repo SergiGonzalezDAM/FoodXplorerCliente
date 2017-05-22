@@ -11,15 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.foodxplorer.foodxplorer.FragmentRegistro;
 import com.foodxplorer.foodxplorer.MainActivity;
 import com.foodxplorer.foodxplorer.R;
 import com.foodxplorer.foodxplorer.helpers.Settings;
+import com.foodxplorer.foodxplorer.helpers.restManager;
 
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 
 interface AsyncResponse {
@@ -39,8 +39,10 @@ public class FragmentLogin extends Fragment implements View.OnClickListener, Asy
     public void processFinish(boolean response) {
         if (response) {
             Log.e(Settings.LOGTAG, "Login ok");
+            this.tienda.currentState.setUsuarioLogueado(etUsuario.getText().toString());
         } else {
             Log.e(Settings.LOGTAG, "Login fail");
+            Toast.makeText(tienda, "Login fail", Toast.LENGTH_LONG);
         }
     }
 
@@ -83,10 +85,6 @@ public class FragmentLogin extends Fragment implements View.OnClickListener, Asy
             tarea.execute(new Usuario(etUsuario.getText().toString(), etPassword.getText().toString()));
         }
     }
-
-    public boolean comprobarlogin() {
-        return true;
-    }
 }
 
 class TareaWScomprobarLogin extends AsyncTask<Object, Void, Boolean> {
@@ -101,24 +99,17 @@ class TareaWScomprobarLogin extends AsyncTask<Object, Void, Boolean> {
             Usuario user= (Usuario) params[0];
             String aux = (Settings.DIRECCIO_SERVIDOR + "ServcioFoodXPlorer/webresources/generic/loguearUsuario");
             aux = aux + "/" + user.username + "/" + user.password + "/";
-            System.out.println(aux);
-            URL url = new URL(aux);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            //conn.setReadTimeout(5000);/*milliseconds*/
-            //conn.setConnectTimeout(5000);
-            conn.setRequestProperty("Content-Type", "application/json");
-            osw = new InputStreamReader(conn.getInputStream());
+            restManager restManager= new restManager(aux);
+            osw = restManager.getInputStream();
             int data = osw.read();
             String res = "";
             while (data != -1) {
                 char current = (char) data;
                 data = osw.read();
-                System.out.print(current);
                 res = res + current;
             }
-            if(res.equals("false")){
-                Log.e(Settings.LOGTAG, "Error de login para user: " +  params[0].toString() );
+            if(!res.equals("true")){
+                Log.e(Settings.LOGTAG, "Error de login para user: " +  user.username );
                 result = false;
             }
             osw.close();
@@ -133,18 +124,11 @@ class TareaWScomprobarLogin extends AsyncTask<Object, Void, Boolean> {
             Log.e(Settings.LOGTAG, "Temps d'espera esgotat al iniciar la conexio amb la BBDD extena: " + ex);
             result = false;
         }
-
-        //   delegate.processFinish(insertadoEnDBexterna);
         return result;
     }
     @Override
     protected void onPostExecute(Boolean result) {
-        // si usuari es valid
-        if (result) {
-            System.out.println("Login correcte.");
-        } else {
-            System.out.println("Login erroni.");
-        }
+        delegate.processFinish(result);
     }
 }
 
