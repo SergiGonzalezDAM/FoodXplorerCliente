@@ -9,14 +9,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
-
-import org.json.JSONObject;
-
-import java.io.OutputStreamWriter;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -77,7 +76,7 @@ public class FragmentLogin extends Fragment implements View.OnClickListener, Asy
         } else {
             TareaWScomprobarLogin tarea = new TareaWScomprobarLogin();
             tarea.delegate = this;
-            tarea.execute();
+            tarea.execute(etUsuario.getText().toString(), etPassword.getText().toString());
         }
     }
 
@@ -86,45 +85,83 @@ public class FragmentLogin extends Fragment implements View.OnClickListener, Asy
     }
 }
 
-class TareaWScomprobarLogin extends AsyncTask<Object, Integer, Boolean> {
+class TareaWScomprobarLogin extends AsyncTask<Object, Void, Boolean> {
 
     public AsyncResponse delegate = null;
 
     @Override
     protected Boolean doInBackground(Object... params) {
-        boolean insertadoEnDBexterna = true;
-        OutputStreamWriter osw;
+        boolean result = true;
+        InputStreamReader osw;
         try {
             String aux = (Settings.DIRECCIO_SERVIDOR + "ServcioFoodXPlorer/webresources/generic/loguearUsuario");
-            URL url = new URL(aux);
+            aux = aux + "/" + params[0].toString() + "/" + params[1].toString() + "/";
             System.out.println(aux);
+            URL url = new URL(aux);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             //conn.setReadTimeout(5000);/*milliseconds*/
             //conn.setConnectTimeout(5000);
             conn.setRequestProperty("Content-Type", "application/json");
-            osw = new OutputStreamWriter(conn.getOutputStream());
-            JSONObject jsonUser = new JSONObject();
-            jsonUser.put("usuario", "Roger");
-            osw.write(jsonUser.toString());
-            osw.flush();
-             osw.close();
-            System.out.println(jsonUser.toString());
-           System.err.println(conn.getResponseMessage());
-        }catch (java.net.ProtocolException ex){
+            osw = new InputStreamReader(conn.getInputStream());
+            int data = osw.read();
+            String res = "";
+            while (data != -1) {
+                char current = (char) data;
+                data = osw.read();
+                System.out.print(current);
+                res = res + current;
+            }
+            if(res.equals("false")){
+                Log.e(Settings.LOGTAG, "Error de login para user: " +  params[0].toString() );
+                result = false;
+            }
+            osw.close();
+            //System.err.println(conn.getResponseMessage());
+        } catch (java.net.ProtocolException ex) {
             Log.e(Settings.LOGTAG, "Error de protocol: " + ex);
-        }
-        catch (java.io.IOException ex) {
-            Log.e(Settings.LOGTAG, "Temps d'espera esgotat al iniciar la conexio amb la BBDD extena" + ex);
-            insertadoEnDBexterna = false;
-        } catch (org.json.JSONException ex) {
-            Log.e(Settings.LOGTAG, "Error en la transformacio de l'objecte JSON: " + ex);
-            insertadoEnDBexterna = false;
+            result = false;
+        } catch (java.io.FileNotFoundException ex) {
+            Log.e(Settings.LOGTAG, "Error de ruta d'acces: " + ex);
+            result = false;
+        } catch (java.io.IOException ex) {
+            Log.e(Settings.LOGTAG, "Temps d'espera esgotat al iniciar la conexio amb la BBDD extena: " + ex);
+            result = false;
         }
 
-         //   delegate.processFinish(insertadoEnDBexterna);
-        return insertadoEnDBexterna;
+        //   delegate.processFinish(insertadoEnDBexterna);
+        return result;
     }
+    @Override
+    protected void onPostExecute(Boolean result) {
+        // si usuari es valid
+        if (result) {
+            System.out.println("Login correcte.");
+        } else {
+            System.out.println("Login erroni.");
+        }
+    }
+}
+
+class usuario {
+
+    String username;
+    String password;
+
+    public usuario(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+
+    public String getPassword() {
+        return password;
+    }
+
 }
 
 
