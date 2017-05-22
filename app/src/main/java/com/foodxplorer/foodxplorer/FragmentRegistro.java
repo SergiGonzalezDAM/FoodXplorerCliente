@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.foodxplorer.foodxplorer.helpers.Settings;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -20,8 +22,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import static com.foodxplorer.foodxplorer.Settings.LOGTAG;
+import static com.foodxplorer.foodxplorer.helpers.Settings.LOGTAG;
 
+interface AsyncResponse{
+    void processFinish(boolean response);
+}
 public class FragmentRegistro extends Fragment implements View.OnClickListener, AsyncResponse {
     private DrawerLayout drawerLayout;
     private NavigationView navView;
@@ -58,9 +63,9 @@ public class FragmentRegistro extends Fragment implements View.OnClickListener, 
     @Override
     public void processFinish(boolean response) {
         if (response) {
-            Log.e(Settings.LOGTAG, "Registro ok");
+            Log.e(LOGTAG, "Registro ok");
         } else {
-            Log.e(Settings.LOGTAG, "Registro fail");
+            Log.e(LOGTAG, "Registro fail");
         }
     }
 
