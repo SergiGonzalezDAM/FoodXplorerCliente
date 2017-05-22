@@ -1,4 +1,4 @@
-package com.foodxplorer.foodxplorer;
+package com.foodxplorer.foodxplorer.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,6 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.foodxplorer.foodxplorer.Pedidos;
+import com.foodxplorer.foodxplorer.R;
 
 import java.util.ArrayList;
 

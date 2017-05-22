@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.foodxplorer.foodxplorer.R;
+
 public class FragmentRegistro extends Fragment {
     private DrawerLayout drawerLayout;
     private NavigationView navView;
