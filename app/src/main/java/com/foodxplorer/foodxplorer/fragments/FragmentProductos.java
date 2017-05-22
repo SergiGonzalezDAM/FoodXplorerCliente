@@ -12,15 +12,17 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.foodxplorer.foodxplorer.Producto;
 import com.foodxplorer.foodxplorer.R;
+import com.foodxplorer.foodxplorer.adapters.AdaptadorProducto;
 
 import java.util.ArrayList;
 
 public class FragmentProductos extends Fragment implements  AdapterView.OnItemClickListener{
 
-    ArrayList<Promociones> arraydir;
+    ArrayList<Producto> arraydir;
     ListView lista;
-    AdaptadorPromociones adaptador;
+    AdaptadorProducto adaptador;
     public FragmentProductos() {
 
     }
@@ -31,16 +33,16 @@ public class FragmentProductos extends Fragment implements  AdapterView.OnItemCl
         View view = inflater.inflate(R.layout.fragment_promociones, container, false);
         lista = (ListView) view.findViewById(R.id.listViewPromociones);
 
-        Promociones promocion;
+        Producto promocion;
         arraydir = new ArrayList<>();
         // Introduzco los datos
-        promocion = new Promociones(getResources().getDrawable(R.drawable.pizza2), "4 Quesos",14,"Artesana");
+        promocion = new Producto(getResources().getDrawable(R.drawable.pizza2), "4 Quesos",14,"Artesana");
         arraydir.add(promocion);
-        promocion = new Promociones(getResources().getDrawable(R.drawable.pizza2), "5 Quesos",15,"Artesana");
+        promocion = new Producto(getResources().getDrawable(R.drawable.pizza2), "5 Quesos",15,"Artesana");
         arraydir.add(promocion);
-        promocion = new Promociones(getResources().getDrawable(R.drawable.pizza2), "6 Quesos",16,"Artesana");
+        promocion = new Producto(getResources().getDrawable(R.drawable.pizza2), "6 Quesos",16,"Artesana");
         arraydir.add(promocion);
-        adaptador = new AdaptadorPromociones(getActivity(), arraydir);
+        adaptador = new AdaptadorProducto(getActivity(), arraydir);
         lista.setAdapter(adaptador);
         lista.setOnItemClickListener(this);
         return view;
@@ -49,19 +51,19 @@ public class FragmentProductos extends Fragment implements  AdapterView.OnItemCl
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        final Promociones promocion = arraydir.get(position);
+        final Producto producto = arraydir.get(position);
 
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());
         View mView = getLayoutInflater(null).inflate(R.layout.activity_dialog,null);
 
         ImageView foto = (ImageView) mView.findViewById(R.id.imagenPromocion);
-        foto.setImageDrawable(promocion.getImagenProducto());
+        foto.setImageDrawable(producto.getImagenProducto());
         TextView nombre = (TextView)mView.findViewById(R.id.textViewNombrePromocion);
-        nombre.setText(promocion.getNombreProducto());
+        nombre.setText(producto.getNombreProducto());
         TextView precio = (TextView) mView.findViewById(R.id.textViewPrecioPromocion);
-        precio.setText(promocion.getPrecio()+" €");
+        precio.setText(producto.getPrecio()+" €");
         TextView descripcion = (TextView)mView.findViewById(R.id.textViewDescripcionPromociones);
-        descripcion.setText(promocion.getDescripcion());
+        descripcion.setText(producto.getDescripcion());
 
         mView.findViewById(R.id.btnAddCart).setOnClickListener(new View.OnClickListener() {
             @Override
