@@ -13,8 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.RequestParams;
 
 import org.json.JSONObject;
 
@@ -22,29 +20,28 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class FragmentLogin extends Fragment implements View.OnClickListener, FragmentLogin.AsyncResponse {
+
+interface AsyncResponse {
+    void processFinish(boolean response);
+}
+
+public class FragmentLogin extends Fragment implements View.OnClickListener, AsyncResponse {
     private DrawerLayout drawerLayout;
     private NavigationView navView;
     private MainActivity tienda;
 
     private EditText etUsuario;
     private EditText etPassword;
-    public interface AsyncResponse {
-        void processFinish(boolean response);
-    }
 
 
     @Override
     public void processFinish(boolean response) {
-        if(response){
+        if (response) {
             Log.e(Settings.LOGTAG, "Login ok");
-        }
-        else{
+        } else {
             Log.e(Settings.LOGTAG, "Login fail");
         }
     }
-
-
 
 
     public FragmentLogin() {
@@ -78,7 +75,9 @@ public class FragmentLogin extends Fragment implements View.OnClickListener, Fra
             getFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
             // drawerLayout.closeDrawers();
         } else {
-           comprobarlogin();
+            TareaWScomprobarLogin tarea = new TareaWScomprobarLogin();
+            tarea.delegate = this;
+            tarea.execute();
         }
     }
 
@@ -89,35 +88,40 @@ public class FragmentLogin extends Fragment implements View.OnClickListener, Fra
 
 class TareaWScomprobarLogin extends AsyncTask<Object, Integer, Boolean> {
 
+    public AsyncResponse delegate = null;
 
     @Override
     protected Boolean doInBackground(Object... params) {
         boolean insertadoEnDBexterna = true;
         OutputStreamWriter osw;
         try {
-            String aux=(Settings.DIRECCIO_SERVIDOR+"/ServicioWeb/webresources/generic/insertarPosicion");
+            String aux = (Settings.DIRECCIO_SERVIDOR + "ServcioFoodXPlorer/webresources/generic/loguearUsuario");
             URL url = new URL(aux);
+            System.out.println(aux);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("PUT");
-            conn.setReadTimeout(5000);/*milliseconds*/
-            conn.setConnectTimeout(5000);
+            conn.setRequestMethod("GET");
+            //conn.setReadTimeout(5000);/*milliseconds*/
+            //conn.setConnectTimeout(5000);
             conn.setRequestProperty("Content-Type", "application/json");
             osw = new OutputStreamWriter(conn.getOutputStream());
-            JSONObject jsonUser = new JSONObject();
-            jsonUser.put("usuario")
-            osw.write(getStringJSON(params));
-            osw.flush();
-            osw.close();
-            System.err.println(conn.getResponseMessage());
+            //JSONObject jsonUser = new JSONObject();
+            //jsonUser.put("usuario", "Roger");
+            //osw.write(jsonUser.toString());
+            //osw.flush();
+            // osw.close();
+            //System.out.println(jsonUser.toString());
+           // System.err.println(conn.getResponseMessage());
         } catch (java.io.IOException ex) {
-            Log.e(Settings.LOGTAG, "Temps d'espera esgotat al iniciar la conexio amb la BBDD extena"+ex);
+            Log.e(Settings.LOGTAG, "Temps d'espera esgotat al iniciar la conexio amb la BBDD extena" + ex);
             insertadoEnDBexterna = false;
-        } catch (org.json.JSONException ex) {
-            Log.e(LOGTAG, "Error en la transformacio de l'objecte JSON: " + ex);
+        } /*catch (org.json.JSONException ex) {
+            Log.e(Settings.LOGTAG, "Error en la transformacio de l'objecte JSON: " + ex);
             insertadoEnDBexterna = false;
-        }
+        }*/
+
+         //   delegate.processFinish(insertadoEnDBexterna);
         return insertadoEnDBexterna;
     }
 }
-}
+
 
