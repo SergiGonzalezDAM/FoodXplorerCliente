@@ -76,7 +76,7 @@ public class FragmentLogin extends Fragment implements View.OnClickListener, Asy
         } else {
             TareaWScomprobarLogin tarea = new TareaWScomprobarLogin();
             tarea.delegate = this;
-            tarea.execute(etUsuario.getText().toString(), etPassword.getText().toString());
+            tarea.execute(new Usuario(etUsuario.getText().toString(), etPassword.getText().toString()));
         }
     }
 
@@ -94,8 +94,9 @@ class TareaWScomprobarLogin extends AsyncTask<Object, Void, Boolean> {
         boolean result = true;
         InputStreamReader osw;
         try {
+            Usuario user= (Usuario) params[0];
             String aux = (Settings.DIRECCIO_SERVIDOR + "ServcioFoodXPlorer/webresources/generic/loguearUsuario");
-            aux = aux + "/" + params[0].toString() + "/" + params[1].toString() + "/";
+            aux = aux + "/" + user.username + "/" + user.password + "/";
             System.out.println(aux);
             URL url = new URL(aux);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -143,12 +144,12 @@ class TareaWScomprobarLogin extends AsyncTask<Object, Void, Boolean> {
     }
 }
 
-class usuario {
+class Usuario {
 
     String username;
     String password;
 
-    public usuario(String username, String password) {
+    public Usuario(String username, String password) {
         this.username = username;
         this.password = password;
     }
