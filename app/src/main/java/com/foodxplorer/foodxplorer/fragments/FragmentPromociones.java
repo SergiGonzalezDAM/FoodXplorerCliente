@@ -12,8 +12,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.foodxplorer.foodxplorer.adapters.AdaptadorPromociones;
-import com.foodxplorer.foodxplorer.Promociones;
+import com.foodxplorer.foodxplorer.Producto;
+import com.foodxplorer.foodxplorer.adapters.AdaptadorProducto;
 import com.foodxplorer.foodxplorer.R;
 
 import java.util.ArrayList;
@@ -21,14 +21,14 @@ import java.util.ArrayList;
 public class FragmentPromociones extends Fragment implements AdapterView.OnItemClickListener{
 
     public interface OnAddToCart{
-        void onAddToCart(Promociones promociones);
+        void onAddToCart(Producto producto);
     }
 
     private OnAddToCart mOnAddToCart;
 
-    ArrayList<Promociones> arraydir;
+    ArrayList<Producto> arraydir;
     ListView lista;
-    AdaptadorPromociones adaptador;
+    AdaptadorProducto adaptador;
     public FragmentPromociones()
     {
 
@@ -37,19 +37,19 @@ public class FragmentPromociones extends Fragment implements AdapterView.OnItemC
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_promociones, container, false);
-        lista = (ListView) view.findViewById(R.id.listViewPromociones);
+        View view = inflater.inflate(R.layout.fragment_productos, container, false);
+        lista = (ListView) view.findViewById(R.id.listViewProductos);
 
-        Promociones promocion;
+        Producto producto;
         arraydir = new ArrayList<>();
         // Introduzco los datos
-        promocion = new Promociones(getResources().getDrawable(R.drawable.pizza2), "4 Quesos",14,"Artesana");
-        arraydir.add(promocion);
-        promocion = new Promociones(getResources().getDrawable(R.drawable.pizza2), "5 Quesos",15,"Artesana");
-        arraydir.add(promocion);
-        promocion = new Promociones(getResources().getDrawable(R.drawable.pizza2), "6 Quesos",16,"Artesana");
-        arraydir.add(promocion);
-        adaptador = new AdaptadorPromociones(getActivity(), arraydir);
+        producto = new Producto(getResources().getDrawable(R.drawable.pizza2), "4 Quesos",14,"Artesana");
+        arraydir.add(producto);
+        producto = new Producto(getResources().getDrawable(R.drawable.pizza2), "5 Quesos",15,"Artesana");
+        arraydir.add(producto);
+        producto = new Producto(getResources().getDrawable(R.drawable.pizza2), "6 Quesos",16,"Artesana");
+        arraydir.add(producto);
+        adaptador = new AdaptadorProducto(getActivity(), arraydir);
         lista.setAdapter(adaptador);
         lista.setOnItemClickListener(this);
         return view;
@@ -58,24 +58,24 @@ public class FragmentPromociones extends Fragment implements AdapterView.OnItemC
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        final Promociones promocion = arraydir.get(position);
+        final Producto producto = arraydir.get(position);
 
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());
         View mView = getLayoutInflater(null).inflate(R.layout.activity_dialog,null);
 
         ImageView foto = (ImageView) mView.findViewById(R.id.imagenPromocion);
-        foto.setImageDrawable(promocion.getImagenProducto());
+        foto.setImageDrawable(producto.getImagenProducto());
         TextView nombre = (TextView)mView.findViewById(R.id.textViewNombrePromocion);
-        nombre.setText(promocion.getNombreProducto());
+        nombre.setText(producto.getNombreProducto());
         TextView precio = (TextView) mView.findViewById(R.id.textViewPrecioPromocion);
-        precio.setText(promocion.getPrecio()+" €");
+        precio.setText(producto.getPrecio()+" €");
         TextView descripcion = (TextView)mView.findViewById(R.id.textViewDescripcionPromociones);
-        descripcion.setText(promocion.getDescripcion());
+        descripcion.setText(producto.getDescripcion());
 
         mView.findViewById(R.id.btnAddCart).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnAddToCart.onAddToCart(promocion);
+                mOnAddToCart.onAddToCart(producto);
                 System.out.println("sadfgdsafgfasghjfgfasdgshgfasfdgssafdgdfgsfasdgfas vsgbdsdafvbdgfevs");
             }
         });

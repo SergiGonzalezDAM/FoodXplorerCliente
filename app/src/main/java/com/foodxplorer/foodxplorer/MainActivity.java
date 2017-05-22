@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
     }
 
     @Override
-    public void onAddToCart(Promociones promociones) {
-        Log.i("ON_ADD_TO_CART", promociones.toString() + "");
+    public void onAddToCart(Producto producto) {
+        Log.i("ON_ADD_TO_CART", producto.toString() + "");
     }
 }
