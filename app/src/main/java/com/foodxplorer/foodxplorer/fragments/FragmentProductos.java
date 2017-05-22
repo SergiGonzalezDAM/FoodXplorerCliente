@@ -69,7 +69,7 @@ public class FragmentProductos extends Fragment implements  AdapterView.OnItemCl
             @Override
             public void onClick(View v) {
                 //mOnAddToCart.onAddToCart(promocion);
-                System.out.println("sadfgdsafgfasghjfgfasdgshgfasfdgssafdgdfgsfasdgfas vsgbdsdafvbdgfevs");
+                System.out.println("sadfgdsafgfasghjfgfasdgshgfasfdgssafdgdfgsfasgfas vsgbdsdafvbdgfevs");
             }
         });
 
