@@ -1,4 +1,4 @@
-package com.foodxplorer.foodxplorer;
+package com.foodxplorer.foodxplorer.fragments;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,11 +9,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.Toast;
+
+import com.foodxplorer.foodxplorer.FragmentRegistro;
+import com.foodxplorer.foodxplorer.MainActivity;
+import com.foodxplorer.foodxplorer.R;
+import com.foodxplorer.foodxplorer.helpers.Settings;
 
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;

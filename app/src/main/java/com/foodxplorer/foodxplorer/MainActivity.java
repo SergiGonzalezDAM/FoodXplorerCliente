@@ -4,7 +4,6 @@ package com.foodxplorer.foodxplorer;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +11,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.foodxplorer.foodxplorer.fragments.FragmentLogin;
+import com.foodxplorer.foodxplorer.fragments.FragmentPedidos;
+import com.foodxplorer.foodxplorer.fragments.FragmentProductos;
+import com.foodxplorer.foodxplorer.fragments.FragmentPromociones;
+import com.foodxplorer.foodxplorer.fragments.FragmentSeguimientoPedido;
 
 
 public class MainActivity extends AppCompatActivity implements FragmentPromociones.OnAddToCart {
