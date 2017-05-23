@@ -2,6 +2,8 @@ package com.foodxplorer.foodxplorer.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,10 @@ import android.widget.TextView;
 import com.foodxplorer.foodxplorer.Producto;
 import com.foodxplorer.foodxplorer.R;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -60,7 +66,20 @@ public class AdaptadorProducto extends BaseAdapter
         Producto dir = items.get(position);
         //RELLENAMOS LA IMAGEN Y EL TEXTO
         ImageView foto = (ImageView) v.findViewById(R.id.imagenPromocion);
-        foto.setImageDrawable(dir.getImagenProducto());
+        URL imageUrl = null;
+        HttpURLConnection conn = null;
+        Bitmap imagen = null;
+        try {
+            imageUrl = new URL(dir.getLinkImagen());
+            conn = (HttpURLConnection) imageUrl.openConnection();
+            conn.connect();
+            imagen = BitmapFactory.decodeStream(conn.getInputStream());
+            foto.setImageBitmap(imagen);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         TextView nombre = (TextView) v.findViewById(R.id.textViewNombrePromocion);
         nombre.setText(dir.getNombre());
         TextView precio = (TextView) v.findViewById(R.id.textViewPrecioPromocion);
