@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
                 getSupportActionBar().setTitle(MainActivity.SEGUIMIENTO);
                 break;
             case PEDIDOS:
-                fragment = new FragmentPedidos();
+                fragment = new FragmentPedidos(MainActivity.this);
                 navView.setCheckedItem(R.id.menu_seccion_4);
                 getSupportActionBar().setTitle(MainActivity.PEDIDOS);
                 break;

@@ -8,5 +8,6 @@ package com.foodxplorer.foodxplorer.helpers;
  */
 
 public interface AsyncResponse {
+
     void processFinish(boolean response);
 }

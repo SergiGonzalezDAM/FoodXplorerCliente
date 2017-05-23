@@ -66,20 +66,6 @@ public class AdaptadorProducto extends BaseAdapter
         Producto dir = items.get(position);
         //RELLENAMOS LA IMAGEN Y EL TEXTO
         ImageView foto = (ImageView) v.findViewById(R.id.imagenPromocion);
-        URL imageUrl = null;
-        HttpURLConnection conn = null;
-        Bitmap imagen = null;
-        try {
-            imageUrl = new URL(dir.getLinkImagen());
-            conn = (HttpURLConnection) imageUrl.openConnection();
-            conn.connect();
-            imagen = BitmapFactory.decodeStream(conn.getInputStream());
-            foto.setImageBitmap(imagen);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         TextView nombre = (TextView) v.findViewById(R.id.textViewNombrePromocion);
         nombre.setText(dir.getNombre());
         TextView precio = (TextView) v.findViewById(R.id.textViewPrecioPromocion);

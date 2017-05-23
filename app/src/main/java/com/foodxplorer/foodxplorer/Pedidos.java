@@ -6,33 +6,17 @@ import android.graphics.drawable.Drawable;
  * Created by ALUMNEDAM on 15/05/2017.
  */
 
-public class Pedidos
-{
-    private String numeroPedido;
+public class Pedidos {
+    private long idPedido;
     private String fechaPedido;
-    private int idPedido;
-    public Pedidos()
-    {
 
+
+    public Pedidos() {
     }
-    public Pedidos(String numeroPedido, String fechaPedido, int idPedido)
-    {
-        this.numeroPedido = numeroPedido;
-        this.fechaPedido = fechaPedido;
+
+    public Pedidos(long idPedido, String fechaPedido) {
         this.idPedido = idPedido;
-    }
-    public Pedidos(String numeroPedido, String fechaPedido)
-    {
-        this.numeroPedido = numeroPedido;
         this.fechaPedido = fechaPedido;
-    }
-
-    public String getNumeroPedido() {
-        return numeroPedido;
-    }
-
-    public void setNumeroPedido(String numeroPedido) {
-        this.numeroPedido = numeroPedido;
     }
 
     public String getFechaPedido() {
@@ -43,11 +27,11 @@ public class Pedidos
         this.fechaPedido = fechaPedido;
     }
 
-    public int getIdPedido() {
+    public long getIdPedido() {
         return idPedido;
     }
 
-    public void setIdPedido(int idPedido) {
+    public void setIdPedido(long idPedido) {
         this.idPedido = idPedido;
     }
 }
