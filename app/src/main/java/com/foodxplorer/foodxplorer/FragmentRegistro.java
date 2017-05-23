@@ -56,7 +56,9 @@ public class FragmentRegistro extends Fragment implements View.OnClickListener, 
         if(R.id.btnRegistrarRegistro == view.getId()){
             TareaWSRegistrarUsuario tareaRegistrar = new TareaWSRegistrarUsuario();
             tareaRegistrar.delegate = this;
-            tareaRegistrar.execute(correo, contrasena);
+            System.out.println(correo.getText());
+            System.out.println(contrasena.getText());
+            tareaRegistrar.execute(correo.getText(), contrasena.getText());
         }
     }
 
@@ -78,7 +80,8 @@ public class FragmentRegistro extends Fragment implements View.OnClickListener, 
             try {
                 URL url = new URL(Settings.DIRECCIO_SERVIDOR + "ServcioFoodXPlorer/webresources/generic/insertarUsuario");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("POST");
+                conn.setRequestMethod("PUT");
+                conn.setDoOutput(true);
                 conn.setReadTimeout(1000 /*milliseconds*/);
                 conn.setConnectTimeout(500);
                 conn.setRequestProperty("Content-Type", "application/json");
@@ -86,7 +89,7 @@ public class FragmentRegistro extends Fragment implements View.OnClickListener, 
                 osw.write(getStringJSON(params));
                 osw.flush();
                 osw.close();
-                System.err.println(conn.getResponseMessage());
+                System.err.println("holaaaaaaaaaaaaaaa"+conn.getResponseMessage());
             } catch (java.io.IOException ex) {
                 Log.e(LOGTAG, "Temps d'espera esgotat al iniciar la conexio amb la BBDD extena");
                 insertadoEnDBexterna = false;
