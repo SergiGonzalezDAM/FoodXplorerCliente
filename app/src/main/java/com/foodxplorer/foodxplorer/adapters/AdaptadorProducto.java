@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.foodxplorer.foodxplorer.Producto;
 import com.foodxplorer.foodxplorer.R;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -65,7 +66,9 @@ public class AdaptadorProducto extends BaseAdapter
 
         Producto dir = items.get(position);
         //RELLENAMOS LA IMAGEN Y EL TEXTO
-        ImageView foto = (ImageView) v.findViewById(R.id.imagenPromocion);
+        ImageView image = (ImageView) v.findViewById(R.id.imagenPromocion);
+        Picasso.with(v.getContext()).load("http://www.cicis.com/media/1138/pizza_trad_pepperoni.png").into(image);
+        System.out.println(dir.getLinkImagen());
         TextView nombre = (TextView) v.findViewById(R.id.textViewNombrePromocion);
         nombre.setText(dir.getNombre());
         TextView precio = (TextView) v.findViewById(R.id.textViewPrecioPromocion);
