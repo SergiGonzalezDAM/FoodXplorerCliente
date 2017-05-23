@@ -16,15 +16,15 @@ import android.widget.Toast;
 import com.foodxplorer.foodxplorer.FragmentRegistro;
 import com.foodxplorer.foodxplorer.MainActivity;
 import com.foodxplorer.foodxplorer.R;
-import com.foodxplorer.foodxplorer.helpers.Settings;
-import com.foodxplorer.foodxplorer.helpers.restManager;
+import com.foodxplorer.foodxplorer.helpers.*;
+
+
+
 
 import java.io.InputStreamReader;
 
 
-interface AsyncResponse {
-    void processFinish(boolean response);
-}
+
 
 public class FragmentLogin extends Fragment implements View.OnClickListener, AsyncResponse {
     private DrawerLayout drawerLayout;
