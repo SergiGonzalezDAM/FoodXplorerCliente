@@ -113,7 +113,7 @@ public class FragmentPromociones extends Fragment implements AdapterView.OnItemC
             catch (java.io.FileNotFoundException ex) {
                 Log.e(LOGTAG, "Error al obtenir la posicio de:" + url.toString()+"\n"+ex);
             }catch (java.io.IOException ex) {
-                Log.e(LOGTAG, "Temps d'espera esgotat al iniciar la conexio amb la BBDD extera:" + url.toString()+"\n"+ex);
+                Log.e(LOGTAG, "Temps d'espera esgotat al iniciar la conexio amb la BBDD externa:" + url.toString()+"\n"+ex);
             } catch (org.json.JSONException ex) {
                 Log.e(LOGTAG, "Error en la transformacio de l'objecte JSON: " + ex);
             }
