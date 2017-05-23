@@ -17,7 +17,7 @@ import com.foodxplorer.foodxplorer.fragments.FragmentPedidos;
 import com.foodxplorer.foodxplorer.fragments.FragmentProductos;
 import com.foodxplorer.foodxplorer.fragments.FragmentPromociones;
 import com.foodxplorer.foodxplorer.fragments.FragmentSeguimientoPedido;
-import com.foodxplorer.foodxplorer.helpers.currentState;
+import com.foodxplorer.foodxplorer.helpers.CurrentState;
 
 
 public class MainActivity extends AppCompatActivity implements FragmentPromociones.OnAddToCart {
@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
     private Toolbar appbar;
     private DrawerLayout drawerLayout;
     private NavigationView navView;
-    public currentState currentState;
+    public CurrentState CurrentState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
             }
         });
         */
-        currentState= new currentState();
+        CurrentState = new CurrentState();
 
         navView = (NavigationView) findViewById(R.id.navview);
         navView.setNavigationItemSelectedListener(

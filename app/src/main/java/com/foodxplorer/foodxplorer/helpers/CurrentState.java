@@ -7,12 +7,12 @@ package com.foodxplorer.foodxplorer.helpers;
  * Created by IES on 22/05/2017.
  */
 
-public class currentState {
+public class CurrentState {
 
     String usuarioLogueado=null;
 
 
-    public currentState(){
+    public CurrentState(){
 
     }
 
@@ -24,3 +24,7 @@ public class currentState {
         this.usuarioLogueado = usuarioLogueado;
     }
 }
+
+
+
+

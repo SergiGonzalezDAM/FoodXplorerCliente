@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Set;
 
 /**
  * Projecte FoodXplorer
@@ -13,16 +14,16 @@ import java.net.URL;
  * Created by IES on 22/05/2017.
  */
 
-public class restManager {
+public class RestManager {
 
     HttpURLConnection conn;
 
-public restManager(String direccio) throws IOException {
+public RestManager(String direccio) throws IOException {
     URL url = new URL(direccio);
     conn = (HttpURLConnection) url.openConnection();
     conn.setRequestMethod("GET");
-    conn.setReadTimeout(5000);/*milliseconds*/
-    conn.setConnectTimeout(5000);
+    conn.setReadTimeout(Settings.SERVER_READ_TIMEOUT);/*milliseconds*/
+    conn.setConnectTimeout(Settings.SERVER_CONNECT_TIMEOUT);
     conn.setRequestProperty("Content-Type", "application/json");
 
 }
