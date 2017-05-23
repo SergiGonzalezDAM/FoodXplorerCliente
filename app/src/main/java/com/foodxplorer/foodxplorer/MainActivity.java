@@ -27,11 +27,11 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
     private NavigationView navView;
     public CurrentState CurrentState;
 
-    public static final int PROMOCIONES = 0;
-    public static final int SEGUIMIENTO = 1;
-    public static final int PEDIDOS = 2;
-    public static final int PRODUCTOS = 3;
-    public static final int LOGIN = 4;
+    public static final String PROMOCIONES = "PROMOCIONES";
+    public static final String SEGUIMIENTO = "SEGUIMINTO";
+    public static final String PEDIDOS = "PEDIDOS";
+    public static final String PRODUCTOS = "PRODUCTOS";
+    public static final String LOGIN = "LOGIN";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,40 +46,14 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        /************************************
-         */
+
         Fragment fragment = new FragmentPromociones();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_frame, fragment)
                 .commit();
         drawerLayout.closeDrawers();
 
-        /*
-        //Eventos del Drawer Layout
-        drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-
-            }
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-
-            }
-
-            @Override
-            public void onDrawerStateChanged(int newState) {
-
-            }
-        });
-        */
         CurrentState = new CurrentState();
-
         navView = (NavigationView) findViewById(R.id.navview);
 
         navView.setNavigationItemSelectedListener(
@@ -152,29 +126,35 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
     /**
      * Go to a especific location.
      *
-     * @param loc
+     * @param loc El fragment al que volem anar
      */
-    public void goTo(int loc) {
+    public void goTo(String loc) {
         Fragment fragment = null;
         switch (loc) {
             case PROMOCIONES:
                 fragment = new FragmentPromociones();
                 navView.setCheckedItem(R.id.menu_seccion_1);
+                getSupportActionBar().setTitle(MainActivity.PROMOCIONES);
                 break;
             case LOGIN:
                 fragment = new FragmentLogin(MainActivity.this);
                 navView.setCheckedItem(R.id.menu_seccion_2);
+                getSupportActionBar().setTitle(MainActivity.LOGIN);
                 break;
             case SEGUIMIENTO:
                 fragment = new FragmentSeguimientoPedido();
                 navView.setCheckedItem(R.id.menu_seccion_3);
+                getSupportActionBar().setTitle(MainActivity.SEGUIMIENTO);
                 break;
             case PEDIDOS:
                 fragment = new FragmentPedidos();
                 navView.setCheckedItem(R.id.menu_seccion_4);
+                getSupportActionBar().setTitle(MainActivity.PEDIDOS);
                 break;
             case PRODUCTOS:
                 fragment = new FragmentProductos();
+                navView.setCheckedItem(R.id.menu_seccion_4);
+                getSupportActionBar().setTitle(MainActivity.PRODUCTOS);
                 break;
         }
 
@@ -184,7 +164,6 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
                     .commit();
 
 
-           // getSupportActionBar().setTitle(navView.getTitle());
         }
 
         drawerLayout.closeDrawers();

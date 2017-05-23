@@ -11,20 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.foodxplorer.foodxplorer.FragmentRegistro;
 import com.foodxplorer.foodxplorer.MainActivity;
 import com.foodxplorer.foodxplorer.R;
-import com.foodxplorer.foodxplorer.helpers.*;
-
-
-
+import com.foodxplorer.foodxplorer.helpers.AsyncResponse;
+import com.foodxplorer.foodxplorer.helpers.RestManager;
+import com.foodxplorer.foodxplorer.helpers.Settings;
 
 import java.io.InputStreamReader;
-
-
 
 
 public class FragmentLogin extends Fragment implements View.OnClickListener, AsyncResponse {
@@ -44,7 +40,7 @@ public class FragmentLogin extends Fragment implements View.OnClickListener, Asy
             this.tienda.goTo(MainActivity.PROMOCIONES);
         } else {
             Log.e(Settings.LOGTAG, "Login fail");
-            Toast.makeText(tienda, "Login fail", Toast.LENGTH_LONG);
+            Toast.makeText(tienda, "Login fail", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -95,11 +91,12 @@ class TareaWScomprobarLogin extends AsyncTask<Object, Void, Boolean> {
     protected Boolean doInBackground(Object... params) {
         boolean result = true;
         InputStreamReader osw;
+        RestManager restManager;
         try {
-            Usuario user= (Usuario) params[0];
-            String aux = (Settings.DIRECCIO_SERVIDOR + Settings.PATH+"loguearUsuario");
+            Usuario user = (Usuario) params[0];
+            String aux = (Settings.DIRECCIO_SERVIDOR + Settings.PATH + "loguearUsuario");
             aux = aux + "/" + user.getUsername() + "/" + user.getPassword() + "/";
-            RestManager restManager= new RestManager(aux);
+            restManager = new RestManager(aux);
             osw = restManager.getInputStream();
             int data = osw.read();
             String res = "";
@@ -108,11 +105,12 @@ class TareaWScomprobarLogin extends AsyncTask<Object, Void, Boolean> {
                 data = osw.read();
                 res = res + current;
             }
-            if(!res.equals("true")){
-                Log.e(Settings.LOGTAG, "Error de login para user: " +  user.getUsername() );
+            if (!res.equals("true")) {
+                Log.e(Settings.LOGTAG, "Error de login para user: " + user.getUsername());
                 result = false;
             }
             osw.close();
+            restManager.disconnect();
             //System.err.println(conn.getResponseMessage());
         } catch (java.net.ProtocolException ex) {
             Log.e(Settings.LOGTAG, "Error de protocol: " + ex);
@@ -120,17 +118,16 @@ class TareaWScomprobarLogin extends AsyncTask<Object, Void, Boolean> {
         } catch (java.io.FileNotFoundException | java.net.MalformedURLException ex) {
             Log.e(Settings.LOGTAG, "Error de ruta d'acces: " + ex);
             result = false;
-        }
-        catch (java.net.SocketTimeoutException ex){
+        } catch (java.net.SocketTimeoutException ex) {
             Log.e(Settings.LOGTAG, "Temps d'espera esgotat al iniciar la conexio amb la BBDD extena: " + ex);
             result = false;
-        }
-        catch (java.io.IOException ex) {
+        } catch (java.io.IOException ex) {
             Log.e(Settings.LOGTAG, "Undefined error: " + ex);
             result = false;
         }
         return result;
     }
+
     @Override
     protected void onPostExecute(Boolean result) {
         delegate.processFinish(result);

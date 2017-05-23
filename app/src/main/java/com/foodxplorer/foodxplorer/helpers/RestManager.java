@@ -16,7 +16,7 @@ import java.util.Set;
 
 public class RestManager {
 
-    HttpURLConnection conn;
+    private HttpURLConnection conn;
 
 public RestManager(String direccio) throws IOException {
     URL url = new URL(direccio);
@@ -33,5 +33,9 @@ public InputStreamReader getInputStream() throws IOException {
     return  new InputStreamReader(conn.getInputStream());
 }
 
+
+public void disconnect(){
+    conn.disconnect();
+}
 
 }
