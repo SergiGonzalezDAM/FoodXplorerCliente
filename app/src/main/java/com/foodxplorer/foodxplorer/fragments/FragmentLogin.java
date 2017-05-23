@@ -77,7 +77,7 @@ public class FragmentLogin extends Fragment implements View.OnClickListener, Asy
     @Override
     public void onClick(View view) {
         if (R.id.btnRegistrar == view.getId()) {
-            Fragment fragment = new FragmentRegistro();
+            Fragment fragment = new FragmentRegistro(this.tienda);
             getFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
         } else {
             TareaWScomprobarLogin tarea = new TareaWScomprobarLogin();

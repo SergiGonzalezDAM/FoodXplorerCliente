@@ -34,9 +34,14 @@ public class FragmentRegistro extends Fragment implements View.OnClickListener, 
     private EditText contrasena;
     private EditText correo;
     private Button btnRegistro;
+    private MainActivity tienda;
 
     public FragmentRegistro() {
         // Required empty public constructor
+    }
+    public FragmentRegistro(MainActivity tienda)
+    {
+        this.tienda = tienda;
     }
 
     @Override
@@ -57,8 +62,6 @@ public class FragmentRegistro extends Fragment implements View.OnClickListener, 
         if (R.id.btnRegistrarRegistro == view.getId()) {
             TareaWSRegistrarUsuario tareaRegistrar = new TareaWSRegistrarUsuario();
             tareaRegistrar.delegate = this;
-            System.out.println(correo.getText());
-            System.out.println(contrasena.getText());
             tareaRegistrar.execute(correo.getText(), contrasena.getText());
         }
     }
@@ -67,6 +70,7 @@ public class FragmentRegistro extends Fragment implements View.OnClickListener, 
     public void processFinish(boolean response) {
         if (response) {
             Log.e(LOGTAG, "Registro ok");
+            this.tienda.goTo(MainActivity.PROMOCIONES);
         } else {
             Log.e(LOGTAG, "Registro fail");
         }
@@ -91,7 +95,7 @@ public class FragmentRegistro extends Fragment implements View.OnClickListener, 
                 osw.write(getStringJSON(params));
                 osw.flush();
                 osw.close();
-                System.err.println("holaaaaaaaaaaaaaaa" + conn.getResponseMessage());
+                System.err.println(conn.getResponseMessage());
             } catch (java.io.IOException ex) {
                 Log.e(LOGTAG, "Temps d'espera esgotat al iniciar la conexio amb la BBDD extena");
                 insertadoEnDBexterna = false;
@@ -108,6 +112,11 @@ public class FragmentRegistro extends Fragment implements View.OnClickListener, 
             dato.put("contrasena", params[1]);
             Log.d(LOGTAG, "El usuario que se insertara es:" + dato.toString());
             return String.valueOf(dato);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            delegate.processFinish(aBoolean);
         }
     }
 }
