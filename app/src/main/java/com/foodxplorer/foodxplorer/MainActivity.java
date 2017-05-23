@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
     public static final String PEDIDOS = "PEDIDOS";
     public static final String PRODUCTOS = "PRODUCTOS";
     public static final String LOGIN = "LOGIN";
+    public static final String REGISTRO = "REGISTRO";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,36 +62,23 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
 
-                        Fragment fragment = null;
                         switch (menuItem.getItemId()) {
                             case R.id.menu_seccion_1:
-                                fragment = new FragmentPromociones();
+                                goTo(PROMOCIONES);
                                 break;
                             case R.id.menu_seccion_2:
-                                fragment = new FragmentLogin(MainActivity.this);
+                                goTo(LOGIN);
                                 break;
                             case R.id.menu_seccion_3:
-                                fragment = new FragmentSeguimientoPedido();
+                                goTo(SEGUIMIENTO);
                                 break;
                             case R.id.menu_seccion_4:
-                                fragment = new FragmentPedidos();
+                                goTo(PEDIDOS);
                                 break;
                             case R.id.menu_seccion_5:
-                                fragment = new FragmentProductos();
+                                goTo(PRODUCTOS);
                                 break;
                         }
-
-                        if (fragment != null) {
-                            getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.content_frame, fragment)
-                                    .commit();
-
-                            menuItem.setChecked(true);
-                            getSupportActionBar().setTitle(menuItem.getTitle());
-                        }
-
-                        drawerLayout.closeDrawers();
-
                         return true;
                     }
                 });
@@ -153,8 +141,13 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
                 break;
             case PRODUCTOS:
                 fragment = new FragmentProductos();
-                navView.setCheckedItem(R.id.menu_seccion_4);
+                navView.setCheckedItem(R.id.menu_seccion_5);
                 getSupportActionBar().setTitle(MainActivity.PRODUCTOS);
+                break;
+            case REGISTRO:
+                fragment = new FragmentRegistro();
+                navView.setCheckedItem(R.id.menu_seccion_5);
+                getSupportActionBar().setTitle(MainActivity.REGISTRO);
                 break;
         }
 
