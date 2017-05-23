@@ -59,7 +59,7 @@ public class FragmentProductos extends Fragment implements  AdapterView.OnItemCl
         ImageView foto = (ImageView) mView.findViewById(R.id.imagenPromocion);
         foto.setImageDrawable(producto.getImagenProducto());
         TextView nombre = (TextView)mView.findViewById(R.id.textViewNombrePromocion);
-        nombre.setText(producto.getNombreProducto());
+        nombre.setText(producto.getNombre());
         TextView precio = (TextView) mView.findViewById(R.id.textViewPrecioPromocion);
         precio.setText(producto.getPrecio()+" €");
         TextView descripcion = (TextView)mView.findViewById(R.id.textViewDescripcionPromociones);
