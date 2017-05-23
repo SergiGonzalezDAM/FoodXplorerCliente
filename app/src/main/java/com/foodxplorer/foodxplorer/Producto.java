@@ -4,27 +4,47 @@ import android.graphics.drawable.Drawable;
 
 public class Producto
 {
+
     private Drawable imagenProducto;
-    private String nombreProducto;
+    private String Nombre;
     private int idProducto;
+    String linkImagen;
     private double precio;
+    int iva;
+    double ofertaProducto;
+    int tipoProducto;
+    int activo;
     String descripcion;
 
     public Producto()
     {
 
     }
+
     public Producto(Drawable imagenProducto, String nombreProducto, int idProducto, double precio,String descripcion)
     {
-        this.nombreProducto = nombreProducto;
+        this.Nombre = nombreProducto;
         this.imagenProducto = imagenProducto;
         this.idProducto = idProducto;
         this.precio = precio;
         this.descripcion = descripcion;
     }
+    public Producto(int idProducto, String nombreProducto, String descripcion, double precio, int iva, double ofertaProducto, int activo,int tipoProducto, String linkImagen)
+    {
+        this.Nombre = nombreProducto;
+        this.linkImagen = linkImagen;
+        this.iva = iva;
+        this.activo = activo;
+        this.tipoProducto = tipoProducto;
+        this.ofertaProducto = ofertaProducto;
+        this.idProducto = idProducto;
+        this.precio = precio;
+        this.descripcion = descripcion;
+    }
+
     public Producto(Drawable imagenProducto, String nombreProducto, double precio,String descripcion)
     {
-        this.nombreProducto = nombreProducto;
+        this.Nombre = nombreProducto;
         this.imagenProducto = imagenProducto;
         this.precio = precio;
         this.descripcion = descripcion;
@@ -55,11 +75,11 @@ public class Producto
     }
 
     public String getNombreProducto() {
-        return nombreProducto;
+        return Nombre;
     }
 
     public void setNombreProducto(String nombreProducto) {
-        this.nombreProducto = nombreProducto;
+        this.Nombre = nombreProducto;
     }
 
     public int getIdProducto() {
@@ -74,7 +94,7 @@ public class Producto
     public String toString() {
         return "Promociones{" +
                 "imagenProducto=" + imagenProducto +
-                ", nombreProducto='" + nombreProducto + '\'' +
+                ", Nombre='" + Nombre + '\'' +
                 ", idProducto=" + idProducto +
                 ", precio=" + precio +
                 ", descripcion='" + descripcion + '\'' +
