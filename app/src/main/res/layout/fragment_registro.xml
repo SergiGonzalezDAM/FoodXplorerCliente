@@ -11,63 +11,64 @@
         android:text="Contraseña"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="21dp"
         android:id="@+id/textViewLoginPassword"
         android:textColor="@android:color/background_dark"
         android:textSize="18sp"
-        android:layout_below="@+id/editTextLoginUsuario"
-        android:layout_centerHorizontal="true" />
+        android:layout_above="@+id/editTextPasswordLogin"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="18dp" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/logopizzaxplorer"
         android:id="@+id/imageView"
+        android:layout_marginTop="60dp"
         android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/editTextLoginUsuario"
-        android:layout_alignStart="@+id/editTextLoginUsuario" />
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:text="Correo Electrónico"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="12dp"
         android:id="@+id/textView"
         android:textSize="18sp"
         android:textColor="@android:color/background_dark"
-        android:layout_below="@+id/editTextPasswordLogin"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/imageView"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="107dp"
+        android:layout_marginEnd="107dp" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:ems="10"
-        android:layout_marginTop="12dp"
         android:id="@+id/editTextPasswordLogin"
-        android:layout_below="@+id/textViewLoginPassword"
-        android:layout_alignLeft="@+id/editTextLoginUsuario"
-        android:layout_alignStart="@+id/editTextLoginUsuario" />
+        android:layout_above="@+id/btnRegistrarRegistro"
+        android:layout_alignLeft="@+id/editTextCorreoRegistro"
+        android:layout_alignStart="@+id/editTextCorreoRegistro" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
         android:ems="10"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="13dp"
         android:id="@+id/editTextCorreoRegistro"
         android:layout_below="@+id/textView"
-        android:layout_alignLeft="@+id/editTextPasswordLogin"
-        android:layout_alignStart="@+id/editTextPasswordLogin" />
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:text="Registro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/btnRegistrarRegistro"
-        android:layout_below="@+id/editTextCorreoRegistro"
-        android:layout_alignLeft="@+id/textViewLoginPassword"
-        android:layout_alignStart="@+id/textViewLoginPassword"
-        android:layout_marginTop="37dp" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/textViewLoginPassword"
+        android:layout_alignEnd="@+id/textViewLoginPassword"
+        android:layout_marginBottom="111dp" />
 
 </RelativeLayout>

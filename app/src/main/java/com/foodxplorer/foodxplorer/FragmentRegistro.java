@@ -24,15 +24,17 @@ import java.net.URL;
 
 import static com.foodxplorer.foodxplorer.helpers.Settings.LOGTAG;
 
-interface AsyncResponse{
+interface AsyncResponse {
     void processFinish(boolean response);
 }
+
 public class FragmentRegistro extends Fragment implements View.OnClickListener, AsyncResponse {
     private DrawerLayout drawerLayout;
     private NavigationView navView;
     private EditText contrasena;
     private EditText correo;
     private Button btnRegistro;
+
     public FragmentRegistro() {
         // Required empty public constructor
     }
@@ -50,13 +52,14 @@ public class FragmentRegistro extends Fragment implements View.OnClickListener, 
     }
 
 
-
     @Override
     public void onClick(View view) {
-        if(R.id.btnRegistrarRegistro == view.getId()){
+        if (R.id.btnRegistrarRegistro == view.getId()) {
             TareaWSRegistrarUsuario tareaRegistrar = new TareaWSRegistrarUsuario();
             tareaRegistrar.delegate = this;
-            tareaRegistrar.execute(correo, contrasena);
+            System.out.println(correo.getText());
+            System.out.println(contrasena.getText());
+            tareaRegistrar.execute(correo.getText(), contrasena.getText());
         }
     }
 
@@ -71,14 +74,16 @@ public class FragmentRegistro extends Fragment implements View.OnClickListener, 
 
     class TareaWSRegistrarUsuario extends AsyncTask<Object, Integer, Boolean> {
         public AsyncResponse delegate = null;
+
         @Override
         protected Boolean doInBackground(Object... params) {
             boolean insertadoEnDBexterna = true;
             OutputStreamWriter osw;
             try {
-                URL url = new URL(Settings.DIRECCIO_SERVIDOR + "ServcioFoodXPlorer/webresources/generic/insertarUsuario");
+                URL url = new URL(Settings.DIRECCIO_SERVIDOR + "ServcioFoodXPlorer/webresources/generic/InsertarUsuario");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("POST");
+                conn.setRequestMethod("PUT");
+                conn.setDoOutput(true);
                 conn.setReadTimeout(1000 /*milliseconds*/);
                 conn.setConnectTimeout(500);
                 conn.setRequestProperty("Content-Type", "application/json");
@@ -86,7 +91,7 @@ public class FragmentRegistro extends Fragment implements View.OnClickListener, 
                 osw.write(getStringJSON(params));
                 osw.flush();
                 osw.close();
-                System.err.println(conn.getResponseMessage());
+                System.err.println("holaaaaaaaaaaaaaaa" + conn.getResponseMessage());
             } catch (java.io.IOException ex) {
                 Log.e(LOGTAG, "Temps d'espera esgotat al iniciar la conexio amb la BBDD extena");
                 insertadoEnDBexterna = false;
@@ -96,12 +101,13 @@ public class FragmentRegistro extends Fragment implements View.OnClickListener, 
             }
             return insertadoEnDBexterna;
         }
+
         private String getStringJSON(Object... params) throws JSONException, UnsupportedEncodingException {
             JSONObject dato = new JSONObject();
             dato.put("correo", params[0]);
             dato.put("contrasena", params[1]);
             Log.d(LOGTAG, "El usuario que se insertara es:" + dato.toString());
-            return dato.toString();
+            return String.valueOf(dato);
         }
     }
 }
