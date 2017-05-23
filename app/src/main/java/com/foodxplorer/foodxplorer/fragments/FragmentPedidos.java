@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.foodxplorer.foodxplorer.MainActivity;
 import com.foodxplorer.foodxplorer.Producto;
@@ -103,24 +104,32 @@ public class FragmentPedidos extends Fragment {
         protected void onPostExecute(Boolean result) {
             if (result) {
                 try {
-                    rellenarArray();
-                    adaptador = new AdaptadorPedido(getActivity(), listaPedidos);
-                    lista.setAdapter(adaptador);
+                    if (!rellenarArray()) {
+                        Toast.makeText(tienda,"NO HAY PEDIDOS",Toast.LENGTH_SHORT).show();
+                    } else {
+                        adaptador = new AdaptadorPedido(getActivity(), listaPedidos);
+                        lista.setAdapter(adaptador);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-
-
         }
 
-        private void rellenarArray() throws JSONException {
+        private boolean rellenarArray() throws JSONException {
+            boolean estado;
             listaPedidos = new ArrayList();
-            for (int i = 0; i < listadoPedidosJSON.length(); i++) {
-                JSONObject jsonobject = listadoPedidosJSON.getJSONObject(i);
-                Pedidos pedido = new Pedidos(jsonobject.getLong("idPedido"), jsonobject.getString("fechaSalida"));
-                listaPedidos.add(pedido);
+            if (listadoPedidosJSON.length() > 0) {
+                for (int i = 0; i < listadoPedidosJSON.length(); i++) {
+                    JSONObject jsonobject = listadoPedidosJSON.getJSONObject(i);
+                    Pedidos pedido = new Pedidos(jsonobject.getLong("idPedido"), jsonobject.getString("fechaSalida"));
+                    listaPedidos.add(pedido);
+                }
+                estado = true;
+            } else {
+                estado = false;
             }
+            return estado;
         }
     }
 }
