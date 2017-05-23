@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.foodxplorer.foodxplorer.FragmentRegistro;
@@ -40,6 +41,7 @@ public class FragmentLogin extends Fragment implements View.OnClickListener, Asy
         if (response) {
             Log.e(Settings.LOGTAG, "Login ok");
             this.tienda.CurrentState.setUsuarioLogueado(etUsuario.getText().toString());
+            this.tienda.goTo(MainActivity.PROMOCIONES);
         } else {
             Log.e(Settings.LOGTAG, "Login fail");
             Toast.makeText(tienda, "Login fail", Toast.LENGTH_LONG);
