@@ -17,7 +17,7 @@ import com.foodxplorer.foodxplorer.fragments.FragmentPedidos;
 import com.foodxplorer.foodxplorer.fragments.FragmentProductos;
 import com.foodxplorer.foodxplorer.fragments.FragmentPromociones;
 import com.foodxplorer.foodxplorer.fragments.FragmentSeguimientoPedido;
-import com.foodxplorer.foodxplorer.helpers.currentState;
+import com.foodxplorer.foodxplorer.helpers.CurrentState;
 
 
 public class MainActivity extends AppCompatActivity implements FragmentPromociones.OnAddToCart {
@@ -25,7 +25,13 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
     private Toolbar appbar;
     private DrawerLayout drawerLayout;
     private NavigationView navView;
-    public currentState currentState;
+    public CurrentState CurrentState;
+
+    public static final int PROMOCIONES = 0;
+    public static final int SEGUIMIENTO = 1;
+    public static final int PEDIDOS = 2;
+    public static final int PRODUCTOS = 3;
+    public static final int LOGIN = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,41 +78,35 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
             }
         });
         */
-        currentState= new currentState();
+        CurrentState = new CurrentState();
 
         navView = (NavigationView) findViewById(R.id.navview);
+
         navView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
 
-                        boolean fragmentTransaction = false;
                         Fragment fragment = null;
-
                         switch (menuItem.getItemId()) {
                             case R.id.menu_seccion_1:
                                 fragment = new FragmentPromociones();
-                                fragmentTransaction = true;
                                 break;
                             case R.id.menu_seccion_2:
                                 fragment = new FragmentLogin(MainActivity.this);
-                                fragmentTransaction = true;
                                 break;
                             case R.id.menu_seccion_3:
                                 fragment = new FragmentSeguimientoPedido();
-                                fragmentTransaction = true;
                                 break;
                             case R.id.menu_seccion_4:
                                 fragment = new FragmentPedidos();
-                                fragmentTransaction = true;
                                 break;
                             case R.id.menu_seccion_5:
                                 fragment = new FragmentProductos();
-                                fragmentTransaction = true;
                                 break;
                         }
 
-                        if (fragmentTransaction) {
+                        if (fragment != null) {
                             getSupportFragmentManager().beginTransaction()
                                     .replace(R.id.content_frame, fragment)
                                     .commit();
@@ -148,4 +148,46 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
     public void onAddToCart(Producto producto) {
         Log.i("ON_ADD_TO_CART", producto.toString() + "");
     }
+
+    /**
+     * Go to a especific location.
+     *
+     * @param loc
+     */
+    public void goTo(int loc) {
+        Fragment fragment = null;
+        switch (loc) {
+            case PROMOCIONES:
+                fragment = new FragmentPromociones();
+                navView.setCheckedItem(R.id.menu_seccion_1);
+                break;
+            case LOGIN:
+                fragment = new FragmentLogin(MainActivity.this);
+                navView.setCheckedItem(R.id.menu_seccion_2);
+                break;
+            case SEGUIMIENTO:
+                fragment = new FragmentSeguimientoPedido();
+                navView.setCheckedItem(R.id.menu_seccion_3);
+                break;
+            case PEDIDOS:
+                fragment = new FragmentPedidos();
+                navView.setCheckedItem(R.id.menu_seccion_4);
+                break;
+            case PRODUCTOS:
+                fragment = new FragmentProductos();
+                break;
+        }
+
+        if (fragment != null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content_frame, fragment)
+                    .commit();
+
+
+           // getSupportActionBar().setTitle(navView.getTitle());
+        }
+
+        drawerLayout.closeDrawers();
+    }
 }
+

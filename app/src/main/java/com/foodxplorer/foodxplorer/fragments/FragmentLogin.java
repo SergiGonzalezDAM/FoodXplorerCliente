@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.foodxplorer.foodxplorer.FragmentRegistro;
@@ -39,7 +40,8 @@ public class FragmentLogin extends Fragment implements View.OnClickListener, Asy
     public void processFinish(boolean response) {
         if (response) {
             Log.e(Settings.LOGTAG, "Login ok");
-            this.tienda.currentState.setUsuarioLogueado(etUsuario.getText().toString());
+            this.tienda.CurrentState.setUsuarioLogueado(etUsuario.getText().toString());
+            this.tienda.goTo(MainActivity.PROMOCIONES);
         } else {
             Log.e(Settings.LOGTAG, "Login fail");
             Toast.makeText(tienda, "Login fail", Toast.LENGTH_LONG);
@@ -75,10 +77,8 @@ public class FragmentLogin extends Fragment implements View.OnClickListener, Asy
     @Override
     public void onClick(View view) {
         if (R.id.btnRegistrar == view.getId()) {
-            System.out.println("Joderrrr");
-            Fragment fragment = new FragmentRegistro();
+            Fragment fragment = new FragmentRegistro(this.tienda);
             getFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
-            // drawerLayout.closeDrawers();
         } else {
             TareaWScomprobarLogin tarea = new TareaWScomprobarLogin();
             tarea.delegate = this;
@@ -97,9 +97,9 @@ class TareaWScomprobarLogin extends AsyncTask<Object, Void, Boolean> {
         InputStreamReader osw;
         try {
             Usuario user= (Usuario) params[0];
-            String aux = (Settings.DIRECCIO_SERVIDOR + "ServcioFoodXPlorer/webresources/generic/loguearUsuario");
-            aux = aux + "/" + user.username + "/" + user.password + "/";
-            restManager restManager= new restManager(aux);
+            String aux = (Settings.DIRECCIO_SERVIDOR + Settings.PATH+"loguearUsuario");
+            aux = aux + "/" + user.getUsername() + "/" + user.getPassword() + "/";
+            RestManager restManager= new RestManager(aux);
             osw = restManager.getInputStream();
             int data = osw.read();
             String res = "";
@@ -109,7 +109,7 @@ class TareaWScomprobarLogin extends AsyncTask<Object, Void, Boolean> {
                 res = res + current;
             }
             if(!res.equals("true")){
-                Log.e(Settings.LOGTAG, "Error de login para user: " +  user.username );
+                Log.e(Settings.LOGTAG, "Error de login para user: " +  user.getUsername() );
                 result = false;
             }
             osw.close();
@@ -117,11 +117,16 @@ class TareaWScomprobarLogin extends AsyncTask<Object, Void, Boolean> {
         } catch (java.net.ProtocolException ex) {
             Log.e(Settings.LOGTAG, "Error de protocol: " + ex);
             result = false;
-        } catch (java.io.FileNotFoundException ex) {
+        } catch (java.io.FileNotFoundException | java.net.MalformedURLException ex) {
             Log.e(Settings.LOGTAG, "Error de ruta d'acces: " + ex);
             result = false;
-        } catch (java.io.IOException ex) {
+        }
+        catch (java.net.SocketTimeoutException ex){
             Log.e(Settings.LOGTAG, "Temps d'espera esgotat al iniciar la conexio amb la BBDD extena: " + ex);
+            result = false;
+        }
+        catch (java.io.IOException ex) {
+            Log.e(Settings.LOGTAG, "Undefined error: " + ex);
             result = false;
         }
         return result;
@@ -134,8 +139,8 @@ class TareaWScomprobarLogin extends AsyncTask<Object, Void, Boolean> {
 
 class Usuario {
 
-    String username;
-    String password;
+    private String username;
+    private String password;
 
     public Usuario(String username, String password) {
         this.username = username;
