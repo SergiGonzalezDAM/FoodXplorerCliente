@@ -85,7 +85,7 @@ public class FragmentLogin extends Fragment implements View.OnClickListener, Asy
 
 class TareaWScomprobarLogin extends AsyncTask<Object, Void, Boolean> {
 
-    public AsyncResponse delegate = null;
+    AsyncResponse delegate = null;
 
     @Override
     protected Boolean doInBackground(Object... params) {
@@ -139,17 +139,17 @@ class Usuario {
     private String username;
     private String password;
 
-    public Usuario(String username, String password) {
+    Usuario(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
-    public String getUsername() {
+    String getUsername() {
         return username;
     }
 
 
-    public String getPassword() {
+    String getPassword() {
         return password;
     }
 
