@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.foodxplorer.foodxplorer.Producto;
 import com.foodxplorer.foodxplorer.R;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -65,21 +66,8 @@ public class AdaptadorProducto extends BaseAdapter
 
         Producto dir = items.get(position);
         //RELLENAMOS LA IMAGEN Y EL TEXTO
-        ImageView foto = (ImageView) v.findViewById(R.id.imagenPromocion);
-        URL imageUrl = null;
-        HttpURLConnection conn = null;
-        Bitmap imagen = null;
-        try {
-            imageUrl = new URL(dir.getLinkImagen());
-            conn = (HttpURLConnection) imageUrl.openConnection();
-            conn.connect();
-            imagen = BitmapFactory.decodeStream(conn.getInputStream());
-            foto.setImageBitmap(imagen);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ImageView image = (ImageView) v.findViewById(R.id.imagenPromocion);
+        Picasso.with(v.getContext()).load(dir.getLinkImagen()).into(image);
         TextView nombre = (TextView) v.findViewById(R.id.textViewNombrePromocion);
         nombre.setText(dir.getNombre());
         TextView precio = (TextView) v.findViewById(R.id.textViewPrecioPromocion);
