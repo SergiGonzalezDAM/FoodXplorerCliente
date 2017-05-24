@@ -19,6 +19,7 @@ import com.foodxplorer.foodxplorer.fragments.FragmentLogin;
 import com.foodxplorer.foodxplorer.fragments.FragmentPedidos;
 import com.foodxplorer.foodxplorer.fragments.FragmentProductos;
 import com.foodxplorer.foodxplorer.fragments.FragmentPromociones;
+import com.foodxplorer.foodxplorer.fragments.FragmentResumenPedido;
 import com.foodxplorer.foodxplorer.fragments.FragmentSeguimientoPedido;
 import com.foodxplorer.foodxplorer.helpers.Carrito;
 
@@ -145,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
                 getSupportActionBar().setTitle(MainActivity.LOGIN);
                 break;
             case SEGUIMIENTO:
-                fragment = new FragmentSeguimientoPedido();
+                fragment = new FragmentSeguimientoPedido(MainActivity.this);
                 navView.setCheckedItem(R.id.menu_seccion_3);
                 getSupportActionBar().setTitle(MainActivity.SEGUIMIENTO);
                 break;
