@@ -63,7 +63,7 @@ public class FragmentResumenPedido extends Fragment {
         importe = (TextView) view.findViewById(R.id.textViewImporte);
         direccion = (TextView) view.findViewById(R.id.textViewDireccion);
         estado = (TextView) view.findViewById(R.id.textViewEstadoResumenPedido);
-        nombreCliente.setText(tienda.CurrentState.getUsuarioLogueado());
+        nombreCliente.setText(tienda.carrito.getUsuarioLogueado());
         TareaWSRecuperarDireccion tareaRecDir = new TareaWSRecuperarDireccion();
         tareaRecDir.execute();
         TareaWSRecuperarLineasPedido tareaLines = new TareaWSRecuperarLineasPedido();
@@ -120,7 +120,7 @@ public class FragmentResumenPedido extends Fragment {
         protected void onPostExecute(Boolean result) {
             if (result) {
                 try {
-                    if (!rellenarObjeto() || tienda.CurrentState.getUsuarioLogueado() == null || tienda.CurrentState.getUsuarioLogueado().equals("")) {
+                    if (!rellenarObjeto() || tienda.carrito.getUsuarioLogueado() == null || tienda.carrito.getUsuarioLogueado().equals("")) {
                         Toast.makeText(tienda, "NO EXISTE ESE NUMERO DE PEDIDO", Toast.LENGTH_SHORT).show();
                     } else {
                         direccion.setText(direccionObject.getPiso() + "\n" + direccionObject.getCalle() + "\n" + direccionObject.getPoblacion());
@@ -179,7 +179,7 @@ public class FragmentResumenPedido extends Fragment {
         protected void onPostExecute(Boolean result) {
             if (result) {
                 try {
-                    if (!rellenarArray() || tienda.CurrentState.getUsuarioLogueado() == null || tienda.CurrentState.getUsuarioLogueado().equals("")) {
+                    if (!rellenarArray() || tienda.carrito.getUsuarioLogueado() == null || tienda.carrito.getUsuarioLogueado().equals("")) {
                         Toast.makeText(tienda, "ERROR", Toast.LENGTH_SHORT).show();
                     } else {
                         for (LineasPedido linea : listaLineasPedido) {

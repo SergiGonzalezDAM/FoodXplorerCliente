@@ -122,7 +122,7 @@ public class FragmentSeguimientoPedido extends Fragment implements View.OnClickL
         protected void onPostExecute(Boolean result) {
             if (result) {
                 try {
-                    if (!rellenarObjeto() || tienda.CurrentState.getUsuarioLogueado() == null || tienda.CurrentState.getUsuarioLogueado().equals("")) {
+                    if (!rellenarObjeto() || tienda.carrito.getUsuarioLogueado() == null || tienda.carrito.getUsuarioLogueado().equals("")) {
                         Toast.makeText(tienda, "NO EXISTE ESE NUMERO DE PEDIDO", Toast.LENGTH_SHORT).show();
                     } else {
                         numeroPedidoEncontrado = true;
