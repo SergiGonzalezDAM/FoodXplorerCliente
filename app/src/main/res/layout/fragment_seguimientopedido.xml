@@ -33,7 +33,7 @@
         android:inputType="textPersonName"
         android:ems="10"
         android:layout_marginTop="24dp"
-        android:id="@+id/editTextLoginUsuario"
+        android:id="@+id/editTextNumeroSeguimiento"
         android:layout_below="@+id/textViewShowUsername"
         android:layout_centerHorizontal="true" />
 

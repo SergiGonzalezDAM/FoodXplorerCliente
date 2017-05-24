@@ -12,7 +12,7 @@
         android:inputType="textPersonName"
         android:ems="10"
         android:layout_marginTop="15dp"
-        android:id="@+id/editTextLoginUsuario"
+        android:id="@+id/editTextNumeroSeguimiento"
         android:layout_below="@+id/textViewShowUsername"
         android:layout_centerHorizontal="true" />
 
@@ -36,7 +36,7 @@
         android:id="@+id/textViewLoginPassword"
         android:textColor="@android:color/background_dark"
         android:textSize="18sp"
-        android:layout_below="@+id/editTextLoginUsuario"
+        android:layout_below="@+id/editTextNumeroSeguimiento"
         android:layout_centerHorizontal="true" />
 
     <EditText

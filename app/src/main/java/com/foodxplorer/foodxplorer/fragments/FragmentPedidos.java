@@ -52,18 +52,7 @@ public class FragmentPedidos extends Fragment {
         tareaPedidos.execute();
         View view = inflater.inflate(R.layout.fragment_pedidos, container, false);
         lista = (ListView) view.findViewById(R.id.listViewPedidos);
-//        Pedidos pedido;
-//        // Introduzco los datos
-//        pedido = new Pedidos("56431351", "15/05/2017");
-//        arraydira.add(pedido);
-//        pedido = new Pedidos("13152541", "11/05/2017");
-//        arraydira.add(pedido);
-//        pedido = new Pedidos("35431565", "12/05/2017");
-//        arraydira.add(pedido);
-//        adaptador = new AdaptadorPedido(getActivity(), arraydira);
-        //       lista.setAdapter(adaptador);
         return view;
-
     }
 
     class TareaWSRecuperarPedidos extends AsyncTask<Object, Void, Boolean> {
@@ -77,12 +66,11 @@ public class FragmentPedidos extends Fragment {
             BufferedReader reader;
             URL url = null;
             try {
-                System.out.println(tienda.CurrentState.getUsuarioLogueado());
                 url = new URL(Settings.DIRECCIO_SERVIDOR + "ServcioFoodXPlorer/webresources/generic/pedidos/" + tienda.CurrentState.getUsuarioLogueado());
                 reader = getBufferedReader(url);
                 listadoPedidosJSON = new JSONArray(reader.readLine());
             } catch (java.io.FileNotFoundException ex) {
-                Log.e(LOGTAG, "Error al obtenir la posicio de:" + url.toString() + "\n" + ex);
+                Log.e(LOGTAG, "Error al obtener el pedido de:" + url.toString() + "\n" + ex);
             } catch (java.io.IOException ex) {
                 Log.e(LOGTAG, "Temps d'espera esgotat al iniciar la conexio amb la BBDD externa:" + url.toString() + "\n" + ex);
             } catch (org.json.JSONException ex) {

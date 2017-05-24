@@ -64,7 +64,7 @@ public class FragmentLogin extends Fragment implements View.OnClickListener, Asy
         btnLogin.setOnClickListener(this);
         Button btnRegister = (Button) view.findViewById(R.id.btnRegistrar);
         btnRegister.setOnClickListener(this);
-        etUsuario = (EditText) view.findViewById(R.id.editTextLoginUsuario);
+        etUsuario = (EditText) view.findViewById(R.id.editTextNumeroSeguimiento);
         etPassword = (EditText) view.findViewById(R.id.editTextPasswordLogin);
 
 
