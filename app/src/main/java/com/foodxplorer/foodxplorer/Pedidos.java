@@ -9,14 +9,15 @@ import android.graphics.drawable.Drawable;
 public class Pedidos {
     private long idPedido;
     private String fechaPedido;
-
+    private long idDireccion;
 
     public Pedidos() {
     }
 
-    public Pedidos(long idPedido, String fechaPedido) {
+    public Pedidos(long idPedido, String fechaPedido, long idDireccion) {
         this.idPedido = idPedido;
         this.fechaPedido = fechaPedido;
+        this.idDireccion = idDireccion;
     }
 
     public String getFechaPedido() {
@@ -33,5 +34,13 @@ public class Pedidos {
 
     public void setIdPedido(long idPedido) {
         this.idPedido = idPedido;
+    }
+
+    public long getIdDireccion() {
+        return idDireccion;
+    }
+
+    public void setIdDireccion(long idDireccion) {
+        this.idDireccion = idDireccion;
     }
 }

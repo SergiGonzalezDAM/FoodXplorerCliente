@@ -90,7 +90,7 @@ public class FragmentPedidos extends Fragment {
             if (result) {
                 try {
                     if (!rellenarArray()) {
-                        Toast.makeText(tienda,"NO HAY PEDIDOS",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(tienda, "NO HAY PEDIDOS", Toast.LENGTH_SHORT).show();
                     } else {
                         adaptador = new AdaptadorPedido(getActivity(), listaPedidos);
                         lista.setAdapter(adaptador);
@@ -107,7 +107,7 @@ public class FragmentPedidos extends Fragment {
             if (listadoPedidosJSON.length() > 0) {
                 for (int i = 0; i < listadoPedidosJSON.length(); i++) {
                     JSONObject jsonobject = listadoPedidosJSON.getJSONObject(i);
-                    Pedidos pedido = new Pedidos(jsonobject.getLong("idPedido"), jsonobject.getString("fechaSalida"));
+                    Pedidos pedido = new Pedidos(jsonobject.getLong("idPedido"), jsonobject.getString("fechaSalida"), jsonobject.getLong("idDireccion"));
                     listaPedidos.add(pedido);
                 }
                 estado = true;

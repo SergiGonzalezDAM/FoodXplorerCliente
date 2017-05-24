@@ -32,6 +32,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
+import static android.R.attr.fragment;
 import static com.foodxplorer.foodxplorer.helpers.Settings.LOGTAG;
 
 public class FragmentSeguimientoPedido extends Fragment implements View.OnClickListener {
@@ -40,6 +41,8 @@ public class FragmentSeguimientoPedido extends Fragment implements View.OnClickL
     MainActivity tienda;
     String numPedido;
     private boolean numeroPedidoEncontrado;
+    private TareaWSRecuperarPedidosSeguimiento tarea;
+    Pedidos pedido;
 
     public FragmentSeguimientoPedido() {
         // Required empty public constructor
@@ -55,25 +58,29 @@ public class FragmentSeguimientoPedido extends Fragment implements View.OnClickL
         View view;
         view = inflater.inflate(R.layout.fragment_seguimientopedido, container, false);
         editTextNumPedido = (EditText) view.findViewById(R.id.editTextNumeroSeguimiento);
-        numPedido = editTextNumPedido.getText().toString();
         btnBuscarPedidoParaSeguir = (Button) view.findViewById(R.id.btnBuscarPedido);
         btnBuscarPedidoParaSeguir.setOnClickListener(this);
-        TareaWSRecuperarPedidosSeguimiento tarea = new TareaWSRecuperarPedidosSeguimiento();
-        tarea.execute();
         return view;
     }
 
     @Override
     public void onClick(View view) {
+        numPedido = String.valueOf(editTextNumPedido.getText());
+        tarea = new TareaWSRecuperarPedidosSeguimiento();
+        tarea.execute();
         if (numeroPedidoEncontrado) {
-            System.out.println("FUNCIONAAAAAAAAAAAA");
+            Fragment fragment = new FragmentResumenPedido(tienda, pedido);
+            tienda.getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content_frame, fragment)
+                    .commit();
+//            this.tienda.goTo(MainActivity.PEDIDOSRESUMEN);
         }
     }
 
     class TareaWSRecuperarPedidosSeguimiento extends AsyncTask<Object, Void, Boolean> {
         JSONObject pedidoJSON;
         public AsyncResponse delegate = null;
-        Pedidos pedido;
+
 
         @Override
         protected Boolean doInBackground(Object... params) {
@@ -115,7 +122,7 @@ public class FragmentSeguimientoPedido extends Fragment implements View.OnClickL
         protected void onPostExecute(Boolean result) {
             if (result) {
                 try {
-                    if (!rellenarObjeto()) {
+                    if (!rellenarObjeto() || tienda.CurrentState.getUsuarioLogueado() == null || tienda.CurrentState.getUsuarioLogueado().equals("")) {
                         Toast.makeText(tienda, "NO EXISTE ESE NUMERO DE PEDIDO", Toast.LENGTH_SHORT).show();
                     } else {
                         numeroPedidoEncontrado = true;
@@ -128,8 +135,8 @@ public class FragmentSeguimientoPedido extends Fragment implements View.OnClickL
 
         private boolean rellenarObjeto() throws JSONException {
             boolean estado;
-            if (pedidoJSON.length() > 0) {
-                pedido = new Pedidos(pedidoJSON.getLong("idPedido"), pedidoJSON.getString("fechaSalida"));
+            if (pedidoJSON != null) {
+                pedido = new Pedidos(pedidoJSON.getLong("idPedido"), pedidoJSON.getString("fechaSalida"), pedidoJSON.getLong("idDireccion"));
                 estado = true;
             } else {
                 estado = false;
