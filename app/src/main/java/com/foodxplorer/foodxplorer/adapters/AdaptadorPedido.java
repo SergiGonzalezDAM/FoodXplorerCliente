@@ -59,7 +59,7 @@ public class AdaptadorPedido extends BaseAdapter
         Pedidos dir = items.get(position);
         //RELLENAMOS LA IMAGEN Y EL TEXTO
         TextView foto = (TextView) v.findViewById(R.id.textViewShowUsername);
-        foto.setText(dir.getNumeroPedido());
+        foto.setText(String.valueOf(dir.getIdPedido()));
         TextView nombre = (TextView) v.findViewById(R.id.textViewShowFechaPedido);
         nombre.setText(dir.getFechaPedido());
 
