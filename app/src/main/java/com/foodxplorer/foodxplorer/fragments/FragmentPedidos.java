@@ -11,14 +11,11 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.foodxplorer.foodxplorer.MainActivity;
-import com.foodxplorer.foodxplorer.Producto;
 import com.foodxplorer.foodxplorer.adapters.AdaptadorPedido;
 import com.foodxplorer.foodxplorer.Pedidos;
 import com.foodxplorer.foodxplorer.R;
 
-import com.foodxplorer.foodxplorer.adapters.AdaptadorProducto;
 import com.foodxplorer.foodxplorer.helpers.AsyncResponse;
-import com.foodxplorer.foodxplorer.helpers.RestManager;
 import com.foodxplorer.foodxplorer.helpers.Settings;
 
 import org.json.JSONArray;
@@ -66,7 +63,7 @@ public class FragmentPedidos extends Fragment {
             BufferedReader reader;
             URL url = null;
             try {
-                url = new URL(Settings.DIRECCIO_SERVIDOR + "ServcioFoodXPlorer/webresources/generic/pedidos/" + tienda.CurrentState.getUsuarioLogueado());
+                url = new URL(Settings.DIRECCIO_SERVIDOR + "ServcioFoodXPlorer/webresources/generic/pedidos/" + tienda.carrito.getUsuarioLogueado());
                 reader = getBufferedReader(url);
                 listadoPedidosJSON = new JSONArray(reader.readLine());
             } catch (java.io.FileNotFoundException ex) {

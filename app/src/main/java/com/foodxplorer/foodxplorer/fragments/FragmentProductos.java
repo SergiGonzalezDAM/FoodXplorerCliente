@@ -70,6 +70,7 @@ public class FragmentProductos extends Fragment implements AdapterView.OnItemCli
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+        System.out.println("metodo onclick fragment productos");
         final Producto producto = arraydir.get(position);
 
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());

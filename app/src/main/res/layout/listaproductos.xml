@@ -2,62 +2,53 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
+    android:layout_height="wrap_content"
+    android:clickable="false"
     android:descendantFocusability="blocksDescendants"
     android:focusable="false"
-    android:clickable="false"
+    android:orientation="horizontal"
     tools:context=".MainActivity">
 
-    <ImageView android:id="@+id/imagenPromocion"
+    <ImageView
+        android:id="@+id/imagenPromocion"
         android:layout_width="158dp"
         android:layout_height="143dp"
-        android:src="@drawable/navheader"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="41dp" />
+        android:layout_alignParentTop="true"
+        android:src="@drawable/navheader" />
 
     <TextView
         android:id="@+id/textViewPrecioPromocion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Error Precio"
-        android:layout_marginBottom="25dp"
-        android:layout_alignBottom="@+id/imagenPromocion"
-        android:layout_toRightOf="@+id/imagenPromocion"
-        android:layout_toEndOf="@+id/imagenPromocion" />
+        android:layout_alignBaseline="@+id/textViewNombrePromocion"
+        android:layout_alignBottom="@+id/textViewNombrePromocion"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="21dp"
+        android:layout_marginRight="21dp"
+        android:text="Error Precio" />
 
     <TextView
         android:id="@+id/textViewNombrePromocion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Producto"
-        android:layout_alignBaseline="@+id/textViewCantidadPromociones"
-        android:layout_alignBottom="@+id/textViewCantidadPromociones"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="17dp"
+        android:layout_toEndOf="@+id/imagenPromocion"
         android:layout_toRightOf="@+id/imagenPromocion"
-        android:layout_toEndOf="@+id/imagenPromocion" />
+        android:text="Producto" />
 
     <TextView
         android:id="@+id/textViewDescripcionPromociones"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Descripcion"
-        android:layout_marginTop="20dp"
-        android:layout_below="@+id/imagenPromocion"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
 
-    <TextView
-        android:id="@+id/textViewCantidadPromociones"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Cantidad"
-        android:layout_marginTop="24dp"
-        android:layout_alignTop="@+id/imagenPromocion"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="12dp"
-        android:layout_marginEnd="12dp" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/imagenPromocion"
+        android:layout_marginLeft="14dp"
+        android:text="Descripcion" />
 
 </RelativeLayout>

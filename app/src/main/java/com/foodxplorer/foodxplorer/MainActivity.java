@@ -12,9 +12,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.foodxplorer.foodxplorer.fragments.FragmentCarrito;
 import com.foodxplorer.foodxplorer.fragments.FragmentLogin;
 import com.foodxplorer.foodxplorer.fragments.FragmentPedidos;
 import com.foodxplorer.foodxplorer.fragments.FragmentProductos;
@@ -28,15 +31,15 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
     private Toolbar appbar;
     private DrawerLayout drawerLayout;
     private NavigationView navView;
-    public Carrito CurrentState;
+    public Carrito carrito;
 
-    public static final String PROMOCIONES = "PROMOCIONES";
-    public static final String SEGUIMIENTO = "SEGUIMIENTO";
-    public static final String PEDIDOS = "PEDIDOS";
-    public static final String PRODUCTOS = "PRODUCTOS";
-    public static final String LOGIN = "LOGIN";
-    public static final String REGISTRO = "REGISTRO";
-
+    public static final String PROMOCIONES = "Promociones";
+    public static final String SEGUIMIENTO = "Seguimieno";
+    public static final String PEDIDOS = "Pedidos";
+    public static final String PRODUCTOS = "Productos";
+    public static final String LOGIN = "Login";
+    public static final String REGISTRO = "Registro";
+    public static final String CARRITO = "Carrito";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
                 .commit();
         drawerLayout.closeDrawers();
 
-        CurrentState = new Carrito();
+        carrito = new Carrito();
         navView = (NavigationView) findViewById(R.id.navview);
 
         navView.setNavigationItemSelectedListener(
@@ -92,11 +95,18 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        //MenuItem item = menu.findItem(R.id.badge);
-        //MenuItemCompat.setActionView(item, R.layout.cart_button);
-        //RelativeLayout notifCount = (RelativeLayout)   MenuItemCompat.getActionView(item);
-        //TextView tv = (TextView) notifCount.findViewById(R.id.actionbar_notifcation_textview);
-        //tv.setText("12");
+        MenuItem item = menu.findItem(R.id.badge);
+        MenuItemCompat.setActionView(item, R.layout.cart_button);
+        RelativeLayout notifCount = (RelativeLayout)   MenuItemCompat.getActionView(item);
+        TextView tv = (TextView) notifCount.findViewById(R.id.actionbar_notifcation_textview);
+        tv.setText(String.valueOf(carrito.getTotalProductos()));
+        ImageView imagenCarro = (ImageView) notifCount.findViewById(R.id.imatgeCarre);
+        imagenCarro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goTo(CARRITO);
+            }
+        });
         return true;
     }
 
@@ -112,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
                 return true;
             case R.id.badge:
                 System.out.println("Carro de la compra ");
+                goTo(CARRITO);
                 return true;
 
             default:
@@ -123,11 +134,16 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
 
     @Override
     public void onAddToCart(Producto producto, int cantidad) {
-        Log.i("ON_ADD_TO_CART", producto.toString() + "");
+        Log.i("ON_ADD_TO_CART", producto.toString() + "cantidad:"+cantidad);
+        this.carrito.addProducto(producto,cantidad);
+
+        TextView tv = (TextView) findViewById(R.id.actionbar_notifcation_textview);
+        tv.setText(String.valueOf(carrito.getTotalProductos()));
+
     }
 
     /**
-     * Go to a especific location.
+     * Go to a especific fragment location.
      *
      * @param loc El fragment al que volem anar
      */
@@ -164,14 +180,16 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
                 navView.setCheckedItem(R.id.menu_seccion_5);
                 getSupportActionBar().setTitle(MainActivity.REGISTRO);
                 break;
+            case CARRITO:
+                fragment = new FragmentCarrito(MainActivity.this);
+                getSupportActionBar().setTitle(MainActivity.CARRITO);
+                break;
         }
 
         if (fragment != null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.content_frame, fragment)
                     .commit();
-
-
         }
 
         drawerLayout.closeDrawers();

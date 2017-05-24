@@ -9,42 +9,46 @@
     android:clickable="false"
     tools:context=".MainActivity">
 
-<include layout="@layout/listaproductos" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    <Button
-        android:id="@+id/btnAddMore"
+    <include layout="@layout/listaproductos" />
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="+"
-        android:layout_marginBottom="215dp"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="168dp">
 
-    <Button
-        android:id="@+id/btnAñadirLess"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/btnAddMore"
-        android:layout_marginLeft="24dp"
-        android:layout_marginStart="24dp"
-        android:layout_toEndOf="@+id/btnAddMore"
-        android:layout_toRightOf="@+id/btnAddMore"
-        android:text="-" />
+        <Button
+            android:id="@+id/btnAddMore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
-    <Button
-        android:id="@+id/btnAddCart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/btnAñadirLess"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginEnd="30dp"
-        android:layout_marginRight="30dp"
-        android:text="Añadir" />
+            android:text="+" />
 
-    </RelativeLayout>
+        <TextView
+            android:id="@+id/popUpTextViewCantidad"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:text="1"
+            android:textAlignment="center" />
+
+        <Button
+            android:id="@+id/btnAddLess"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-" />
+
+
+        <Button
+            android:id="@+id/btnAddCart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Añadir"
+             />
+
+    </LinearLayout>
 </RelativeLayout>

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ import com.foodxplorer.foodxplorer.adapters.AdaptadorProducto;
 import com.foodxplorer.foodxplorer.helpers.AsyncResponse;
 import com.foodxplorer.foodxplorer.helpers.RestManager;
 import com.foodxplorer.foodxplorer.helpers.Settings;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -74,11 +76,11 @@ public class FragmentPromociones extends Fragment implements AdapterView.OnItemC
 
         final Producto producto = listadoPromociones.get(position);
 
-        AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());
-        View mView = getLayoutInflater(null).inflate(R.layout.activity_dialog, null);
+        final AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());
+        final View mView = getLayoutInflater(null).inflate(R.layout.activity_dialog, null);
 
-        ImageView foto = (ImageView) mView.findViewById(R.id.imagenPromocion);
-        foto.setImageDrawable(producto.getImagenProducto());
+        ImageView image = (ImageView) mView.findViewById(R.id.imagenPromocion);
+        Picasso.with(mView.getContext()).load("http://www.cicis.com/media/1138/pizza_trad_pepperoni.png").into(image);
         TextView nombre = (TextView) mView.findViewById(R.id.textViewNombrePromocion);
         nombre.setText(producto.getNombre());
         TextView precio = (TextView) mView.findViewById(R.id.textViewPrecioPromocion);
@@ -86,15 +88,41 @@ public class FragmentPromociones extends Fragment implements AdapterView.OnItemC
         TextView descripcion = (TextView) mView.findViewById(R.id.textViewDescripcionPromociones);
         descripcion.setText(producto.getDescripcion());
 
-        mView.findViewById(R.id.btnAddCart).setOnClickListener(new View.OnClickListener() {
+        mBuilder.setView(mView);
+        final AlertDialog dialog = mBuilder.create();
+        final TextView cantidad = (TextView) mView.findViewById(R.id.popUpTextViewCantidad);
+
+        Button addmore = (Button) mView.findViewById(R.id.btnAddMore);
+        addmore.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                mOnAddToCart.onAddToCart(producto, 1);
+            public void onClick(View view) {
+
+                int aux= Integer.valueOf(cantidad.getText().toString());
+                cantidad.setText(String.valueOf(++aux));
             }
         });
 
-        mBuilder.setView(mView);
-        AlertDialog dialog = mBuilder.create();
+
+        Button addless = (Button) mView.findViewById(R.id.btnAddLess);
+        addless.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int aux= Integer.valueOf(cantidad.getText().toString());
+                if(aux>0){
+                    cantidad.setText(String.valueOf(--aux));
+                }
+            }
+        });
+
+        mView.findViewById(R.id.btnAddCart).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnAddToCart.onAddToCart(producto, Integer.valueOf(cantidad.getText().toString()));
+                dialog.dismiss();
+            }
+        });
+
+
         dialog.show();
     }
 

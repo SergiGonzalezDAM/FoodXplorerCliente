@@ -7,6 +7,7 @@
 
     <!-- Menu Item Image -->
     <ImageView
+        android:id="@+id/imatgeCarre"
         android:layout_width="48dp"
         android:clickable="true"
         android:layout_height="fill_parent"
@@ -17,8 +18,10 @@
         android:id="@+id/actionbar_notifcation_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true"
         android:text="99"
-         />
+        android:textColor="@android:color/background_light"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
 </RelativeLayout>

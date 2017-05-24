@@ -36,8 +36,8 @@ public class FragmentLogin extends Fragment implements View.OnClickListener, Asy
     @Override
     public void processFinish(boolean response) {
         if (response) {
-            Log.e(Settings.LOGTAG, "Login ok");
-            this.tienda.CurrentState.setUsuarioLogueado(etUsuario.getText().toString());
+            Log.d(Settings.LOGTAG, "Login ok");
+            this.tienda.carrito.setUsuarioLogueado(etUsuario.getText().toString());
             this.tienda.goTo(MainActivity.PROMOCIONES);
         } else {
             Log.e(Settings.LOGTAG, "Login fail");
@@ -67,7 +67,7 @@ public class FragmentLogin extends Fragment implements View.OnClickListener, Asy
         etUsuario = (EditText) view.findViewById(R.id.editTextNumeroSeguimiento);
         etPassword = (EditText) view.findViewById(R.id.editTextPasswordLogin);
 
-        if(tienda.CurrentState.getUsuarioLogueado()!=null){
+        if(tienda.carrito.getUsuarioLogueado()!=null){
             Toast.makeText(tienda, "Login ya realizado", Toast.LENGTH_LONG).show();
             this.tienda.goTo(MainActivity.PROMOCIONES);
         }
