@@ -5,19 +5,22 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.foodxplorer.foodxplorer.fragments.FragmentLogin;
 import com.foodxplorer.foodxplorer.fragments.FragmentPedidos;
 import com.foodxplorer.foodxplorer.fragments.FragmentProductos;
 import com.foodxplorer.foodxplorer.fragments.FragmentPromociones;
 import com.foodxplorer.foodxplorer.fragments.FragmentSeguimientoPedido;
-import com.foodxplorer.foodxplorer.helpers.CurrentState;
+import com.foodxplorer.foodxplorer.helpers.Carrito;
 
 
 public class MainActivity extends AppCompatActivity implements FragmentPromociones.OnAddToCart {
@@ -25,10 +28,10 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
     private Toolbar appbar;
     private DrawerLayout drawerLayout;
     private NavigationView navView;
-    public CurrentState CurrentState;
+    public Carrito CurrentState;
 
     public static final String PROMOCIONES = "PROMOCIONES";
-    public static final String SEGUIMIENTO = "SEGUIMINTO";
+    public static final String SEGUIMIENTO = "SEGUIMIENTO";
     public static final String PEDIDOS = "PEDIDOS";
     public static final String PRODUCTOS = "PRODUCTOS";
     public static final String LOGIN = "LOGIN";
@@ -48,13 +51,13 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
 
-        Fragment fragment = new FragmentPromociones();
+        Fragment fragment = new FragmentPromociones(this);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_frame, fragment)
                 .commit();
         drawerLayout.closeDrawers();
 
-        CurrentState = new CurrentState();
+        CurrentState = new Carrito();
         navView = (NavigationView) findViewById(R.id.navview);
 
         navView.setNavigationItemSelectedListener(
@@ -78,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
                             case R.id.menu_seccion_5:
                                 goTo(PRODUCTOS);
                                 break;
+
                         }
                         return true;
                     }
@@ -88,6 +92,11 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        //MenuItem item = menu.findItem(R.id.badge);
+        //MenuItemCompat.setActionView(item, R.layout.cart_button);
+        //RelativeLayout notifCount = (RelativeLayout)   MenuItemCompat.getActionView(item);
+        //TextView tv = (TextView) notifCount.findViewById(R.id.actionbar_notifcation_textview);
+        //tv.setText("12");
         return true;
     }
 
@@ -101,13 +110,19 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
                 return true;
+            case R.id.badge:
+                System.out.println("Carro de la compra ");
+                return true;
+
+            default:
+                System.out.println("clicado algo raro....");
         }
 
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void onAddToCart(Producto producto) {
+    public void onAddToCart(Producto producto, int cantidad) {
         Log.i("ON_ADD_TO_CART", producto.toString() + "");
     }
 
@@ -120,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
         Fragment fragment = null;
         switch (loc) {
             case PROMOCIONES:
-                fragment = new FragmentPromociones();
+                fragment = new FragmentPromociones(this);
                 navView.setCheckedItem(R.id.menu_seccion_1);
                 getSupportActionBar().setTitle(MainActivity.PROMOCIONES);
                 break;
