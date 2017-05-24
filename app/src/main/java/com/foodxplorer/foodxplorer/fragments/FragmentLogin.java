@@ -66,6 +66,10 @@ public class FragmentLogin extends Fragment implements View.OnClickListener, Asy
         etUsuario = (EditText) view.findViewById(R.id.editTextLoginUsuario);
         etPassword = (EditText) view.findViewById(R.id.editTextPasswordLogin);
 
+        if(tienda.CurrentState.getUsuarioLogueado()!=null){
+            Toast.makeText(tienda, "Login ya realizado", Toast.LENGTH_LONG).show();
+            this.tienda.goTo(MainActivity.PROMOCIONES);
+        }
 
         return view;
     }
