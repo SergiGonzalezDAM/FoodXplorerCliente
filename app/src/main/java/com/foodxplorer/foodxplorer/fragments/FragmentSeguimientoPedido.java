@@ -136,7 +136,8 @@ public class FragmentSeguimientoPedido extends Fragment implements View.OnClickL
         private boolean rellenarObjeto() throws JSONException {
             boolean estado;
             if (pedidoJSON != null) {
-                pedido = new Pedidos(pedidoJSON.getLong("idPedido"), pedidoJSON.getString("fechaSalida"), pedidoJSON.getLong("idDireccion"));
+                pedido = new Pedidos(pedidoJSON.getLong("idPedido"), pedidoJSON.getString("fechaSalida"),
+                        pedidoJSON.getLong("idDireccion"), pedidoJSON.getLong("idEstado"));
                 estado = true;
             } else {
                 estado = false;

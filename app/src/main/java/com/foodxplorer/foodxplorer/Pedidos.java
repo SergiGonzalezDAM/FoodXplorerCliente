@@ -10,14 +10,16 @@ public class Pedidos {
     private long idPedido;
     private String fechaPedido;
     private long idDireccion;
+    private long idEstado;
 
     public Pedidos() {
     }
 
-    public Pedidos(long idPedido, String fechaPedido, long idDireccion) {
+    public Pedidos(long idPedido, String fechaPedido, long idDireccion, long idEstado) {
         this.idPedido = idPedido;
         this.fechaPedido = fechaPedido;
         this.idDireccion = idDireccion;
+        this.idEstado = idEstado;
     }
 
     public String getFechaPedido() {
@@ -42,5 +44,13 @@ public class Pedidos {
 
     public void setIdDireccion(long idDireccion) {
         this.idDireccion = idDireccion;
+    }
+
+    public long getIdEstado() {
+        return idEstado;
+    }
+
+    public void setIdEstado(long idEstado) {
+        this.idEstado = idEstado;
     }
 }
