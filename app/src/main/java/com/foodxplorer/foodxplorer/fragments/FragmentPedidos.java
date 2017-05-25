@@ -107,7 +107,8 @@ public class FragmentPedidos extends Fragment {
             if (listadoPedidosJSON.length() > 0) {
                 for (int i = 0; i < listadoPedidosJSON.length(); i++) {
                     JSONObject jsonobject = listadoPedidosJSON.getJSONObject(i);
-                    Pedidos pedido = new Pedidos(jsonobject.getLong("idPedido"), jsonobject.getString("fechaSalida"), jsonobject.getLong("idDireccion"));
+                    Pedidos pedido = new Pedidos(jsonobject.getLong("idPedido"), jsonobject.getString("fechaSalida"),
+                            jsonobject.getLong("idDireccion"), jsonobject.getLong("idEstado"));
                     listaPedidos.add(pedido);
                 }
                 estado = true;
