@@ -17,7 +17,7 @@ import java.util.List;
 
 public class Carrito {
 
-    String usuarioLogueado = null;
+    String usuarioLogueado = "";
     List<Producto> productosEnCarrito;
     List<Integer> cantidades;
 

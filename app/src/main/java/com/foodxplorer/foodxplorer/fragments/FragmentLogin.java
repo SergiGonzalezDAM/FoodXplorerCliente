@@ -21,6 +21,7 @@ import com.foodxplorer.foodxplorer.helpers.RestManager;
 import com.foodxplorer.foodxplorer.helpers.Settings;
 
 import java.io.InputStreamReader;
+import java.util.Objects;
 
 
 public class FragmentLogin extends Fragment implements View.OnClickListener, AsyncResponse {
@@ -37,7 +38,8 @@ public class FragmentLogin extends Fragment implements View.OnClickListener, Asy
     public void processFinish(boolean response) {
         if (response) {
             Log.d(Settings.LOGTAG, "Login ok");
-            this.tienda.carrito.setUsuarioLogueado(etUsuario.getText().toString());
+            this.tienda.login(etUsuario.getText().toString());
+            Toast.makeText(tienda, "Hola de nuevo, "+ etUsuario.getText(), Toast.LENGTH_LONG).show();
             this.tienda.goTo(MainActivity.PROMOCIONES);
         } else {
             Log.e(Settings.LOGTAG, "Login fail");
@@ -67,7 +69,9 @@ public class FragmentLogin extends Fragment implements View.OnClickListener, Asy
         etUsuario = (EditText) view.findViewById(R.id.editTextNumeroSeguimiento);
         etPassword = (EditText) view.findViewById(R.id.editTextPasswordLogin);
 
-        if(tienda.carrito.getUsuarioLogueado()!=null){
+        //La aplicacion no permite que se llegue a este fragment si se esta logueado, pero este codigo
+        //se asegura que efectivamente no se produzca un segundo login.
+        if(!"".equals(tienda.carrito.getUsuarioLogueado())){
             Toast.makeText(tienda, "Login ya realizado", Toast.LENGTH_LONG).show();
             this.tienda.goTo(MainActivity.PROMOCIONES);
         }

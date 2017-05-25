@@ -41,11 +41,14 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
     public static final String LOGIN = "Login";
     public static final String REGISTRO = "Registro";
     public static final String CARRITO = "Carrito";
+    public static final String LOGOUT = "Logout";
+    public static final int  LOGIN_ID = 9865556;
+    public static final int LOGOUT_ID = 9568632;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
+        setContentView(R.layout.activity_main);
         appbar = (Toolbar) findViewById(R.id.appbar);
         setSupportActionBar(appbar);
 
@@ -73,8 +76,12 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
                             case R.id.menu_seccion_1:
                                 goTo(PROMOCIONES);
                                 break;
-                            case R.id.menu_seccion_2:
+                            case LOGIN_ID:
                                 goTo(LOGIN);
+                                break;
+                            case LOGOUT_ID:
+                                logout();
+                                goTo(PROMOCIONES);
                                 break;
                             case R.id.menu_seccion_3:
                                 goTo(SEGUIMIENTO);
@@ -95,6 +102,10 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        if(this.carrito.getUsuarioLogueado().equals("")){
+
+        }
+
         getMenuInflater().inflate(R.menu.menu_main, menu);
         MenuItem item = menu.findItem(R.id.badge);
         MenuItemCompat.setActionView(item, R.layout.cart_button);
@@ -134,6 +145,19 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if(!"".equals(carrito.getUsuarioLogueado())) {
+            navView.getMenu().add(0,LOGOUT_ID, Menu.NONE , LOGOUT).setIcon(R.drawable.ic_menu);
+        }
+        else{
+            navView.getMenu().add(0,LOGIN_ID, Menu.NONE , LOGIN).setIcon(R.drawable.ic_menu);
+        }
+
+
+        return true;
+    }
+
+    @Override
     public void onAddToCart(Producto producto, int cantidad) {
         Log.i("ON_ADD_TO_CART", producto.toString() + "cantidad:"+cantidad);
         this.carrito.addProducto(producto,cantidad);
@@ -158,7 +182,6 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
                 break;
             case LOGIN:
                 fragment = new FragmentLogin(MainActivity.this);
-                navView.setCheckedItem(R.id.menu_seccion_2);
                 getSupportActionBar().setTitle(MainActivity.LOGIN);
                 break;
             case SEGUIMIENTO:
@@ -185,6 +208,8 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
                 fragment = new FragmentCarrito(MainActivity.this);
                 getSupportActionBar().setTitle(MainActivity.CARRITO);
                 break;
+            case LOGOUT:
+                this.logout();
         }
 
         if (fragment != null) {
@@ -194,6 +219,24 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
         }
 
         drawerLayout.closeDrawers();
+    }
+
+    private void logout(){
+        this.carrito.setUsuarioLogueado("");
+        navView.getMenu().removeItem(LOGOUT_ID);
+        TextView txtNavViewUser = (TextView) navView.findViewById(R.id.navViewUser);
+        txtNavViewUser.setText(R.string.unregistered_User);
+        this.goTo(PROMOCIONES);
+        invalidateOptionsMenu();
+    }
+
+    public void login(String login){
+        this.carrito.setUsuarioLogueado(login);
+        navView.getMenu().removeItem(LOGIN_ID);
+        TextView txtNavViewUser = (TextView) navView.findViewById(R.id.navViewUser);
+        txtNavViewUser.setText(login);
+        invalidateOptionsMenu();
+
     }
 }
 
