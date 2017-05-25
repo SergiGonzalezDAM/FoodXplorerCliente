@@ -46,7 +46,7 @@ public class FragmentResumenPedido extends Fragment {
     private Direccion direccionObject;
     private Estado estadoObjeto;
     private ArrayList<LineasPedido> listaLineasPedido;
-
+    private ArrayList<Long> listaIdProductos;
 
     public FragmentResumenPedido() {
         // Required empty public constructor
@@ -71,6 +71,8 @@ public class FragmentResumenPedido extends Fragment {
         tareaRecDir.execute();
         TareaWSRecuperarLineasPedido tareaLines = new TareaWSRecuperarLineasPedido();
         tareaLines.execute();
+        TareaWSRecuperarEstado tareaEstado = new TareaWSRecuperarEstado();
+        tareaEstado.execute();
         List<String> lista = new ArrayList();
         lista.add("Barbacoa");
         lista.add("4 Quesos");
@@ -199,11 +201,13 @@ public class FragmentResumenPedido extends Fragment {
         private boolean rellenarArray() throws JSONException {
             boolean estado;
             listaLineasPedido = new ArrayList<>();
+            listaIdProductos = new ArrayList<>();
             if (lineasPedidoJSON.length() > 0) {
                 for (int i = 0; i < lineasPedidoJSON.length(); i++) {
                     JSONObject jsonobject = lineasPedidoJSON.getJSONObject(i);
                     LineasPedido lineasPedido = new LineasPedido(jsonobject.getLong("idPedido"), jsonobject.getLong("idProducto"), jsonobject.getInt("cantidad"),
                             jsonobject.getDouble("precio"), jsonobject.getInt("iva"));
+                    listaIdProductos.add(lineasPedido.getIdProducto());
                     listaLineasPedido.add(lineasPedido);
                 }
                 estado = true;
@@ -271,7 +275,7 @@ public class FragmentResumenPedido extends Fragment {
         private boolean rellenarObjeto() throws JSONException {
             boolean estado;
             if (estadoJSON != null) {
-                estadoObjeto = new Estado(estadoJSON.getLong("idEstado"), estadoJSON.getString("nomEstado"), estadoJSON.getDouble("tiempo"));
+                estadoObjeto = new Estado(estadoJSON.getLong("idEstado"), estadoJSON.getString("nombreEstado"), estadoJSON.getDouble("tiempo"));
                 estado = true;
             } else {
                 estado = false;
@@ -279,4 +283,6 @@ public class FragmentResumenPedido extends Fragment {
             return estado;
         }
     }
+
+
 }
