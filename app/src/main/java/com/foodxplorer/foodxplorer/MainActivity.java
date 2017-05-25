@@ -22,7 +22,7 @@ import com.foodxplorer.foodxplorer.fragments.FragmentLogin;
 import com.foodxplorer.foodxplorer.fragments.FragmentPedidos;
 import com.foodxplorer.foodxplorer.fragments.FragmentProductos;
 import com.foodxplorer.foodxplorer.fragments.FragmentPromociones;
-import com.foodxplorer.foodxplorer.fragments.FragmentResumenPedido;
+import com.foodxplorer.foodxplorer.fragments.FragmentRegistro;
 import com.foodxplorer.foodxplorer.fragments.FragmentSeguimientoPedido;
 import com.foodxplorer.foodxplorer.helpers.Carrito;
 

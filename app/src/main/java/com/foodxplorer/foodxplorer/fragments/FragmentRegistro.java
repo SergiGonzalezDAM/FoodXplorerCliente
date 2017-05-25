@@ -1,4 +1,4 @@
-package com.foodxplorer.foodxplorer;
+package com.foodxplorer.foodxplorer.fragments;
 
 import android.os.AsyncTask;
 import android.support.design.widget.NavigationView;
@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.foodxplorer.foodxplorer.MainActivity;
+import com.foodxplorer.foodxplorer.R;
 import com.foodxplorer.foodxplorer.helpers.Settings;
 
 import org.json.JSONException;

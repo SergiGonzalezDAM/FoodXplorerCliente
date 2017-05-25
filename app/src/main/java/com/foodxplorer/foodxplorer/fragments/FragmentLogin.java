@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.foodxplorer.foodxplorer.FragmentRegistro;
 import com.foodxplorer.foodxplorer.MainActivity;
 import com.foodxplorer.foodxplorer.R;
 import com.foodxplorer.foodxplorer.helpers.AsyncResponse;
@@ -21,7 +20,6 @@ import com.foodxplorer.foodxplorer.helpers.RestManager;
 import com.foodxplorer.foodxplorer.helpers.Settings;
 
 import java.io.InputStreamReader;
-import java.util.Objects;
 
 
 public class FragmentLogin extends Fragment implements View.OnClickListener, AsyncResponse {
