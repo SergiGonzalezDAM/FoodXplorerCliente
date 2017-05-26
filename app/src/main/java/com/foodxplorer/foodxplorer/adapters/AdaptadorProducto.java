@@ -66,8 +66,9 @@ public class AdaptadorProducto extends BaseAdapter
 
         Producto dir = items.get(position);
         //RELLENAMOS LA IMAGEN Y EL TEXTO
+
         ImageView image = (ImageView) v.findViewById(R.id.imagenPromocion);
-        Picasso.with(v.getContext()).load("http://www.cicis.com/media/1138/pizza_trad_pepperoni.png").into(image);
+        Picasso.with(v.getContext()).load(dir.getLinkImagen()).into(image);
         TextView nombre = (TextView) v.findViewById(R.id.textViewNombrePromocion);
         nombre.setText(dir.getNombre());
         TextView precio = (TextView) v.findViewById(R.id.textViewPrecioPromocion);
