@@ -49,11 +49,16 @@ public class FragmentPedidos extends Fragment implements AdapterView.OnItemClick
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        TareaWSRecuperarPedidos tareaPedidos = new TareaWSRecuperarPedidos();
+        if (tienda.carrito.getUsuarioLogueado() != null && !tienda.carrito.getUsuarioLogueado().equals("")) {
+            TareaWSRecuperarPedidos tareaPedidos = new TareaWSRecuperarPedidos();
+            tareaPedidos.execute();
+        } else {
+            Toast.makeText(tienda, "NO ESTÁS LOGUEADO", Toast.LENGTH_SHORT).show();
+        }
         View view = inflater.inflate(R.layout.fragment_pedidos, container, false);
         lista = (ListView) view.findViewById(R.id.listViewPedidos);
         lista.setOnItemClickListener(FragmentPedidos.this);
-        tareaPedidos.execute();
+
         return view;
     }
 
@@ -78,13 +83,10 @@ public class FragmentPedidos extends Fragment implements AdapterView.OnItemClick
             BufferedReader reader;
             URL url = null;
             try {
-                if (tienda.carrito.getUsuarioLogueado() != null && !tienda.carrito.getUsuarioLogueado().equals("")) {
-                    url = new URL(Settings.DIRECCIO_SERVIDOR + "ServcioFoodXPlorer/webresources/generic/pedidos/" + tienda.carrito.getUsuarioLogueado());
-                    reader = getBufferedReader(url);
-                    listadoPedidosJSON = new JSONArray(reader.readLine());
-                } else {
-                    Toast.makeText(tienda, "NO ESTÁS LOGUEADO", Toast.LENGTH_SHORT).show();
-                }
+                url = new URL(Settings.DIRECCIO_SERVIDOR + "ServcioFoodXPlorer/webresources/generic/pedidos/" + tienda.carrito.getUsuarioLogueado());
+                reader = getBufferedReader(url);
+                listadoPedidosJSON = new JSONArray(reader.readLine());
+
 
             } catch (java.io.FileNotFoundException ex) {
                 Log.e(LOGTAG, "Error al obtener el pedido de:" + url.toString() + "\n" + ex);
