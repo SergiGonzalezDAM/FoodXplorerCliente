@@ -1,26 +1,25 @@
 package com.foodxplorer.foodxplorer.fragments;
 
 import android.os.AsyncTask;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.foodxplorer.foodxplorer.Direccion;
-import com.foodxplorer.foodxplorer.Estado;
-import com.foodxplorer.foodxplorer.LineasPedido;
+import com.foodxplorer.foodxplorer.objetos.Direccion;
+import com.foodxplorer.foodxplorer.objetos.Estado;
+import com.foodxplorer.foodxplorer.objetos.LineasPedido;
 import com.foodxplorer.foodxplorer.MainActivity;
-import com.foodxplorer.foodxplorer.Pedidos;
-import com.foodxplorer.foodxplorer.Producto;
+import com.foodxplorer.foodxplorer.objetos.Pedidos;
+import com.foodxplorer.foodxplorer.objetos.Producto;
 import com.foodxplorer.foodxplorer.R;
 import com.foodxplorer.foodxplorer.adapters.AdaptadorProducto;
-import com.foodxplorer.foodxplorer.helpers.AsyncResponse;
+import com.foodxplorer.foodxplorer.helpers.RestManager;
 import com.foodxplorer.foodxplorer.helpers.Settings;
 
 import org.json.JSONArray;
@@ -32,11 +31,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.foodxplorer.foodxplorer.helpers.Settings.LOGTAG;
 
@@ -51,6 +48,7 @@ public class FragmentResumenPedido extends Fragment {
     private ArrayList<Producto> listaProductos;
     AdaptadorProducto adapProducto;
     ListView listView;
+
     public FragmentResumenPedido() {
         // Required empty public constructor
     }
@@ -88,7 +86,7 @@ public class FragmentResumenPedido extends Fragment {
         @Override
         protected Boolean doInBackground(Object... params) {
             try {
-                direccionJSON = readJsonFromUrl(Settings.DIRECCIO_SERVIDOR + "ServcioFoodXPlorer/webresources/generic/direccion/obtener2/" + pedido.getIdDireccion());
+                direccionJSON = readJsonFromUrl(Settings.DIRECCIO_SERVIDOR + Settings.PATH+"/direccion/obtener2/" + pedido.getIdDireccion());
             } catch (java.io.FileNotFoundException ex) {
                 Log.e(LOGTAG, "Error al obtener la direccion");
             } catch (java.io.IOException ex) {
@@ -155,10 +153,11 @@ public class FragmentResumenPedido extends Fragment {
         @Override
         protected Boolean doInBackground(Object... params) {
             BufferedReader reader;
-            URL url = null;
             try {
-                url = new URL(Settings.DIRECCIO_SERVIDOR + "ServcioFoodXPlorer/webresources/generic/pedido/obtenerDetalles/" + pedido.getIdPedido());
-                reader = getBufferedReader(url);
+                String url = Settings.DIRECCIO_SERVIDOR + Settings.PATH+ "/pedido/obtenerDetalles/" + pedido.getIdPedido();
+                RestManager restManager = new RestManager(url);
+                restManager.setRequestMethod(RestManager.GET);
+                reader = restManager.getBufferedReader();
                 lineasPedidoJSON = new JSONArray(reader.readLine());
 
             } catch (java.io.FileNotFoundException ex) {
@@ -171,48 +170,15 @@ public class FragmentResumenPedido extends Fragment {
             return true;
         }
 
-        private BufferedReader getBufferedReader(URL url) throws java.io.IOException {
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            // conn.setReadTimeout(10000 /*milliseconds*/);
-            // conn.setConnectTimeout(10000);
-            conn.setRequestProperty("Content-Type", "application/json");
-            return new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        }
 
         @Override
         protected void onPostExecute(Boolean result) {
             if (result) {
-                try {
-                    if (!rellenarArray() || tienda.carrito.getUsuarioLogueado() == null || tienda.carrito.getUsuarioLogueado().equals("")) {
-                        Toast.makeText(tienda, "ERROR", Toast.LENGTH_SHORT).show();
-                    } else {
-                        for (LineasPedido linea : listaLineasPedido) {
-                            importeTotal += linea.getPrecio();
-                        }
-                        importe.setText(String.valueOf(importeTotal) + "€");
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                for (LineasPedido linea : listaLineasPedido) {
+                    importeTotal += linea.getPrecio();
                 }
+                importe.setText(String.valueOf(importeTotal) + "€");
             }
-        }
-
-        private boolean rellenarArray() throws JSONException {
-            boolean estado;
-            listaLineasPedido = new ArrayList<>();
-            if (lineasPedidoJSON.length() > 0) {
-                for (int i = 0; i < lineasPedidoJSON.length(); i++) {
-                    JSONObject jsonobject = lineasPedidoJSON.getJSONObject(i);
-                    LineasPedido lineasPedido = new LineasPedido(jsonobject.getLong("idPedido"), jsonobject.getLong("idProducto"), jsonobject.getInt("cantidad"),
-                            jsonobject.getDouble("precio"), jsonobject.getInt("iva"));
-                    listaLineasPedido.add(lineasPedido);
-                }
-                estado = true;
-            } else {
-                estado = false;
-            }
-            return estado;
         }
     }
 
@@ -284,13 +250,13 @@ public class FragmentResumenPedido extends Fragment {
 
     class TareaWSRecuperarProductosPedido extends AsyncTask<Object, Void, Boolean> {
         JSONArray productosJSON;
+
         @Override
         protected Boolean doInBackground(Object... params) {
-            BufferedReader reader;
-            URL url;
             try {
-                url = new URL(Settings.DIRECCIO_SERVIDOR + "ServcioFoodXPlorer/webresources/generic/obtenerProductosPorIdPedido/" + pedido.getIdPedido());
-                reader = getBufferedReader(url);
+                String url = Settings.DIRECCIO_SERVIDOR + Settings.PATH + "obtenerProductosPorIdPedido/" + pedido.getIdPedido();
+                RestManager restManager = new RestManager(url);
+                BufferedReader reader = restManager.getBufferedReader();
                 productosJSON = new JSONArray(reader.readLine());
             } catch (java.io.FileNotFoundException ex) {
                 Log.e(LOGTAG, "Error al obtener los productos");
@@ -302,14 +268,6 @@ public class FragmentResumenPedido extends Fragment {
             return true;
         }
 
-        private BufferedReader getBufferedReader(URL url) throws java.io.IOException {
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            // conn.setReadTimeout(10000 /*milliseconds*/);
-            // conn.setConnectTimeout(10000);
-            conn.setRequestProperty("Content-Type", "application/json");
-            return new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        }
 
         @Override
         protected void onPostExecute(Boolean result) {
@@ -317,8 +275,8 @@ public class FragmentResumenPedido extends Fragment {
                 try {
                     if (!rellenarArray() || tienda.carrito.getUsuarioLogueado() == null || tienda.carrito.getUsuarioLogueado().equals("")) {
                         Toast.makeText(tienda, "ERROR", Toast.LENGTH_SHORT).show();
-                    }else{
-                        adapProducto = new AdaptadorProducto(getActivity(),listaProductos);
+                    } else {
+                        adapProducto = new AdaptadorProducto(getActivity(), listaProductos);
                         listView.setAdapter(adapProducto);
                     }
                 } catch (JSONException e) {

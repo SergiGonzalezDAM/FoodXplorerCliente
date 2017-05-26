@@ -1,4 +1,4 @@
-package com.foodxplorer.foodxplorer;
+package com.foodxplorer.foodxplorer.objetos;
 
 /**
  * Created by ALUMNEDAM on 24/05/2017.

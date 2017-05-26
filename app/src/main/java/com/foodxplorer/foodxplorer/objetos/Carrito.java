@@ -1,8 +1,9 @@
-package com.foodxplorer.foodxplorer.helpers;
+package com.foodxplorer.foodxplorer.objetos;
 
 import android.util.Log;
 
-import com.foodxplorer.foodxplorer.Producto;
+import com.foodxplorer.foodxplorer.helpers.Settings;
+import com.foodxplorer.foodxplorer.objetos.Producto;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -17,9 +18,9 @@ import java.util.List;
 
 public class Carrito {
 
-    String usuarioLogueado = "";
-    List<Producto> productosEnCarrito;
-    List<Integer> cantidades;
+    private String usuarioLogueado = "";
+    private List<Producto> productosEnCarrito;
+    private List<Integer> cantidades;
 
     public Carrito() {
         productosEnCarrito = new ArrayList<>();
@@ -95,9 +96,8 @@ public class Carrito {
 
     public int getTotalProductos() {
         int cantidad = 0;
-        Iterator iterator = cantidades.iterator();
-        while (iterator.hasNext()) {
-            int product = (int) iterator.next();
+        for (Integer cantid : cantidades) {
+            int product =  cantid;
             cantidad = cantidad + product;
         }
 

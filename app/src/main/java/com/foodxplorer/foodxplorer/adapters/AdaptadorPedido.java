@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.foodxplorer.foodxplorer.Pedidos;
+import com.foodxplorer.foodxplorer.objetos.Pedidos;
 import com.foodxplorer.foodxplorer.R;
 
 import java.util.ArrayList;
@@ -19,9 +19,9 @@ import java.util.ArrayList;
 
 public class AdaptadorPedido extends BaseAdapter
 {
-        protected Activity activity;
+        private Activity activity;
         //ARRAYLIST CON TODOS LOS ITEMS
-        protected ArrayList<Pedidos> items;
+        private ArrayList<Pedidos> items;
 
         //CONSTRUCTOR
     public AdaptadorPedido(Activity activity, ArrayList<Pedidos> items) {
@@ -62,7 +62,6 @@ public class AdaptadorPedido extends BaseAdapter
         foto.setText(String.valueOf(dir.getIdPedido()));
         TextView nombre = (TextView) v.findViewById(R.id.textViewShowFechaPedido);
         nombre.setText(dir.getFechaPedido());
-            ;
 
         // DEVOLVEMOS VISTA
         return v;

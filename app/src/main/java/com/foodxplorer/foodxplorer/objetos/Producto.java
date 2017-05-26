@@ -1,4 +1,4 @@
-package com.foodxplorer.foodxplorer;
+package com.foodxplorer.foodxplorer.objetos;
 
 import android.graphics.drawable.Drawable;
 
@@ -8,13 +8,13 @@ public class Producto
     private Drawable imagenProducto;
     private String Nombre;
     private int idProducto;
-    String linkImagen;
+    private String linkImagen;
     private double precio;
-    int iva;
-    double ofertaProducto;
-    int tipoProducto;
-    int activo;
-    String descripcion;
+    private int iva;
+    private double ofertaProducto;
+    private int tipoProducto;
+    private int activo;
+    private String descripcion;
 
     public Producto()
     {

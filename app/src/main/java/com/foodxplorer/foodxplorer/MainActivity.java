@@ -24,12 +24,14 @@ import com.foodxplorer.foodxplorer.fragments.FragmentProductos;
 import com.foodxplorer.foodxplorer.fragments.FragmentPromociones;
 import com.foodxplorer.foodxplorer.fragments.FragmentRegistro;
 import com.foodxplorer.foodxplorer.fragments.FragmentSeguimientoPedido;
-import com.foodxplorer.foodxplorer.helpers.Carrito;
+import com.foodxplorer.foodxplorer.objetos.Carrito;
+import com.foodxplorer.foodxplorer.helpers.Settings;
+import com.foodxplorer.foodxplorer.objetos.Producto;
 
 
-public class MainActivity extends AppCompatActivity implements FragmentPromociones.OnAddToCart {
+public class MainActivity extends AppCompatActivity implements FragmentPromociones.OnAddToCart, FragmentProductos.OnAddToCart{
 
-    private Toolbar appbar;
+
     private DrawerLayout drawerLayout;
     private NavigationView navView;
     public Carrito carrito;
@@ -46,12 +48,13 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
     public static final int  LOGIN_ID = 9865556;
     public static final int LOGOUT_ID = 9568632;
     public static final int MIS_PEDIDOS_ID = 965889;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-        appbar = (Toolbar) findViewById(R.id.appbar);
+        Toolbar appbar = (Toolbar) findViewById(R.id.appbar);
         setSupportActionBar(appbar);
 
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_nav_menu);
@@ -104,10 +107,6 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if(this.carrito.getUsuarioLogueado().equals("")){
-
-        }
-
         getMenuInflater().inflate(R.menu.menu_main, menu);
         MenuItem item = menu.findItem(R.id.badge);
         MenuItemCompat.setActionView(item, R.layout.cart_button);
@@ -135,12 +134,8 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
                 drawerLayout.openDrawer(GravityCompat.START);
                 return true;
             case R.id.badge:
-                System.out.println("Carro de la compra ");
                 goTo(CARRITO);
                 return true;
-
-            default:
-                System.out.println("clicado algo raro....");
         }
 
         return super.onOptionsItemSelected(item);
@@ -160,9 +155,8 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
 
     @Override
     public void onAddToCart(Producto producto, int cantidad) {
-        Log.i("ON_ADD_TO_CART", producto.toString() + "cantidad:"+cantidad);
+        Log.i(Settings.LOGTAG, producto.toString() + "cantidad:"+cantidad);
         this.carrito.addProducto(producto,cantidad);
-
         TextView tv = (TextView) findViewById(R.id.actionbar_notifcation_textview);
         tv.setText(String.valueOf(carrito.getTotalProductos()));
 
@@ -175,52 +169,56 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
      */
     public void goTo(String loc) {
         Fragment fragment = null;
-        switch (loc) {
-            case PROMOCIONES:
-                fragment = new FragmentPromociones(this);
-                navView.setCheckedItem(R.id.menu_seccion_1);
-                getSupportActionBar().setTitle(MainActivity.PROMOCIONES);
-                break;
-            case LOGIN:
-                fragment = new FragmentLogin(MainActivity.this);
-                navView.setCheckedItem(navView.getMenu().findItem(LOGIN_ID).getItemId());
-                getSupportActionBar().setTitle(MainActivity.LOGIN);
-                break;
-            case SEGUIMIENTO:
-                fragment = new FragmentSeguimientoPedido(MainActivity.this);
-                navView.setCheckedItem(R.id.menu_seccion_3);
-                getSupportActionBar().setTitle(MainActivity.SEGUIMIENTO);
-                break;
-            case PEDIDOS:
-                fragment = new FragmentPedidos(MainActivity.this);
-                navView.setCheckedItem(navView.getMenu().findItem(MIS_PEDIDOS_ID).getItemId());
-                getSupportActionBar().setTitle(MainActivity.PEDIDOS);
-                break;
-            case PRODUCTOS:
-                fragment = new FragmentProductos();
-                navView.setCheckedItem(R.id.menu_seccion_5);
-                getSupportActionBar().setTitle(MainActivity.PRODUCTOS);
-                break;
-            case REGISTRO:
-                fragment = new FragmentRegistro();
-                navView.setCheckedItem(R.id.menu_seccion_5);
-                getSupportActionBar().setTitle(MainActivity.REGISTRO);
-                break;
-            case CARRITO:
-                fragment = new FragmentCarrito(MainActivity.this);
-                getSupportActionBar().setTitle(MainActivity.CARRITO);
-                break;
-            case LOGOUT:
-                this.logout();
-        }
+        try {
+            switch (loc) {
+                case PROMOCIONES:
+                    fragment = new FragmentPromociones(this);
+                    navView.setCheckedItem(R.id.menu_seccion_1);
+                    getSupportActionBar().setTitle(MainActivity.PROMOCIONES);
+                    break;
+                case LOGIN:
+                    fragment = new FragmentLogin(MainActivity.this);
+                    navView.setCheckedItem(navView.getMenu().findItem(LOGIN_ID).getItemId());
+                    getSupportActionBar().setTitle(MainActivity.LOGIN);
+                    break;
+                case SEGUIMIENTO:
+                    fragment = new FragmentSeguimientoPedido(MainActivity.this);
+                    navView.setCheckedItem(R.id.menu_seccion_3);
+                    getSupportActionBar().setTitle(MainActivity.SEGUIMIENTO);
+                    break;
+                case PEDIDOS:
+                    fragment = new FragmentPedidos(MainActivity.this);
+                    navView.setCheckedItem(navView.getMenu().findItem(MIS_PEDIDOS_ID).getItemId());
+                    getSupportActionBar().setTitle(MainActivity.PEDIDOS);
+                    break;
+                case PRODUCTOS:
+                    fragment = new FragmentProductos(MainActivity.this);
+                    navView.setCheckedItem(R.id.menu_seccion_5);
+                    getSupportActionBar().setTitle(MainActivity.PRODUCTOS);
+                    break;
+                case REGISTRO:
+                    fragment = new FragmentRegistro();
+                    navView.setCheckedItem(R.id.menu_seccion_5);
+                    getSupportActionBar().setTitle(MainActivity.REGISTRO);
+                    break;
+                case CARRITO:
+                    fragment = new FragmentCarrito(MainActivity.this);
+                    getSupportActionBar().setTitle(MainActivity.CARRITO);
+                    break;
+                case LOGOUT:
+                    this.logout();
+            }
 
-        if (fragment != null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.content_frame, fragment)
-                    .commit();
-        }
+            if (fragment != null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_frame, fragment)
+                        .commit();
+            }
 
-        drawerLayout.closeDrawers();
+            drawerLayout.closeDrawers();
+        }catch (NullPointerException ex){
+            Log.i(Settings.LOGTAG, ex.getMessage());
+        }
     }
 
     private void logout(){
@@ -239,7 +237,6 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
         TextView txtNavViewUser = (TextView) navView.findViewById(R.id.navViewUser);
         txtNavViewUser.setText(login);
         invalidateOptionsMenu();
-
     }
 }
 

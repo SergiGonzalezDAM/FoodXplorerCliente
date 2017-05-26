@@ -43,7 +43,7 @@ public class FragmentLogin extends Fragment implements View.OnClickListener, Asy
             this.tienda.goTo(MainActivity.PROMOCIONES);
         } else {
             Log.e(Settings.LOGTAG, "Login fail");
-            Toast.makeText(tienda, "Login fail", Toast.LENGTH_LONG).show();
+            Toast.makeText(tienda, R.string.LOGIN_FAIL, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -72,7 +72,6 @@ public class FragmentLogin extends Fragment implements View.OnClickListener, Asy
         //La aplicacion no permite que se llegue a este fragment si se esta logueado, pero este codigo
         //se asegura que efectivamente no se produzca un segundo login.
         if(!"".equals(tienda.carrito.getUsuarioLogueado())){
-            Toast.makeText(tienda, "Login ya realizado", Toast.LENGTH_LONG).show();
             this.tienda.goTo(MainActivity.PROMOCIONES);
         }
 
@@ -123,7 +122,6 @@ class TareaWScomprobarLogin extends AsyncTask<Object, Void, Boolean> {
             }
             osw.close();
             restManager.disconnect();
-            //System.err.println(conn.getResponseMessage());
         } catch (java.net.ProtocolException ex) {
             Log.e(Settings.LOGTAG, "Error de protocol: " + ex);
             result = false;

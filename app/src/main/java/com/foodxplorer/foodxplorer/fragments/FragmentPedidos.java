@@ -13,7 +13,8 @@ import android.widget.Toast;
 
 import com.foodxplorer.foodxplorer.MainActivity;
 import com.foodxplorer.foodxplorer.adapters.AdaptadorPedido;
-import com.foodxplorer.foodxplorer.Pedidos;
+import com.foodxplorer.foodxplorer.helpers.RestManager;
+import com.foodxplorer.foodxplorer.objetos.Pedidos;
 import com.foodxplorer.foodxplorer.R;
 
 import com.foodxplorer.foodxplorer.helpers.AsyncResponse;
@@ -81,15 +82,15 @@ public class FragmentPedidos extends Fragment implements AdapterView.OnItemClick
         @Override
         protected Boolean doInBackground(Object... params) {
             BufferedReader reader;
-            URL url = null;
+            String url=null;
             try {
-                url = new URL(Settings.DIRECCIO_SERVIDOR + Settings.PATH +"pedidos/" + tienda.carrito.getUsuarioLogueado());
-                reader = getBufferedReader(url);
+                url =Settings.DIRECCIO_SERVIDOR + Settings.PATH +"pedidos/" + tienda.carrito.getUsuarioLogueado();
+                RestManager restManager = new RestManager(url);
+                restManager.setRequestMethod(RestManager.GET);
+                reader = restManager.getBufferedReader();
                 listadoPedidosJSON = new JSONArray(reader.readLine());
-
-
             } catch (java.io.FileNotFoundException ex) {
-                Log.e(LOGTAG, "Error al obtener el pedido de:" + url.toString() + "\n" + ex);
+                Log.e(LOGTAG, "Error al obtener el pedido de:" + url + "\n" + ex);
             } catch (java.io.IOException ex) {
                 Log.e(LOGTAG, "Temps d'espera esgotat al iniciar la conexio amb la BBDD externa:" + url.toString() + "\n" + ex);
             } catch (org.json.JSONException ex) {
@@ -98,14 +99,6 @@ public class FragmentPedidos extends Fragment implements AdapterView.OnItemClick
             return true;
         }
 
-        private BufferedReader getBufferedReader(URL url) throws java.io.IOException {
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            // conn.setReadTimeout(10000 /*milliseconds*/);
-            // conn.setConnectTimeout(10000);
-            conn.setRequestProperty("Content-Type", "application/json");
-            return new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        }
 
         @Override
         protected void onPostExecute(Boolean result) {

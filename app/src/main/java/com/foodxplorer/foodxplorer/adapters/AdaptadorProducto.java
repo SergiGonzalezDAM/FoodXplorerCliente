@@ -2,8 +2,6 @@ package com.foodxplorer.foodxplorer.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,14 +9,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.foodxplorer.foodxplorer.Producto;
+import com.foodxplorer.foodxplorer.objetos.Producto;
 import com.foodxplorer.foodxplorer.R;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -27,9 +21,9 @@ import java.util.ArrayList;
 
 public class AdaptadorProducto extends BaseAdapter
 {
-    protected Activity activity;
+    private Activity activity;
     //ARRAYLIST CON TODOS LOS ITEMS
-    protected ArrayList<Producto> items;
+    private ArrayList<Producto> items;
 
     //CONSTRUCTOR
     public AdaptadorProducto(Activity activity, ArrayList<Producto> items) {

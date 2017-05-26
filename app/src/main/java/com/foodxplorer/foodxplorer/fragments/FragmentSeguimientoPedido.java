@@ -12,13 +12,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.foodxplorer.foodxplorer.MainActivity;
-import com.foodxplorer.foodxplorer.Pedidos;
+import com.foodxplorer.foodxplorer.objetos.Pedidos;
 import com.foodxplorer.foodxplorer.R;
-import com.foodxplorer.foodxplorer.adapters.AdaptadorPedido;
 import com.foodxplorer.foodxplorer.helpers.AsyncResponse;
 import com.foodxplorer.foodxplorer.helpers.Settings;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,12 +25,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 
-import static android.R.attr.fragment;
 import static com.foodxplorer.foodxplorer.helpers.Settings.LOGTAG;
 
 public class FragmentSeguimientoPedido extends Fragment implements View.OnClickListener {

@@ -11,39 +11,46 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.foodxplorer.foodxplorer.Pedidos;
-import com.foodxplorer.foodxplorer.Producto;
+import com.foodxplorer.foodxplorer.MainActivity;
+import com.foodxplorer.foodxplorer.objetos.Producto;
 import com.foodxplorer.foodxplorer.R;
-import com.foodxplorer.foodxplorer.adapters.AdaptadorPedido;
 import com.foodxplorer.foodxplorer.adapters.AdaptadorProducto;
 import com.foodxplorer.foodxplorer.helpers.AsyncResponse;
+import com.foodxplorer.foodxplorer.helpers.RestManager;
 import com.foodxplorer.foodxplorer.helpers.Settings;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 
 import static com.foodxplorer.foodxplorer.helpers.Settings.LOGTAG;
 
 public class FragmentProductos extends Fragment implements AdapterView.OnItemClickListener {
 
-
-
-    ArrayList<Producto> arraydir;
-    ListView lista;
+    private ArrayList<Producto> listaProductos;
+    private ListView lista;
+    private OnAddToCart mOnAddToCart;
+    private MainActivity tienda;
 
     public FragmentProductos() {
 
+    }
+
+    public FragmentProductos(MainActivity tienda) {
+this.tienda=tienda;
+    }
+    public interface OnAddToCart {
+        void onAddToCart(Producto producto, int cantidad);
     }
 
     @Override
@@ -53,15 +60,6 @@ public class FragmentProductos extends Fragment implements AdapterView.OnItemCli
         tareaTodosProductos.execute();
         View view = inflater.inflate(R.layout.fragment_promociones, container, false);
         lista = (ListView) view.findViewById(R.id.listViewPromociones);
-//        Producto promocion;
-//        arraydir = new ArrayList<>();
-//        // Introduzco los datos
-//        promocion = new Producto(getResources().getDrawable(R.drawable.pizza2), "4 Quesos", 14, "Artesana");
-//        arraydir.add(promocion);
-//        promocion = new Producto(getResources().getDrawable(R.drawable.pizza2), "5 Quesos", 15, "Artesana");
-//        arraydir.add(promocion);
-//        promocion = new Producto(getResources().getDrawable(R.drawable.pizza2), "6 Quesos", 16, "Artesana");
-//        arraydir.add(promocion);
         lista.setOnItemClickListener(this);
         return view;
 
@@ -70,14 +68,14 @@ public class FragmentProductos extends Fragment implements AdapterView.OnItemCli
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        System.out.println("metodo onclick fragment productos");
-        final Producto producto = arraydir.get(position);
+        final Producto producto = listaProductos.get(position);
 
-        AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());
-        View mView = getLayoutInflater(null).inflate(R.layout.activity_dialog, null);
+        final AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());
+        final View mView = getLayoutInflater(null).inflate(R.layout.activity_dialog, null);
 
-        ImageView foto = (ImageView) mView.findViewById(R.id.imagenPromocion);
-        foto.setImageDrawable(producto.getImagenProducto());
+        ImageView image = (ImageView) mView.findViewById(R.id.imagenPromocion);
+
+        Picasso.with(mView.getContext()).load(producto.getLinkImagen()).into(image);
         TextView nombre = (TextView) mView.findViewById(R.id.textViewNombrePromocion);
         nombre.setText(producto.getNombre());
         TextView precio = (TextView) mView.findViewById(R.id.textViewPrecioPromocion);
@@ -85,52 +83,78 @@ public class FragmentProductos extends Fragment implements AdapterView.OnItemCli
         TextView descripcion = (TextView) mView.findViewById(R.id.textViewDescripcionPromociones);
         descripcion.setText(producto.getDescripcion());
 
-        mView.findViewById(R.id.btnAddCart).setOnClickListener(new View.OnClickListener() {
+        mBuilder.setView(mView);
+        final AlertDialog dialog = mBuilder.create();
+        final TextView cantidad = (TextView) mView.findViewById(R.id.popUpTextViewCantidad);
+
+        Button addmore = (Button) mView.findViewById(R.id.btnAddMore);
+        addmore.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                //mOnAddToCart.onAddToCart(promocion);
-                System.out.println("sadfgdsafgfasghjfgfasdgshgfasfdgssafdgdfgsfasgfas vsgbdsdafvbdgfevs");
+            public void onClick(View view) {
+
+                int aux= Integer.valueOf(cantidad.getText().toString());
+                cantidad.setText(String.valueOf(++aux));
             }
         });
 
-        mBuilder.setView(mView);
-        AlertDialog dialog = mBuilder.create();
 
+        Button addless = (Button) mView.findViewById(R.id.btnAddLess);
+        addless.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int aux= Integer.valueOf(cantidad.getText().toString());
+                if(aux>0){
+                    cantidad.setText(String.valueOf(--aux));
+                }
+            }
+        });
+
+        mView.findViewById(R.id.btnAddCart).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnAddToCart.onAddToCart(producto, Integer.valueOf(cantidad.getText().toString()));
+                dialog.dismiss();
+            }
+        });
         dialog.show();
     }
 
     class TareaWSRecuperarTodosProductos extends AsyncTask<Object, Void, Boolean> {
-        JSONArray listadoProductosJSON;
+        private JSONArray listadoProductosJSON;
         public AsyncResponse delegate = null;
         private AdaptadorProducto adaptador;
-        ArrayList<Producto> listaProductos;
+
 
         @Override
         protected Boolean doInBackground(Object... params) {
             BufferedReader reader;
-            URL url = null;
+            Boolean result=true;
             try {
-                url = new URL(Settings.DIRECCIO_SERVIDOR + "ServcioFoodXPlorer/webresources/generic/listarTodosLosProductos");
-                reader = getBufferedReader(url);
+                String url =Settings.DIRECCIO_SERVIDOR + Settings.PATH + "/listarTodosLosProductos";
+                RestManager restManager = new RestManager(url);
+                restManager.setRequestMethod(restManager.GET);
+                reader = restManager.getBufferedReader();
                 listadoProductosJSON = new JSONArray(reader.readLine());
-
-            } catch (java.io.FileNotFoundException ex) {
-                Log.e(LOGTAG, "Error al obtenir la posicio de:" + url.toString() + "\n" + ex);
+            } catch (java.net.ProtocolException ex) {
+                Log.e(Settings.LOGTAG, "Error de protocol: " + ex);
+                result = false;
+            } catch (java.io.FileNotFoundException | java.net.MalformedURLException ex) {
+                Log.e(Settings.LOGTAG, "Error de ruta d'acces: " + ex);
+                result = false;
+            } catch (java.net.SocketTimeoutException ex) {
+                Log.e(Settings.LOGTAG, "Temps d'espera esgotat al iniciar la conexio amb la BBDD extena: " + ex);
+                result = false;
+            } catch (java.net.ConnectException ex) {
+                Log.e(Settings.LOGTAG, "Connect exeption: " + ex.getMessage());
+                result = false;
             } catch (java.io.IOException ex) {
-                Log.e(LOGTAG, "Temps d'espera esgotat al iniciar la conexio amb la BBDD externa:" + url.toString() + "\n" + ex);
+                Log.e(Settings.LOGTAG, "Undefined error: " + ex);
+                result = false;
             } catch (org.json.JSONException ex) {
                 Log.e(LOGTAG, "Error en la transformacio de l'objecte JSON: " + ex);
+                result = false;
             }
-            return true;
-        }
-
-        private BufferedReader getBufferedReader(URL url) throws java.io.IOException {
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            // conn.setReadTimeout(10000 /*milliseconds*/);
-            // conn.setConnectTimeout(10000);
-            conn.setRequestProperty("Content-Type", "application/json");
-            return new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            return result;
         }
 
         @Override
@@ -144,6 +168,8 @@ public class FragmentProductos extends Fragment implements AdapterView.OnItemCli
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+            } else {
+                Toast.makeText(tienda, "Error de obtencion de datos.", Toast.LENGTH_LONG).show();
             }
 
 
@@ -159,9 +185,9 @@ public class FragmentProductos extends Fragment implements AdapterView.OnItemCli
         }
     }
 
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        mOnAddToCart = (OnAddToCart) context;
-//    }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mOnAddToCart = (OnAddToCart) context;
+    }
 }
