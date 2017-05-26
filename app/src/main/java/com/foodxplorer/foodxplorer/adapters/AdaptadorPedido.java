@@ -62,6 +62,7 @@ public class AdaptadorPedido extends BaseAdapter
         foto.setText(String.valueOf(dir.getIdPedido()));
         TextView nombre = (TextView) v.findViewById(R.id.textViewShowFechaPedido);
         nombre.setText(dir.getFechaPedido());
+            ;
 
         // DEVOLVEMOS VISTA
         return v;

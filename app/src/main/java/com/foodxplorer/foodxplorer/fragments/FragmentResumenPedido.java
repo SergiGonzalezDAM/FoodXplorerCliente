@@ -17,7 +17,9 @@ import com.foodxplorer.foodxplorer.Estado;
 import com.foodxplorer.foodxplorer.LineasPedido;
 import com.foodxplorer.foodxplorer.MainActivity;
 import com.foodxplorer.foodxplorer.Pedidos;
+import com.foodxplorer.foodxplorer.Producto;
 import com.foodxplorer.foodxplorer.R;
+import com.foodxplorer.foodxplorer.adapters.AdaptadorProducto;
 import com.foodxplorer.foodxplorer.helpers.AsyncResponse;
 import com.foodxplorer.foodxplorer.helpers.Settings;
 
@@ -46,8 +48,9 @@ public class FragmentResumenPedido extends Fragment {
     private Direccion direccionObject;
     private Estado estadoObjeto;
     private ArrayList<LineasPedido> listaLineasPedido;
-    private ArrayList<Long> listaIdProductos;
-
+    private ArrayList<Producto> listaProductos;
+    AdaptadorProducto adapProducto;
+    ListView listView;
     public FragmentResumenPedido() {
         // Required empty public constructor
     }
@@ -62,6 +65,7 @@ public class FragmentResumenPedido extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_resumen_pedido, container, false);
+        listView = (ListView) view.findViewById(R.id.listViewInfoPedido);
         nombreCliente = (TextView) view.findViewById(R.id.textViewNombreCliente);
         importe = (TextView) view.findViewById(R.id.textViewImporte);
         direccion = (TextView) view.findViewById(R.id.textViewDireccion);
@@ -73,12 +77,8 @@ public class FragmentResumenPedido extends Fragment {
         tareaLines.execute();
         TareaWSRecuperarEstado tareaEstado = new TareaWSRecuperarEstado();
         tareaEstado.execute();
-        List<String> lista = new ArrayList();
-        lista.add("Barbacoa");
-        lista.add("4 Quesos");
-        ListView listView = (ListView) view.findViewById(R.id.listViewInfoPedido);
-        ArrayAdapter<String> adaptador = new ArrayAdapter(view.getContext(), android.R.layout.simple_list_item_1, lista);
-        listView.setAdapter(adaptador);
+        TareaWSRecuperarProductosPedido tareaProductos = new TareaWSRecuperarProductosPedido();
+        tareaProductos.execute();
         return view;
     }
 
@@ -201,13 +201,11 @@ public class FragmentResumenPedido extends Fragment {
         private boolean rellenarArray() throws JSONException {
             boolean estado;
             listaLineasPedido = new ArrayList<>();
-            listaIdProductos = new ArrayList<>();
             if (lineasPedidoJSON.length() > 0) {
                 for (int i = 0; i < lineasPedidoJSON.length(); i++) {
                     JSONObject jsonobject = lineasPedidoJSON.getJSONObject(i);
                     LineasPedido lineasPedido = new LineasPedido(jsonobject.getLong("idPedido"), jsonobject.getLong("idProducto"), jsonobject.getInt("cantidad"),
                             jsonobject.getDouble("precio"), jsonobject.getInt("iva"));
-                    listaIdProductos.add(lineasPedido.getIdProducto());
                     listaLineasPedido.add(lineasPedido);
                 }
                 estado = true;
@@ -276,6 +274,73 @@ public class FragmentResumenPedido extends Fragment {
             boolean estado;
             if (estadoJSON != null) {
                 estadoObjeto = new Estado(estadoJSON.getLong("idEstado"), estadoJSON.getString("nombreEstado"), estadoJSON.getDouble("tiempo"));
+                estado = true;
+            } else {
+                estado = false;
+            }
+            return estado;
+        }
+    }
+
+    class TareaWSRecuperarProductosPedido extends AsyncTask<Object, Void, Boolean> {
+        JSONArray productosJSON;
+        @Override
+        protected Boolean doInBackground(Object... params) {
+            BufferedReader reader;
+            URL url;
+            try {
+                url = new URL(Settings.DIRECCIO_SERVIDOR + "ServcioFoodXPlorer/webresources/generic/obtenerProductosPorIdPedido/" + pedido.getIdPedido());
+                reader = getBufferedReader(url);
+                productosJSON = new JSONArray(reader.readLine());
+            } catch (java.io.FileNotFoundException ex) {
+                Log.e(LOGTAG, "Error al obtener los productos");
+            } catch (java.io.IOException ex) {
+                Log.e(LOGTAG, "Temps d'espera esgotat al iniciar la conexio amb la BBDD externa:");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return true;
+        }
+
+        private BufferedReader getBufferedReader(URL url) throws java.io.IOException {
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            // conn.setReadTimeout(10000 /*milliseconds*/);
+            // conn.setConnectTimeout(10000);
+            conn.setRequestProperty("Content-Type", "application/json");
+            return new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            if (result) {
+                try {
+                    if (!rellenarArray() || tienda.carrito.getUsuarioLogueado() == null || tienda.carrito.getUsuarioLogueado().equals("")) {
+                        Toast.makeText(tienda, "ERROR", Toast.LENGTH_SHORT).show();
+                    }else{
+                        adapProducto = new AdaptadorProducto(getActivity(),listaProductos);
+                        listView.setAdapter(adapProducto);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        private boolean rellenarArray() throws JSONException {
+            boolean estado;
+            listaProductos = new ArrayList<>();
+            if (productosJSON.length() > 0) {
+                for (int i = 0; i < productosJSON.length(); i++) {
+                    JSONObject jsonobject = productosJSON.getJSONObject(i);
+                    Producto p = new Producto(jsonobject.getInt("idProducto"),
+                            jsonobject.getString("nombre"), jsonobject.getString("descripcion"),
+                            jsonobject.getDouble("precio"), jsonobject.getInt("iva"),
+                            jsonobject.getInt("ofertaDescuento"), jsonobject.getInt("activo"),
+                            jsonobject.getInt("idTipoProducto"),
+                            jsonobject.getString("urlImagen"));
+                    listaProductos.add(p);
+                }
                 estado = true;
             } else {
                 estado = false;

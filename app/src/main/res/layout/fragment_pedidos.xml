@@ -2,6 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+
     android:layout_height="match_parent"
     tools:context="com.foodxplorer.foodxplorer.MainActivity">
 
@@ -11,7 +12,8 @@
         android:id="@+id/listViewPedidos"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true" />
-
+        android:layout_alignParentTop="true"
+        android:longClickable="true"
+        android:clickable="true"/>
 
 </RelativeLayout>

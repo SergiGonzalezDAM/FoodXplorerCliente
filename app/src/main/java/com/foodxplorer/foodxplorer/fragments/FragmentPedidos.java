@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -31,9 +32,12 @@ import java.util.ArrayList;
 import static com.foodxplorer.foodxplorer.helpers.Settings.LOGTAG;
 
 
-public class FragmentPedidos extends Fragment {
+public class FragmentPedidos extends Fragment implements AdapterView.OnItemClickListener {
     private MainActivity tienda;
     private ListView lista;
+
+    private AdaptadorPedido adaptador;
+    private ArrayList<Pedidos> listaPedidos;
 
     public FragmentPedidos(MainActivity tienda) {
         this.tienda = tienda;
@@ -46,17 +50,28 @@ public class FragmentPedidos extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         TareaWSRecuperarPedidos tareaPedidos = new TareaWSRecuperarPedidos();
-        tareaPedidos.execute();
         View view = inflater.inflate(R.layout.fragment_pedidos, container, false);
         lista = (ListView) view.findViewById(R.id.listViewPedidos);
+        lista.setOnItemClickListener(FragmentPedidos.this);
+        tareaPedidos.execute();
         return view;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Toast.makeText(tienda, "HOLAAA", Toast.LENGTH_SHORT).show();
+        Pedidos pedido;
+        pedido = listaPedidos.get(position);
+        Fragment fragment = new FragmentResumenPedido(tienda, pedido);
+        tienda.getSupportFragmentManager().beginTransaction()
+                .replace(R.id.content_frame, fragment)
+                .commit();
     }
 
     class TareaWSRecuperarPedidos extends AsyncTask<Object, Void, Boolean> {
         JSONArray listadoPedidosJSON;
         public AsyncResponse delegate = null;
-        private AdaptadorPedido adaptador;
-        ArrayList<Pedidos> listaPedidos;
+
 
         @Override
         protected Boolean doInBackground(Object... params) {
@@ -94,6 +109,7 @@ public class FragmentPedidos extends Fragment {
                     } else {
                         adaptador = new AdaptadorPedido(getActivity(), listaPedidos);
                         lista.setAdapter(adaptador);
+
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
