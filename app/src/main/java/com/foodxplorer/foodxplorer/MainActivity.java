@@ -39,11 +39,13 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
     public static final String PEDIDOS = "Pedidos";
     public static final String PRODUCTOS = "Productos";
     public static final String LOGIN = "Login";
+    public static final String MIS_PEDIDOS = "Mis Pedidos";
     public static final String REGISTRO = "Registro";
     public static final String CARRITO = "Carrito";
     public static final String LOGOUT = "Logout";
     public static final int  LOGIN_ID = 9865556;
     public static final int LOGOUT_ID = 9568632;
+    public static final int MIS_PEDIDOS_ID = 965889;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
                             case R.id.menu_seccion_3:
                                 goTo(SEGUIMIENTO);
                                 break;
-                            case R.id.menu_seccion_4:
+                            case MIS_PEDIDOS_ID:
                                 goTo(PEDIDOS);
                                 break;
                             case R.id.menu_seccion_5:
@@ -147,13 +149,12 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         if(!"".equals(carrito.getUsuarioLogueado())) {
+            navView.getMenu().add(0,MIS_PEDIDOS_ID, Menu.NONE , MIS_PEDIDOS ).setIcon(R.drawable.ic_menu);
             navView.getMenu().add(0,LOGOUT_ID, Menu.NONE , LOGOUT).setIcon(R.drawable.ic_menu);
         }
         else{
             navView.getMenu().add(0,LOGIN_ID, Menu.NONE , LOGIN).setIcon(R.drawable.ic_menu);
         }
-
-
         return true;
     }
 
@@ -182,6 +183,7 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
                 break;
             case LOGIN:
                 fragment = new FragmentLogin(MainActivity.this);
+                navView.setCheckedItem(navView.getMenu().findItem(LOGIN_ID).getItemId());
                 getSupportActionBar().setTitle(MainActivity.LOGIN);
                 break;
             case SEGUIMIENTO:
@@ -191,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
                 break;
             case PEDIDOS:
                 fragment = new FragmentPedidos(MainActivity.this);
-                navView.setCheckedItem(R.id.menu_seccion_4);
+                navView.setCheckedItem(navView.getMenu().findItem(MIS_PEDIDOS_ID).getItemId());
                 getSupportActionBar().setTitle(MainActivity.PEDIDOS);
                 break;
             case PRODUCTOS:
@@ -224,6 +226,7 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
     private void logout(){
         this.carrito.setUsuarioLogueado("");
         navView.getMenu().removeItem(LOGOUT_ID);
+        navView.getMenu().removeItem(MIS_PEDIDOS_ID);
         TextView txtNavViewUser = (TextView) navView.findViewById(R.id.navViewUser);
         txtNavViewUser.setText(R.string.unregistered_User);
         this.goTo(PROMOCIONES);

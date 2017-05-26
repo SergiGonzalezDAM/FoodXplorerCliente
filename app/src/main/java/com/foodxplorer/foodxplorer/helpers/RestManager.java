@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.util.Set;
 
@@ -18,15 +19,20 @@ import java.util.Set;
 public class RestManager {
 
     private HttpURLConnection conn;
+    public static final String GET = "GET";
 
 public RestManager(String direccio) throws IOException {
     URL url = new URL(direccio);
     conn = (HttpURLConnection) url.openConnection();
-    conn.setRequestMethod("GET");
+
     conn.setReadTimeout(Settings.SERVER_READ_TIMEOUT);/*milliseconds*/
     conn.setConnectTimeout(Settings.SERVER_CONNECT_TIMEOUT);
     conn.setRequestProperty("Content-Type", "application/json");
 
+}
+
+public void setRequestMethod(String Method) throws ProtocolException {
+    conn.setRequestMethod(Method);
 }
 
 

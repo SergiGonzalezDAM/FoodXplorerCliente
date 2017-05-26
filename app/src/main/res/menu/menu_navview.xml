@@ -10,10 +10,6 @@
             android:icon="@drawable/ic_menu"
             android:title="Seguimiento"/>
         <item
-            android:id="@+id/menu_seccion_4"
-            android:icon="@drawable/ic_menu"
-            android:title="Pedidos"/>
-        <item
             android:id="@+id/menu_seccion_5"
             android:icon="@drawable/ic_menu"
             android:title="Productos"/>

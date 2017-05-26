@@ -42,8 +42,6 @@ public class FragmentPromociones extends Fragment implements AdapterView.OnItemC
     }
 
     private OnAddToCart mOnAddToCart;
-
-    ArrayList<Producto> arraydir;
     ListView lista;
     AdaptadorProducto adaptador;
     JSONArray listadoPromocionesJSON;
@@ -139,6 +137,7 @@ public class FragmentPromociones extends Fragment implements AdapterView.OnItemC
                 Log.d(LOGTAG, "Obteniendo ofertas");
                 url = Settings.DIRECCIO_SERVIDOR + Settings.PATH+"productos/ofertas";
                 RestManager rest = new RestManager(url);
+                rest.setRequestMethod(RestManager.GET);
                 reader = rest.getBufferedReader();
                 listadoPromocionesJSON = new JSONArray(reader.readLine());
             } catch (java.net.ProtocolException ex) {

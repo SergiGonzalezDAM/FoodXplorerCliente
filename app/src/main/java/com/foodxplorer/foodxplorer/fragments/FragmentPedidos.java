@@ -78,7 +78,7 @@ public class FragmentPedidos extends Fragment implements AdapterView.OnItemClick
             BufferedReader reader;
             URL url = null;
             try {
-                url = new URL(Settings.DIRECCIO_SERVIDOR + "ServcioFoodXPlorer/webresources/generic/pedidos/" + tienda.carrito.getUsuarioLogueado());
+                url = new URL(Settings.DIRECCIO_SERVIDOR + Settings.PATH +"pedidos/" + tienda.carrito.getUsuarioLogueado());
                 reader = getBufferedReader(url);
                 listadoPedidosJSON = new JSONArray(reader.readLine());
             } catch (java.io.FileNotFoundException ex) {

@@ -1,5 +1,6 @@
 package com.foodxplorer.foodxplorer.fragments;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -83,6 +85,9 @@ public class FragmentLogin extends Fragment implements View.OnClickListener, Asy
             Fragment fragment = new FragmentRegistro(this.tienda);
             getFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
         } else {
+            InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow((null == getActivity().getCurrentFocus()) ? null : getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
             TareaWScomprobarLogin tarea = new TareaWScomprobarLogin();
             tarea.delegate = this;
             tarea.execute(new Usuario(etUsuario.getText().toString(), etPassword.getText().toString()));
