@@ -42,11 +42,9 @@ public class FragmentPromociones extends Fragment implements AdapterView.OnItemC
     }
 
     private OnAddToCart mOnAddToCart;
-    ListView lista;
-    AdaptadorProducto adaptador;
-    JSONArray listadoPromocionesJSON;
-    ArrayList<Producto> listadoPromociones;
-    MainActivity tienda;
+    private ListView lista;
+    private ArrayList<Producto> listadoPromociones;
+    private MainActivity tienda;
 
     public FragmentPromociones() {
 
@@ -78,7 +76,8 @@ public class FragmentPromociones extends Fragment implements AdapterView.OnItemC
         final View mView = getLayoutInflater(null).inflate(R.layout.activity_dialog, null);
 
         ImageView image = (ImageView) mView.findViewById(R.id.imagenPromocion);
-        Picasso.with(mView.getContext()).load("http://www.cicis.com/media/1138/pizza_trad_pepperoni.png").into(image);
+
+        Picasso.with(mView.getContext()).load(producto.getLinkImagen()).into(image);
         TextView nombre = (TextView) mView.findViewById(R.id.textViewNombrePromocion);
         nombre.setText(producto.getNombre());
         TextView precio = (TextView) mView.findViewById(R.id.textViewPrecioPromocion);
@@ -126,7 +125,8 @@ public class FragmentPromociones extends Fragment implements AdapterView.OnItemC
 
     class TareaWSRecuperarProductos extends AsyncTask<Object, Void, Boolean> {
 
-
+        JSONArray listadoPromocionesJSON;
+        AdaptadorProducto adaptador;
         @Override
         protected Boolean doInBackground(Object... params) {
             boolean result = true;
