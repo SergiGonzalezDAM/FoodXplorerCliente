@@ -30,11 +30,11 @@ public class FragmentCarrito extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_resumen_pedido, container, false);
+        View view = inflater.inflate(R.layout.fragment_confirmacion_pedido, container, false);
         List<String> lista = new ArrayList();
         lista.add("Barbacoa");
         lista.add("4 Quesos");
-        ListView listView =(ListView) view.findViewById(R.id.listViewInfoPedido);
+        ListView listView =(ListView) view.findViewById(R.id.listViewConfPedido);
         ArrayAdapter<String> adaptador = new ArrayAdapter(view.getContext(), android.R.layout.simple_list_item_1, lista);
         listView.setAdapter(adaptador);
         return view;

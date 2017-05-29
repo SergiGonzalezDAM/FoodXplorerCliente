@@ -10,15 +10,15 @@
     tools:context=".MainActivity">
 
 
-    <include layout="@layout/listaproductos" />
+    <include layout="@layout/listaproductos"
+        android:id="@+id/include" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/include"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="168dp">
+        android:layout_alignParentStart="true">
 
         <Button
             android:id="@+id/btnAddMore"
@@ -31,8 +31,8 @@
             android:id="@+id/popUpTextViewCantidad"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_weight="1"
+            android:gravity="center"
             android:text="1"
             android:textAlignment="center" />
 
@@ -47,8 +47,7 @@
             android:id="@+id/btnAddCart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Añadir"
-             />
+            android:text="Añadir" />
 
     </LinearLayout>
 </RelativeLayout>

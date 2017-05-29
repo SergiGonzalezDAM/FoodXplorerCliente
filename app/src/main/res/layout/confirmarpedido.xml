@@ -20,10 +20,8 @@
 
     <TextView
         android:id="@+id/textViewPrecioPromocion"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_below="@+id/textViewNombrePromocion"
         android:layout_marginTop="0dp"
         android:layout_toRightOf="@+id/imagenPromocion"
@@ -57,5 +55,25 @@
         android:layout_toEndOf="@+id/imagenPromocion"
         android:layout_toRightOf="@+id/imagenPromocion"
         android:text="Descripcion" />
+
+    <TextView
+        android:id="@+id/txtViewCantidad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textViewDescripcionPromociones"
+        android:layout_toRightOf="@+id/textViewPrecioPromocion"
+        android:text="TextView"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+
+    <TextView
+        android:id="@+id/precioTotalProducto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textViewDescripcionPromociones"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/textViewNombrePromocion"
+        android:text="TextView"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
 
 </RelativeLayout>

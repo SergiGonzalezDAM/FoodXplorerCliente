@@ -6,12 +6,13 @@
             android:icon="@drawable/ic_menu"
             android:title="@string/seccion_1"/>
         <item
-            android:id="@+id/menu_seccion_3"
-            android:icon="@drawable/ic_menu"
-            android:title="Seguimiento"/>
-        <item
             android:id="@+id/menu_seccion_5"
             android:icon="@drawable/ic_menu"
             android:title="Productos"/>
+        <item
+            android:id="@+id/menu_seccion_3"
+            android:icon="@drawable/ic_menu"
+            android:title="Seguimiento"/>
+
     </group>
 </menu>

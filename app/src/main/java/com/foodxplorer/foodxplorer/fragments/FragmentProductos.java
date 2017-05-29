@@ -130,7 +130,7 @@ this.tienda=tienda;
             BufferedReader reader;
             Boolean result=true;
             try {
-                String url =Settings.DIRECCIO_SERVIDOR + Settings.PATH + "/listarTodosLosProductos";
+                String url =Settings.DIRECCIO_SERVIDOR + Settings.PATH + "listarTodosLosProductos";
                 RestManager restManager = new RestManager(url);
                 restManager.setRequestMethod(restManager.GET);
                 reader = restManager.getBufferedReader();
