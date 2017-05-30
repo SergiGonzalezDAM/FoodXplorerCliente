@@ -12,10 +12,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.foodxplorer.foodxplorer.MainActivity;
-import com.foodxplorer.foodxplorer.objetos.Pedidos;
 import com.foodxplorer.foodxplorer.R;
 import com.foodxplorer.foodxplorer.helpers.AsyncResponse;
 import com.foodxplorer.foodxplorer.helpers.Settings;
+import com.foodxplorer.foodxplorer.objetos.Pedidos;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -80,7 +80,8 @@ public class FragmentSeguimientoPedido extends Fragment implements View.OnClickL
         @Override
         protected Boolean doInBackground(Object... params) {
             try {
-                pedidoJSON = readJsonFromUrl(Settings.DIRECCIO_SERVIDOR + "ServcioFoodXPlorer/webresources/generic/obtenerPedido/" + numPedido);
+                Log.d(LOGTAG, Settings.DIRECCIO_SERVIDOR + Settings.PATH + "obtenerPedido/" + numPedido);
+                pedidoJSON = readJsonFromUrl(Settings.DIRECCIO_SERVIDOR + Settings.PATH + "obtenerPedido/" + numPedido);
             } catch (java.io.FileNotFoundException ex) {
                 Log.e(LOGTAG, "Error al obtener el pedido");
             } catch (java.io.IOException ex) {
@@ -117,10 +118,15 @@ public class FragmentSeguimientoPedido extends Fragment implements View.OnClickL
         protected void onPostExecute(Boolean result) {
             if (result) {
                 try {
-                    if (!rellenarObjeto() || tienda.carrito.getUsuarioLogueado() == null || tienda.carrito.getUsuarioLogueado().equals("")) {
-                        Toast.makeText(tienda, "NO EXISTE ESE NUMERO DE PEDIDO", Toast.LENGTH_SHORT).show();
+                    if (tienda.carrito.getUsuarioLogueado().equals("")) {
+                        Toast.makeText(tienda, "Logueate para ver pedidos.", Toast.LENGTH_SHORT).show();
                     } else {
-                        numeroPedidoEncontrado = true;
+                        if (!rellenarObjeto()) {
+                            Toast.makeText(tienda, "NO EXISTE ESE NUMERO DE PEDIDO", Toast.LENGTH_SHORT).show();
+                        } else {
+                            numeroPedidoEncontrado = true;
+                            Log.d(Settings.LOGTAG, "PostExecuteSeguimiento. Pedido encontrado");
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -134,7 +140,9 @@ public class FragmentSeguimientoPedido extends Fragment implements View.OnClickL
                 pedido = new Pedidos(pedidoJSON.getLong("idPedido"), pedidoJSON.getString("fechaSalida"),
                         pedidoJSON.getLong("idDireccion"), pedidoJSON.getLong("idEstado"));
                 estado = true;
+                System.out.println("Encontrado");
             } else {
+                Log.e(Settings.LOGTAG, "Ningun dato obtenido.");
                 estado = false;
             }
             return estado;

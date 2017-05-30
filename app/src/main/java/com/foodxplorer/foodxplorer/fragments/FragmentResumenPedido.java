@@ -86,9 +86,9 @@ public class FragmentResumenPedido extends Fragment {
         @Override
         protected Boolean doInBackground(Object... params) {
             try {
-                direccionJSON = readJsonFromUrl(Settings.DIRECCIO_SERVIDOR + Settings.PATH+"/direccion/obtener2/" + pedido.getIdDireccion());
+                direccionJSON = readJsonFromUrl(Settings.DIRECCIO_SERVIDOR + Settings.PATH+"direccion/obtener2/" + pedido.getIdDireccion());
             } catch (java.io.FileNotFoundException ex) {
-                Log.e(LOGTAG, "Error al obtener la direccion");
+                Log.e(LOGTAG, "Error al obtener la direccion:"+Settings.DIRECCIO_SERVIDOR + Settings.PATH+"direccion/obtener2/" + pedido.getIdDireccion());
             } catch (java.io.IOException ex) {
                 Log.e(LOGTAG, "Temps d'espera esgotat al iniciar la conexio amb la BBDD externa:");
             } catch (JSONException e) {
@@ -153,15 +153,16 @@ public class FragmentResumenPedido extends Fragment {
         @Override
         protected Boolean doInBackground(Object... params) {
             BufferedReader reader;
+            String url=null;
             try {
-                String url = Settings.DIRECCIO_SERVIDOR + Settings.PATH+ "/pedido/obtenerDetalles/" + pedido.getIdPedido();
+                url = Settings.DIRECCIO_SERVIDOR + Settings.PATH+ "pedido/obtenerDetalles/" + pedido.getIdPedido();
                 RestManager restManager = new RestManager(url);
                 restManager.setRequestMethod(RestManager.GET);
                 reader = restManager.getBufferedReader();
                 lineasPedidoJSON = new JSONArray(reader.readLine());
 
             } catch (java.io.FileNotFoundException ex) {
-                Log.e(LOGTAG, "Error al obtener la direccion");
+                Log.e(LOGTAG, "Error al obtener los detalles:" + url);
             } catch (java.io.IOException ex) {
                 Log.e(LOGTAG, "Temps d'espera esgotat al iniciar la conexio amb la BBDD externa:");
             } catch (JSONException e) {
@@ -174,10 +175,15 @@ public class FragmentResumenPedido extends Fragment {
         @Override
         protected void onPostExecute(Boolean result) {
             if (result) {
-                for (LineasPedido linea : listaLineasPedido) {
-                    importeTotal += linea.getPrecio();
+                if(listaLineasPedido!=null) {
+                    for (LineasPedido linea : listaLineasPedido) {
+                        importeTotal += linea.getPrecio();
+                    }
+                    importe.setText(String.valueOf(importeTotal) + "€");
                 }
-                importe.setText(String.valueOf(importeTotal) + "€");
+                else{
+                    Log.e(LOGTAG, "Error. ListalineasPedidos null;");
+                }
             }
         }
     }
@@ -188,9 +194,9 @@ public class FragmentResumenPedido extends Fragment {
         @Override
         protected Boolean doInBackground(Object... params) {
             try {
-                estadoJSON = readJsonFromUrl(Settings.DIRECCIO_SERVIDOR + "ServcioFoodXPlorer/webresources/generic/obtenerEstado/" + pedido.getIdEstado());
+                estadoJSON = readJsonFromUrl(Settings.DIRECCIO_SERVIDOR + Settings.PATH+"obtenerEstado/" + pedido.getIdEstado());
             } catch (java.io.FileNotFoundException ex) {
-                Log.e(LOGTAG, "Error al obtener la direccion");
+                Log.e(LOGTAG, "Error al obtener el estado: "+Settings.DIRECCIO_SERVIDOR + Settings.PATH+"obtenerEstado/" + pedido.getIdEstado());
             } catch (java.io.IOException ex) {
                 Log.e(LOGTAG, "Temps d'espera esgotat al iniciar la conexio amb la BBDD externa:");
             } catch (JSONException e) {

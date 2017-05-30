@@ -85,6 +85,7 @@ public class FragmentPedidos extends Fragment implements AdapterView.OnItemClick
             String url=null;
             try {
                 url =Settings.DIRECCIO_SERVIDOR + Settings.PATH +"pedidos/" + tienda.carrito.getUsuarioLogueado();
+                System.out.println(url);
                 RestManager restManager = new RestManager(url);
                 restManager.setRequestMethod(RestManager.GET);
                 reader = restManager.getBufferedReader();
