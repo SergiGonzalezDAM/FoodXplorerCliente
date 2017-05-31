@@ -16,13 +16,18 @@ public class Producto
     private int activo;
     private String descripcion;
 
-    /**
-     * Generamos la clase producto con un constructor vacio y otro con los datos necesarios para poder recuperarlos de la base de datos
-     * lo usaremos para generar promociones o productos en
-     */
     public Producto()
     {
 
+    }
+
+    public Producto(Drawable imagenProducto, String nombreProducto, int idProducto, double precio,String descripcion)
+    {
+        this.Nombre = nombreProducto;
+        this.imagenProducto = imagenProducto;
+        this.idProducto = idProducto;
+        this.precio = precio;
+        this.descripcion = descripcion;
     }
     public Producto(int idProducto, String nombreProducto, String descripcion, double precio, int iva, double ofertaProducto, int activo,int tipoProducto, String linkImagen)
     {
@@ -37,24 +42,92 @@ public class Producto
         this.descripcion = descripcion;
     }
 
+    public Producto(Drawable imagenProducto, String nombreProducto, double precio,String descripcion)
+    {
+        this.Nombre = nombreProducto;
+        this.imagenProducto = imagenProducto;
+        this.precio = precio;
+        this.descripcion = descripcion;
+    }
+
+    public Drawable getImagenProducto() {
+        return imagenProducto;
+    }
+
+    public void setImagenProducto(Drawable imagenProducto) {
+        this.imagenProducto = imagenProducto;
+    }
+
     public String getNombre() {
         return Nombre;
+    }
+
+    public void setNombre(String nombre) {
+        Nombre = nombre;
     }
 
     public int getIdProducto() {
         return idProducto;
     }
 
+    public void setIdProducto(int idProducto) {
+        this.idProducto = idProducto;
+    }
+
     public String getLinkImagen() {
         return linkImagen;
+    }
+
+    public void setLinkImagen(String linkImagen) {
+        this.linkImagen = linkImagen;
     }
 
     public double getPrecio() {
         return precio;
     }
 
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
+
+    public int getIva() {
+        return iva;
+    }
+
+    public void setIva(int iva) {
+        this.iva = iva;
+    }
+
+    public double getOfertaProducto() {
+        return ofertaProducto;
+    }
+
+    public void setOfertaProducto(double ofertaProducto) {
+        this.ofertaProducto = ofertaProducto;
+    }
+
+    public int getTipoProducto() {
+        return tipoProducto;
+    }
+
+    public void setTipoProducto(int tipoProducto) {
+        this.tipoProducto = tipoProducto;
+    }
+
+    public int getActivo() {
+        return activo;
+    }
+
+    public void setActivo(int activo) {
+        this.activo = activo;
+    }
+
     public String getDescripcion() {
         return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     @Override

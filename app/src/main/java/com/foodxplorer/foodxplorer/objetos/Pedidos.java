@@ -37,4 +37,20 @@ public class Pedidos {
         return idEstado;
     }
 
+
+    public void setIdPedido(long idPedido) {
+        this.idPedido = idPedido;
+    }
+
+    public void setFechaPedido(String fechaPedido) {
+        this.fechaPedido = fechaPedido;
+    }
+
+    public void setIdDireccion(long idDireccion) {
+        this.idDireccion = idDireccion;
+    }
+
+    public void setIdEstado(long idEstado) {
+        this.idEstado = idEstado;
+    }
 }
