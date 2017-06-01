@@ -2,9 +2,7 @@ package com.foodxplorer.foodxplorer.fragments;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,7 +74,7 @@ public class FragmentRegistro extends Fragment implements View.OnClickListener, 
         if (R.id.btnRegistrarRegistro == view.getId()) {
             TareaWSRegistrarUsuario tareaRegistrar = new TareaWSRegistrarUsuario();
             tareaRegistrar.delegate = this;
-            tareaRegistrar.execute(correo.getText(), contrasena.getText());
+            tareaRegistrar.execute(correo.getText().toString(), contrasena.getText().toString());
         }
     }
 
@@ -141,8 +139,7 @@ public class FragmentRegistro extends Fragment implements View.OnClickListener, 
         private String getStringJSON(Object... params) throws JSONException, UnsupportedEncodingException {
             JSONObject dato = new JSONObject();
             dato.put("correo", params[0]);
-            MD5 md5cypher = new MD5();
-            dato.put("contrasena", md5cypher.md5((String) params[1]));
+            dato.put("contrasena", MD5.hash((String) params[1]));
             Log.d(LOGTAG, "El usuario que se insertara es:" + dato.toString());
             return String.valueOf(dato);
         }

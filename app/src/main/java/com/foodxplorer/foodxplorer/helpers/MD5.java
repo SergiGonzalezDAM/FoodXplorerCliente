@@ -10,9 +10,9 @@ import java.security.NoSuchAlgorithmException;
  * Created by IES on 01/06/2017.
  */
 
-public class MD5 {
+public final class MD5 {
 
-    public String md5(String s) {
+    public static String hash(String s) {
         String result = "";
         try {
             // Create MD5 Hash
@@ -24,7 +24,7 @@ public class MD5 {
             StringBuffer hexString = new StringBuffer();
             for (int i = 0; i < messageDigest.length; i++)
                 hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
-            result = hexString.toString();
+            result = String.valueOf(hexString);
 
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();

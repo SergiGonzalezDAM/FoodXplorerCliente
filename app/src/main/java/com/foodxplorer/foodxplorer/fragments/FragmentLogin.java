@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.foodxplorer.foodxplorer.MainActivity;
 import com.foodxplorer.foodxplorer.R;
 import com.foodxplorer.foodxplorer.helpers.AsyncResponse;
+import com.foodxplorer.foodxplorer.helpers.MD5;
 import com.foodxplorer.foodxplorer.helpers.RestManager;
 import com.foodxplorer.foodxplorer.helpers.Settings;
 
@@ -31,6 +32,15 @@ public class FragmentLogin extends Fragment implements View.OnClickListener, Asy
 
     private EditText etUsuario;
     private EditText etPassword;
+
+    public FragmentLogin() {
+        // Required empty public constructor
+    }
+
+
+    public FragmentLogin(MainActivity tienda) {
+        this.tienda = tienda;
+    }
 
     /**
      * Al finalizar, dependiendo de la respuesta que nos llegue sabremos si el usuario y contraseña
@@ -49,15 +59,6 @@ public class FragmentLogin extends Fragment implements View.OnClickListener, Asy
             Log.e(Settings.LOGTAG, "Login fail");
             Toast.makeText(tienda, R.string.LOGIN_FAIL, Toast.LENGTH_LONG).show();
         }
-    }
-
-
-    public FragmentLogin() {
-        // Required empty public constructor
-    }
-
-    public FragmentLogin(MainActivity tienda) {
-        this.tienda = tienda;
     }
 
     /**
@@ -126,8 +127,9 @@ class TareaWScomprobarLogin extends AsyncTask<Object, Void, Boolean> {
         RestManager restManager;
         try {
             Usuario user = (Usuario) params[0];
+
             String aux = (Settings.DIRECCIO_SERVIDOR + Settings.PATH + "loguearUsuario");
-            aux = aux + "/" + user.getUsername() + "/" + user.getPassword() + "/";
+            aux = aux + "/" + user.getUsername() + "/" + MD5.hash(user.getPassword()) + "/";
             restManager = new RestManager(aux);
             osw = restManager.getInputStream();
             int data = osw.read();

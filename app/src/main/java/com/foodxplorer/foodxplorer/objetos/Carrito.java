@@ -76,11 +76,11 @@ public class Carrito {
                     Log.d(Settings.LOGTAG, "productoAnadir encontrado en carrito, actualizamos");
                     int pos = productosEnCarrito.indexOf(productoEnCarrito);
                     productosEnCarrito.remove(pos);
-                    int cantidadAntigua = cantidades.get(pos);
                     cantidades.remove(pos);
-                    productosEnCarrito.add(pos, productoAnadir);
-                    int nuevaCantidad = cantidadAntigua + cantidad;
-                    cantidades.add(pos, nuevaCantidad);
+                    if (cantidad != 0) {
+                        productosEnCarrito.add(pos, productoAnadir);
+                        cantidades.add(pos, cantidad);
+                    }
                     found = true;
                     break;
                 }
@@ -89,9 +89,11 @@ public class Carrito {
 
             //Si no existeix en el carro, l'afegim
             if (!found) {
-                Log.d(Settings.LOGTAG, "productoAnadir NO encontrado en carrito, añadimos");
-                productosEnCarrito.add(productoAnadir);
-                cantidades.add(cantidad);
+                if (cantidad != 0) {
+                    Log.d(Settings.LOGTAG, "productoAnadir NO encontrado en carrito, añadimos");
+                    productosEnCarrito.add(productoAnadir);
+                    cantidades.add(cantidad);
+                }
             }
         } catch (ArrayIndexOutOfBoundsException ex) {
             Log.e(Settings.LOGTAG, ex.getMessage());

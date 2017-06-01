@@ -26,7 +26,12 @@ public class TareaComprobarLogin extends AsyncTask<Object, Void, Boolean> {
         try {
             Usuario user = (Usuario) params[0];
             String aux = (Settings.DIRECCIO_SERVIDOR + Settings.PATH + "loguearUsuario");
-            aux = aux + "/" + user.getUsername() + "/" + user.getPassword() + "/";
+            MD5 md5 = new MD5();
+            System.out.println(aux);
+            aux = aux + "/" + user.getUsername() + "/" + MD5.hash(user.getPassword()) + "/";
+            System.out.println("HOLA!!!");
+            Log.e(Settings.LOGTAG, "Aux es:" + aux);
+            System.out.println("ADIOS!!!");
             restManager = new RestManager(aux);
             osw = restManager.getInputStream();
             int data = osw.read();

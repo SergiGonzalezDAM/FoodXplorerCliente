@@ -18,7 +18,6 @@ import android.widget.Toast;
 
 import com.foodxplorer.foodxplorer.MainActivity;
 import com.foodxplorer.foodxplorer.R;
-import com.foodxplorer.foodxplorer.helpers.AsyncResponse;
 import com.foodxplorer.foodxplorer.helpers.RestManager;
 import com.foodxplorer.foodxplorer.helpers.Settings;
 import com.foodxplorer.foodxplorer.objetos.LineasPedido;
@@ -157,8 +156,6 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
 
     class TareaObtenerDirecciones extends AsyncTask<Object, Void, Boolean> {
 
-        AsyncResponse delegate = null;
-
         @Override
         protected Boolean doInBackground(Object... params) {
             boolean result = true;
@@ -266,13 +263,11 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
 
         @Override
         protected Integer doInBackground(Object... params) {
-            int result = 0;
+            int numeroPedido = 0;
             OutputStreamWriter osw;
             BufferedInputStream isr;
             RestManager restManager;
-
             try {
-
                 String aux = (Settings.DIRECCIO_SERVIDOR + Settings.PATH + "pedido/insertar/");
                 pedido = new Pedidos();
                 DateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
@@ -280,39 +275,91 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
                 String fechaPedido = df.format(today);
                 pedido.setIdDireccion(obtenerIdDireccion());
                 if (pedido.getIdDireccion() <= 0) {
-                    Log.d(Settings.LOGTAG, "Error al obtenir la direccio de l'spinner");
-                    return result;
-                }
-                pedido.setFechaPedido(fechaPedido);
-                //aux = aux + "/" + user.getUsername() + "/" + user.getPassword() + "/";
-                restManager = new RestManager(aux);
-                restManager.setRequestMethod(RestManager.POST);
-                osw = restManager.getOutputStreamWriter();
-                osw.write(getStringJSON(pedido));
-                osw.flush();
-                BufferedReader bfr = restManager.getBufferedReader();
-                result = Integer.valueOf(bfr.readLine());
-                System.err.println(restManager.getResponseMessage());
-                System.err.println(restManager.getResponseCode());
+                    Log.e(Settings.LOGTAG, "Error al obtenir la direccio de l'spinner");
+                } else {
+                    if (pedido.getIdDireccion() <= 0) {
+                        Log.d(Settings.LOGTAG, "Error al obtenir la direccio de l'spinner");
+                        return -1;
+                    }
+                    pedido.setFechaPedido(fechaPedido);
+                    //aux = aux + "/" + user.getUsername() + "/" + user.getPassword() + "/";
+                    restManager = new RestManager(aux);
+                    restManager.setRequestMethod(RestManager.POST);
+                    osw = restManager.getOutputStreamWriter();
+                    osw.write(getStringJSON(pedido));
+                    osw.flush();
+                    BufferedReader bfr = restManager.getBufferedReader();
+                    numeroPedido = Integer.valueOf(bfr.readLine());
+                    System.err.println(restManager.getResponseMessage());
+                    System.err.println(restManager.getResponseCode());
 
+
+                    ArrayList<LineasPedido> lineas = new ArrayList<>();
+                    ArrayList<Producto> productos = (ArrayList) tienda.carrito.getProductosEnCarrito();
+                    ArrayList<Integer> cantidades = (ArrayList) tienda.carrito.getCantidades();
+
+                    for (int i = 0; i < productos.size(); i++) {
+                        Producto poducto = productos.get(i);
+                        lineas.add(new LineasPedido(numeroPedido, poducto.getIdProducto(), cantidades.get(i), poducto.getPrecio(), poducto.getIva()));
+                    }
+
+                    for (LineasPedido linea : lineas) {
+                        RestManager restManager2;
+                        String aux2 = (Settings.DIRECCIO_SERVIDOR + Settings.PATH + "lineasPedido/insertar/");
+                        restManager2 = new RestManager(aux2);
+                        restManager2.setRequestMethod(RestManager.POST);
+                        osw = restManager2.getOutputStreamWriter();
+                        String linea2 = getStringJSON(linea);
+                        System.err.println("Vamos a insertar la linea:    " + linea);
+                        osw.write(linea2);
+                        osw.flush();
+                        BufferedReader bfr2 = restManager2.getBufferedReader();
+                        if (!restManager2.getResponseMessage().equals("OK")) {
+                            return -2;
+                        }
+                    }
+                    pedidoInsertado(numeroPedido);
+
+                }
             } catch (java.net.ProtocolException ex) {
                 Log.e(Settings.LOGTAG, "Error de protocol: " + ex);
-                result = 0;
+                numeroPedido = 0;
             } catch (java.io.FileNotFoundException | java.net.MalformedURLException ex) {
                 Log.e(Settings.LOGTAG, "Error de ruta d'acces: " + ex);
-                result = 0;
+                numeroPedido = 0;
             } catch (java.net.SocketTimeoutException ex) {
                 Log.e(Settings.LOGTAG, "Temps d'espera esgotat al iniciar la conexio amb la BBDD extena: " + ex);
-                result = 0;
+                numeroPedido = 0;
             } catch (java.io.IOException ex) {
                 Log.e(Settings.LOGTAG, "Undefined error: " + ex);
-                result = 0;
+                numeroPedido = 0;
             } catch (JSONException e) {
                 Log.e(Settings.LOGTAG, "Error de manipulacio de l'objecte JSON: " + e.getStackTrace());
             }
-            return result;
+
+            return numeroPedido;
         }
 
+        @Override
+        protected void onPostExecute(Integer numeroPedido) {
+            if (pedido.getIdDireccion() <= 0) {
+                Toast.makeText(tienda, "Selecciona una direccion de entrega.", Toast.LENGTH_LONG).show();
+            } else {
+                if (numeroPedido == 0) {
+                    Toast.makeText(tienda, "Error al procesar el pedido.", Toast.LENGTH_LONG).show();
+                } else {
+                    ArrayList<LineasPedido> lineas = new ArrayList<>();
+                    ArrayList<Producto> productos = (ArrayList) tienda.carrito.getProductosEnCarrito();
+                    ArrayList<Integer> cantidades = (ArrayList) tienda.carrito.getCantidades();
+
+                    for (int i = 0; i < productos.size(); i++) {
+                        Producto poducto = productos.get(i);
+                        lineas.add(new LineasPedido(numeroPedido, poducto.getIdProducto(), cantidades.get(i), poducto.getPrecio(), poducto.getIva()));
+                    }
+                    pedidoInsertado(numeroPedido);
+                }
+            }
+        }
         private String getStringJSON(Pedidos pedido) throws JSONException, UnsupportedEncodingException {
             JSONObject dato = new JSONObject();
             dato.put("idDireccion", pedido.getIdDireccion());
@@ -325,8 +372,23 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
             return String.valueOf(dato);
         }
 
+        private String getStringJSON(LineasPedido lineas) throws JSONException, UnsupportedEncodingException {
+            JSONObject dato = new JSONObject();
+            dato.put("idPedido", lineas.getIdPedido());
+            dato.put("idProducto", lineas.getIdProducto());
+            dato.put("cantidad", lineas.getCantidad());
+            dato.put("precio", lineas.getPrecio());
+            dato.put("iva", lineas.getIva());
+            return String.valueOf(dato);
+        }
 
-        public int obtenerIdDireccion() throws JSONException {
+        /**
+         * Retorna un id de direccio
+         *
+         * @return 0 if needs to add a new direction, -1 if no direction selected.
+         * @throws JSONException
+         */
+        int obtenerIdDireccion() throws JSONException {
             int result = 0;
             if (spinnerDirecciones.getSelectedItem().toString().equals("Nueva direccion de entrega") || spinnerDirecciones.getSelectedItem().toString().equals("Selecciona la direccion de entrega")) {
                 if (spinnerDirecciones.getSelectedItem().toString().equals("Nueva direccion de entrega")) {
@@ -342,37 +404,6 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
 
             }
             return result;
-        }
-
-        @Override
-        protected void onPostExecute(Integer numeroPedido) {
-            if (pedido.getIdDireccion() <= 0) {
-                if (pedido.getIdDireccion() == -1) {
-                    Toast.makeText(tienda, "Selecciona una direccion de entrega.", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(tienda, "Nueva direccion de entrega.", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            if (numeroPedido == 0) {
-                Toast.makeText(tienda, "Error al procesar el pedido.", Toast.LENGTH_LONG).show();
-            } else {
-                ArrayList<LineasPedido> lineas = new ArrayList<>();
-                ArrayList<Producto> productos = (ArrayList) tienda.carrito.getProductosEnCarrito();
-                ArrayList<Integer> cantidades = (ArrayList) tienda.carrito.getCantidades();
-
-                for (int i = 0; i < productos.size(); i++) {
-                    Producto poducto = productos.get(i);
-                    lineas.add(new LineasPedido(numeroPedido, poducto.getIdProducto(), cantidades.get(i), poducto.getPrecio(), poducto.getIva()));
-                }
-
-                for (LineasPedido linea : lineas) {
-                    System.out.println("Tarea!");
-                    InsertarLinea tarea = new InsertarLinea();
-                    tarea.execute(linea);
-                }
-                pedidoInsertado(numeroPedido);
-            }
         }
     }
 }
