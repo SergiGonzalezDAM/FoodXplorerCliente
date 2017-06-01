@@ -279,9 +279,14 @@ public class FragmentResumenPedido extends Fragment {
         protected void onPostExecute(Boolean result) {
             if (result) {
                 try {
-                    if (!rellenarArray() || tienda.carrito.getUsuarioLogueado() == null || tienda.carrito.getUsuarioLogueado().equals("")) {
-                        Toast.makeText(tienda, "ERROR", Toast.LENGTH_SHORT).show();
-                    } else {
+                    if (!rellenarArray()) {
+                        Toast.makeText(tienda, "Error en la obtencion de datos.", Toast.LENGTH_SHORT).show();
+                        tienda.goTo(MainActivity.PROMOCIONES);
+                    }
+                    else if (tienda.carrito.getUsuarioLogueado() == null || tienda.carrito.getUsuarioLogueado().equals("")){
+                        Toast.makeText(tienda, "Undefined Error", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
                         adapProducto = new AdaptadorProducto(getActivity(), listaProductos);
                         listView.setAdapter(adapProducto);
                     }

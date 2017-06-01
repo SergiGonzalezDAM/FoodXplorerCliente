@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
     public Carrito carrito;
 
     public static final String PROMOCIONES = "Promociones";
-    public static final String SEGUIMIENTO = "Seguimieno";
+    public static final String SEGUIMIENTO = "Seguimiento";
     public static final String PEDIDOS = "Pedidos";
     public static final String PRODUCTOS = "Productos";
     public static final String LOGIN = "Login";
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
 
                         switch (menuItem.getItemId()) {
-                            case R.id.menu_seccion_1:
+                            case R.id.menu_seccion_promciones:
                                 goTo(PROMOCIONES);
                                 break;
                             case LOGIN_ID:
@@ -88,13 +88,13 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
                                 logout();
                                 goTo(PROMOCIONES);
                                 break;
-                            case R.id.menu_seccion_3:
+                            case R.id.menu_seccion_seguimiento:
                                 goTo(SEGUIMIENTO);
                                 break;
                             case MIS_PEDIDOS_ID:
                                 goTo(PEDIDOS);
                                 break;
-                            case R.id.menu_seccion_5:
+                            case R.id.menu_seccion_productos:
                                 goTo(PRODUCTOS);
                                 break;
 
@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
             switch (loc) {
                 case PROMOCIONES:
                     fragment = new FragmentPromociones(this);
-                    navView.setCheckedItem(R.id.menu_seccion_1);
+                    navView.setCheckedItem(R.id.menu_seccion_promciones);
                     getSupportActionBar().setTitle(MainActivity.PROMOCIONES);
                     break;
                 case LOGIN:
@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
                     break;
                 case SEGUIMIENTO:
                     fragment = new FragmentSeguimientoPedido(MainActivity.this);
-                    navView.setCheckedItem(R.id.menu_seccion_3);
+                    navView.setCheckedItem(R.id.menu_seccion_seguimiento);
                     getSupportActionBar().setTitle(MainActivity.SEGUIMIENTO);
                     break;
                 case PEDIDOS:
@@ -193,12 +193,12 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
                     break;
                 case PRODUCTOS:
                     fragment = new FragmentProductos(MainActivity.this);
-                    navView.setCheckedItem(R.id.menu_seccion_5);
+                    navView.setCheckedItem(R.id.menu_seccion_productos);
                     getSupportActionBar().setTitle(MainActivity.PRODUCTOS);
                     break;
                 case REGISTRO:
                     fragment = new FragmentRegistro();
-                    navView.setCheckedItem(R.id.menu_seccion_5);
+                    navView.setCheckedItem(R.id.menu_seccion_productos);
                     getSupportActionBar().setTitle(MainActivity.REGISTRO);
                     break;
                 case CARRITO:
@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
 
             drawerLayout.closeDrawers();
         }catch (NullPointerException ex){
-            Log.i(Settings.LOGTAG, ex.getMessage());
+            Log.e(Settings.LOGTAG, ex.getMessage());
         }
     }
 

@@ -65,7 +65,6 @@ public class FragmentPedidos extends Fragment implements AdapterView.OnItemClick
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(tienda, "HOLAAA", Toast.LENGTH_SHORT).show();
         Pedidos pedido;
         pedido = listaPedidos.get(position);
         Fragment fragment = new FragmentResumenPedido(tienda, pedido);
@@ -83,6 +82,7 @@ public class FragmentPedidos extends Fragment implements AdapterView.OnItemClick
         protected Boolean doInBackground(Object... params) {
             BufferedReader reader;
             String url=null;
+            boolean result=true;
             try {
                 url =Settings.DIRECCIO_SERVIDOR + Settings.PATH +"pedidos/" + tienda.carrito.getUsuarioLogueado();
                 System.out.println(url);
@@ -92,12 +92,15 @@ public class FragmentPedidos extends Fragment implements AdapterView.OnItemClick
                 listadoPedidosJSON = new JSONArray(reader.readLine());
             } catch (java.io.FileNotFoundException ex) {
                 Log.e(LOGTAG, "Error al obtener el pedido de:" + url + "\n" + ex);
+                result=false;
             } catch (java.io.IOException ex) {
                 Log.e(LOGTAG, "Temps d'espera esgotat al iniciar la conexio amb la BBDD externa:" + url.toString() + "\n" + ex);
+                result=false;
             } catch (org.json.JSONException ex) {
                 Log.e(LOGTAG, "Error en la transformacio de l'objecte JSON: " + ex);
+                result=false;
             }
-            return true;
+            return result;
         }
 
 
@@ -107,6 +110,7 @@ public class FragmentPedidos extends Fragment implements AdapterView.OnItemClick
                 try {
                     if (!rellenarArray()) {
                         Toast.makeText(tienda, "NO HAY PEDIDOS", Toast.LENGTH_SHORT).show();
+                        tienda.goTo(MainActivity.PROMOCIONES);
                     } else {
                         adaptador = new AdaptadorPedido(getActivity(), listaPedidos);
                         lista.setAdapter(adaptador);
@@ -115,6 +119,9 @@ public class FragmentPedidos extends Fragment implements AdapterView.OnItemClick
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+            }else {
+                Toast.makeText(tienda, "Error al recuperar los datos", Toast.LENGTH_SHORT).show();
+                tienda.goTo(MainActivity.PROMOCIONES);
             }
         }
 

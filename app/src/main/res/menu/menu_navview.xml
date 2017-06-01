@@ -2,15 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/menu_seccion_1"
+            android:id="@+id/menu_seccion_promciones"
             android:icon="@drawable/ic_menu"
             android:title="@string/seccion_1"/>
         <item
-            android:id="@+id/menu_seccion_5"
+            android:id="@+id/menu_seccion_productos"
             android:icon="@drawable/ic_menu"
             android:title="Productos"/>
         <item
-            android:id="@+id/menu_seccion_3"
+            android:id="@+id/menu_seccion_seguimiento"
             android:icon="@drawable/ic_menu"
             android:title="Seguimiento"/>
 

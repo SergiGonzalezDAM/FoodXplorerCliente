@@ -1,5 +1,6 @@
 package com.foodxplorer.foodxplorer.helpers;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -54,5 +55,14 @@ public OutputStreamWriter getOutputStreamWriter() throws IOException {
 public void disconnect(){
     conn.disconnect();
 }
+
+public int getResponseCode() throws IOException {
+    return conn.getResponseCode();
+}
+
+public String getResponseMessage() throws IOException {
+        return conn.getResponseMessage();
+    }
+
 
 }

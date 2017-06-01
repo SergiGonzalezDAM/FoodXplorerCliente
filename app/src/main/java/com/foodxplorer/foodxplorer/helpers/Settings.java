@@ -18,5 +18,5 @@ public class Settings {
 
 
     public static  final int SERVER_READ_TIMEOUT=1000;
-    public static final int SERVER_CONNECT_TIMEOUT=1000;
+    public static final int SERVER_CONNECT_TIMEOUT=2500;
 }

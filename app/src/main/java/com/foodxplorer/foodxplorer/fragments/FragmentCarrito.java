@@ -21,6 +21,7 @@ import com.foodxplorer.foodxplorer.R;
 import com.foodxplorer.foodxplorer.helpers.AsyncResponse;
 import com.foodxplorer.foodxplorer.helpers.RestManager;
 import com.foodxplorer.foodxplorer.helpers.Settings;
+import com.foodxplorer.foodxplorer.objetos.LineasPedido;
 import com.foodxplorer.foodxplorer.objetos.Pedidos;
 import com.foodxplorer.foodxplorer.objetos.Producto;
 
@@ -28,6 +29,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
@@ -47,7 +49,7 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
     JSONArray jsonarrayDireccions = new JSONArray();
     Spinner mySpinner;
     TextView direccio;
-    Pedidos pedido;
+
 
     public FragmentCarrito(MainActivity tienda) {
 
@@ -69,8 +71,8 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
         ArrayList<Producto> productosenCarrito = (ArrayList) tienda.carrito.getProductosEnCarrito();
         ArrayList<Integer> cantidadesenCarrito = (ArrayList) tienda.carrito.getCantidades();
 
-            TareaObtenerDirecciones obtenerDirecciones = new TareaObtenerDirecciones();
-            obtenerDirecciones.execute();
+        TareaObtenerDirecciones obtenerDirecciones = new TareaObtenerDirecciones();
+        obtenerDirecciones.execute();
 
         if (productosenCarrito.size() == 0) {
             lista.add("No tienes ningun producto en el carrito aun.");
@@ -102,7 +104,7 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
             if (direccionsClient.size() > 0) {
                 direccionsClient.add(0, "Selecciona la direccion de entrega");
             }
-                direccionsClient.add("Nueva direccion de entrega");
+            direccionsClient.add("Nueva direccion de entrega");
             Spinner mySpinner = (Spinner) getView().findViewById(R.id.spinnerDireccionesConfirmarPedido);
             mySpinner.setAdapter(new ArrayAdapter<>(getView().getContext(),
                     android.R.layout.simple_spinner_dropdown_item,
@@ -195,47 +197,96 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
         }
     }
 
-    class TareaInsertarPedido extends AsyncTask<Object, Void, Boolean> {
 
+    class InsertarLinea extends AsyncTask<Object, Void, Boolean> {
 
         @Override
-        protected Boolean doInBackground(Object... params) {
-            boolean result = true;
+        protected Boolean doInBackground(Object... objects) {
             OutputStreamWriter osw;
+            BufferedInputStream isr;
             RestManager restManager;
+            int result = 1;
+            try {
+                String aux = (Settings.DIRECCIO_SERVIDOR + Settings.PATH + "pedido/insertar/");
+                restManager = new RestManager(aux);
+                restManager.setRequestMethod(RestManager.POST);
+                osw = restManager.getOutputStreamWriter();
+                osw.write(getStringJSON((LineasPedido) objects[0]));
+            } catch (java.net.ProtocolException ex) {
+                Log.e(Settings.LOGTAG, "Error de protocol: " + ex);
+                result = 0;
+            } catch (java.io.FileNotFoundException | java.net.MalformedURLException ex) {
+                Log.e(Settings.LOGTAG, "Error de ruta d'acces: " + ex);
+                result = 0;
+            } catch (java.net.SocketTimeoutException ex) {
+                Log.e(Settings.LOGTAG, "Temps d'espera esgotat al iniciar la conexio " + ex);
+                result = 0;
+            } catch (java.io.IOException ex) {
+                Log.e(Settings.LOGTAG, "Undefined error: " + ex);
+                result = 0;
+            } catch (JSONException e) {
+                Log.e(Settings.LOGTAG, "Error de manipulacio de l'objecte JSON: " + e.getStackTrace());
+            }
+            return false;
+        }
+
+        private String getStringJSON(LineasPedido lineas) throws JSONException, UnsupportedEncodingException {
+            JSONObject dato = new JSONObject();
+            dato.put("idPedido",lineas.getIdPedido() );
+            dato.put("idProducto", lineas.getIdProducto());
+            dato.put("cantidad", lineas.getPrecio());
+            dato.put("iva", lineas.getIva());
+            return String.valueOf(dato);
+        }
+    }
+
+    class TareaInsertarPedido extends AsyncTask<Object, Void, Integer> {
+        Pedidos pedido;
+
+        @Override
+        protected Integer doInBackground(Object... params) {
+            int result = 0;
+            OutputStreamWriter osw;
+            BufferedInputStream isr;
+            RestManager restManager;
+
             try {
 
                 String aux = (Settings.DIRECCIO_SERVIDOR + Settings.PATH + "pedido/insertar/");
                 pedido = new Pedidos();
-
                 DateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
                 Date today = Calendar.getInstance().getTime();
                 String fechaPedido = df.format(today);
                 pedido.setIdDireccion(obtenerIdDireccion());
                 if (pedido.getIdDireccion() <= 0) {
-                    return false;
+                    return result;
                 }
                 pedido.setFechaPedido(fechaPedido);
                 //aux = aux + "/" + user.getUsername() + "/" + user.getPassword() + "/";
                 restManager = new RestManager(aux);
                 restManager.setRequestMethod(RestManager.POST);
                 osw = restManager.getOutputStreamWriter();
-                osw.write(getStringJSON(pedido));
 
+                osw.write(getStringJSON(pedido));
+                osw.flush();
                 osw.close();
+                BufferedReader bfr = restManager.getBufferedReader();
+                result = Integer.valueOf(bfr.readLine());
+                System.err.println(restManager.getResponseMessage());
+                System.err.println(restManager.getResponseCode());
                 restManager.disconnect();
             } catch (java.net.ProtocolException ex) {
                 Log.e(Settings.LOGTAG, "Error de protocol: " + ex);
-                result = false;
+                result = 0;
             } catch (java.io.FileNotFoundException | java.net.MalformedURLException ex) {
                 Log.e(Settings.LOGTAG, "Error de ruta d'acces: " + ex);
-                result = false;
+                result = 0;
             } catch (java.net.SocketTimeoutException ex) {
                 Log.e(Settings.LOGTAG, "Temps d'espera esgotat al iniciar la conexio amb la BBDD extena: " + ex);
-                result = false;
+                result = 0;
             } catch (java.io.IOException ex) {
                 Log.e(Settings.LOGTAG, "Undefined error: " + ex);
-                result = false;
+                result = 0;
             } catch (JSONException e) {
                 Log.e(Settings.LOGTAG, "Error de manipulacio de l'objecte JSON: " + e.getStackTrace());
             }
@@ -244,13 +295,9 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
 
         private String getStringJSON(Pedidos pedido) throws JSONException, UnsupportedEncodingException {
             JSONObject dato = new JSONObject();
-            System.err.println("Primer OK");
             dato.put("idDireccion", pedido.getIdDireccion());
-            System.err.println("Segundo OK");
-            dato.put("estado", 1);
-            System.err.println("Tercer OK");
-            dato.put("fechaPedido", pedido.getFechaPedido());
-            System.err.println("Cuarto OK");
+            dato.put("idEstado", 1);
+            dato.put("fechaSalida", pedido.getFechaPedido());
             if (tienda.carrito.getUsuarioLogueado() != "") {
                 dato.put("correo", tienda.carrito.getUsuarioLogueado());
             }
@@ -278,7 +325,7 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
         }
 
         @Override
-        protected void onPostExecute(Boolean result) {
+        protected void onPostExecute(Integer numeroPedido) {
             if (pedido.getIdDireccion() <= 0) {
                 if (pedido.getIdDireccion() == -1) {
                     Toast.makeText(tienda, "Selecciona una direccion de entrega.", Toast.LENGTH_LONG).show();
@@ -287,8 +334,25 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
                 }
             }
 
-            if (result) {
-                pedidoInsertado(123456);
+            if (numeroPedido == 0) {
+                Toast.makeText(tienda, "Error al procesar el pedido.", Toast.LENGTH_LONG).show();
+            } else {
+                ArrayList<LineasPedido> lineas = new ArrayList<>();
+                ArrayList<Producto> productos = (ArrayList) tienda.carrito.getProductosEnCarrito();
+                ArrayList<Integer> cantidades = (ArrayList) tienda.carrito.getCantidades();
+
+                for (int i = 0; i < productos.size(); i++) {
+                    Producto poducto = productos.get(i);
+                    lineas.add(new LineasPedido(numeroPedido, poducto.getIdProducto(), cantidades.get(i), poducto.getPrecio(), poducto.getIva()));
+                }
+
+                for (LineasPedido linea : lineas) {
+                    System.out.println("Tarea!");
+                    System.out.println("Vamos a insertar la linea:"+linea.toString());
+                    InsertarLinea tarea = new InsertarLinea();
+                    tarea.execute(linea, numeroPedido);
+                }
+                pedidoInsertado(numeroPedido);
             }
         }
     }

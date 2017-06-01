@@ -63,13 +63,7 @@ public class FragmentSeguimientoPedido extends Fragment implements View.OnClickL
         numPedido = String.valueOf(editTextNumPedido.getText());
         tarea = new TareaWSRecuperarPedidosSeguimiento();
         tarea.execute();
-        if (numeroPedidoEncontrado) {
-            Fragment fragment = new FragmentResumenPedido(tienda, pedido);
-            tienda.getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.content_frame, fragment)
-                    .commit();
-//            this.tienda.goTo(MainActivity.PEDIDOSRESUMEN);
-        }
+
     }
 
     class TareaWSRecuperarPedidosSeguimiento extends AsyncTask<Object, Void, Boolean> {
@@ -122,13 +116,19 @@ public class FragmentSeguimientoPedido extends Fragment implements View.OnClickL
                         Toast.makeText(tienda, "Logueate para ver pedidos.", Toast.LENGTH_SHORT).show();
                     } else {
                         if (!rellenarObjeto()) {
-                            Toast.makeText(tienda, "NO EXISTE ESE NUMERO DE PEDIDO", Toast.LENGTH_SHORT).show();
+                            //TODO en produccion, el mensaje tiene que ser un error generico
+                            Toast.makeText(tienda, "No existe ese numero de pedido", Toast.LENGTH_SHORT).show();
                         } else {
                             numeroPedidoEncontrado = true;
                             Log.d(Settings.LOGTAG, "PostExecuteSeguimiento. Pedido encontrado");
+                                Fragment fragment = new FragmentResumenPedido(tienda, pedido);
+                                tienda.getSupportFragmentManager().beginTransaction()
+                                        .replace(R.id.content_frame, fragment)
+                                        .commit();
+                          }
                         }
                     }
-                } catch (JSONException e) {
+                 catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
