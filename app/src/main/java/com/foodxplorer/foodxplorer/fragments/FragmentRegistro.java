@@ -1,5 +1,6 @@
 package com.foodxplorer.foodxplorer.fragments;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -26,11 +28,8 @@ import java.net.URL;
 
 import static com.foodxplorer.foodxplorer.helpers.Settings.LOGTAG;
 
-interface AsyncResponse {
-    void processFinish(boolean response);
-}
 
-public class FragmentRegistro extends Fragment implements View.OnClickListener, AsyncResponse {
+public class FragmentRegistro extends Fragment implements View.OnClickListener {
     private DrawerLayout drawerLayout;
     private NavigationView navView;
     private EditText contrasena;
@@ -62,24 +61,15 @@ public class FragmentRegistro extends Fragment implements View.OnClickListener, 
     @Override
     public void onClick(View view) {
         if (R.id.btnRegistrarRegistro == view.getId()) {
+            InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow((null == getActivity().getCurrentFocus()) ? null : getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             TareaWSRegistrarUsuario tareaRegistrar = new TareaWSRegistrarUsuario();
-            tareaRegistrar.delegate = this;
             tareaRegistrar.execute(correo.getText(), contrasena.getText());
         }
     }
 
-    @Override
-    public void processFinish(boolean response) {
-        if (response) {
-            Log.e(LOGTAG, "Registro ok");
-            this.tienda.goTo(MainActivity.PROMOCIONES);
-        } else {
-            Log.e(LOGTAG, "Registro fail");
-        }
-    }
-
     class TareaWSRegistrarUsuario extends AsyncTask<Object, Integer, Boolean> {
-        public AsyncResponse delegate = null;
+
 
         @Override
         protected Boolean doInBackground(Object... params) {
@@ -118,7 +108,12 @@ public class FragmentRegistro extends Fragment implements View.OnClickListener, 
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
-            delegate.processFinish(aBoolean);
+                     if (aBoolean) {
+                Log.e(LOGTAG, "Registro ok");
+                tienda.goTo(MainActivity.PROMOCIONES);
+            } else {
+                Log.e(LOGTAG, "Registro fail");
+            }
         }
     }
 }
