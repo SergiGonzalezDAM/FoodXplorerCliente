@@ -45,10 +45,10 @@ import static com.foodxplorer.foodxplorer.helpers.Settings.LOGTAG;
 public class FragmentCarrito extends Fragment implements AdapterView.OnClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener {
 
     MainActivity tienda;
-    private ArrayList<String> direccionsClient = new ArrayList<>();
     JSONArray jsonarrayDireccions = new JSONArray();
     Spinner spinnerDirecciones;
     TextView direccio;
+    private ArrayList<String> direccionsClient = new ArrayList<>();
 
 
     public FragmentCarrito(MainActivity tienda) {
@@ -122,11 +122,10 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
 
     @Override
     public void onClick(View view) {
-        if(this.tienda.carrito.getProductosEnCarrito().size()>0) {
+        if (this.tienda.carrito.getProductosEnCarrito().size() > 0) {
             TareaInsertarPedido tarea = new TareaInsertarPedido();
             tarea.execute();
-        }
-        else{
+        } else {
             Toast.makeText(tienda, "Tu carrito esta vacio.", Toast.LENGTH_LONG).show();
         }
 
@@ -289,10 +288,8 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
                 restManager = new RestManager(aux);
                 restManager.setRequestMethod(RestManager.POST);
                 osw = restManager.getOutputStreamWriter();
-
                 osw.write(getStringJSON(pedido));
                 osw.flush();
-
                 BufferedReader bfr = restManager.getBufferedReader();
                 result = Integer.valueOf(bfr.readLine());
                 System.err.println(restManager.getResponseMessage());

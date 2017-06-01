@@ -12,22 +12,17 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.foodxplorer.foodxplorer.MainActivity;
+import com.foodxplorer.foodxplorer.R;
 import com.foodxplorer.foodxplorer.adapters.AdaptadorPedido;
 import com.foodxplorer.foodxplorer.helpers.RestManager;
-import com.foodxplorer.foodxplorer.objetos.Pedidos;
-import com.foodxplorer.foodxplorer.R;
-
-import com.foodxplorer.foodxplorer.helpers.AsyncResponse;
 import com.foodxplorer.foodxplorer.helpers.Settings;
+import com.foodxplorer.foodxplorer.objetos.Pedidos;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 
 import static com.foodxplorer.foodxplorer.helpers.Settings.LOGTAG;
@@ -75,7 +70,6 @@ public class FragmentPedidos extends Fragment implements AdapterView.OnItemClick
 
     class TareaWSRecuperarPedidos extends AsyncTask<Object, Void, Boolean> {
         JSONArray listadoPedidosJSON;
-        public AsyncResponse delegate = null;
 
 
         @Override
