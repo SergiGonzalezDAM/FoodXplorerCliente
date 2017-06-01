@@ -35,7 +35,9 @@ import static com.foodxplorer.foodxplorer.helpers.Settings.LOGTAG;
 
 public class FragmentPromociones extends Fragment implements AdapterView.OnItemClickListener {
 
-
+    /**
+     * Hacemos la llamada a la interface para añadir productos al carrito
+     */
     public interface OnAddToCart {
         void onAddToCart(Producto producto, int cantidad);
     }
@@ -53,6 +55,13 @@ public class FragmentPromociones extends Fragment implements AdapterView.OnItemC
         this.tienda = tienda;
     }
 
+    /**
+     * AL cargar el fragment lo primero que nos hará será lanzar la tarea e identificar el listview
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -66,6 +75,14 @@ public class FragmentPromociones extends Fragment implements AdapterView.OnItemC
         return view;
     }
 
+    /**
+     * Al hacer click sobre un producto obtenemos el producto determinado pero lanzada
+     * mediante un Dialog para poder asignar más, menos productos o añadir al carrito
+     * @param parent
+     * @param view
+     * @param position
+     * @param id
+     */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -126,10 +143,16 @@ public class FragmentPromociones extends Fragment implements AdapterView.OnItemC
 
         JSONArray listadoPromocionesJSON;
         AdaptadorProducto adaptador;
+
+        /**
+         * Una vez lanzamos la tarea cargará este método, con el cual obtenemos los datos del método
+         * codificado en el rest y lo llenaremos en una array de objetos JSON
+         * @param params
+         * @return
+         */
         @Override
         protected Boolean doInBackground(Object... params) {
             boolean result = true;
-
             BufferedReader reader;
             String url;
             try {
@@ -161,7 +184,10 @@ public class FragmentPromociones extends Fragment implements AdapterView.OnItemC
             return result;
         }
 
-
+        /**
+         * Una vesz hemos llenado el array correctamente, insertamso el adaptador en el listview
+         * @param result
+         */
         @Override
         protected void onPostExecute(Boolean result) {
             if (result) {
@@ -177,6 +203,10 @@ public class FragmentPromociones extends Fragment implements AdapterView.OnItemC
             }
         }
 
+        /**
+         * Rellenamos el array con objetos Producto en función a los productos obtenidos del servidor.
+         * @throws JSONException
+         */
         private void rellenarArray() throws JSONException {
             listadoPromociones = new ArrayList();
             System.err.println("Promociones recibidas: " + listadoPromocionesJSON.length());

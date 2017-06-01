@@ -9,7 +9,14 @@ public class LineasPedido {
 
     public LineasPedido() {
     }
-
+    /**
+     * Generaremos la clase LinesPedido para poder obtener los productos de un pedido en concreto
+     * @param idPedido
+     * @param idProducto
+     * @param cantidad
+     * @param precio
+     * @param iva
+     */
     public LineasPedido(long idPedido, long idProducto, int cantidad, double precio, int iva) {
         this.idPedido = idPedido;
         this.idProducto = idProducto;

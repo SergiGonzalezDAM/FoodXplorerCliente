@@ -42,6 +42,15 @@ public class FragmentPedidos extends Fragment implements AdapterView.OnItemClick
     public FragmentPedidos() {
     }
 
+    /**
+     * Cuando cargamos este fragment lo primero de todo verificamos que esté el user logueado
+     * por que hemos pensado que para ver los pedidos lo que tiene más sentido es que esté en nuestra
+     * base de datos. Cuando verificamos esto, lanzamos la tarea.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -58,6 +67,14 @@ public class FragmentPedidos extends Fragment implements AdapterView.OnItemClick
         return view;
     }
 
+    /**
+     * Cuando hacemos click sobre un producto nos llevará directamente al resumen de este pedido
+     * en concreto.
+     * @param parent
+     * @param view
+     * @param position
+     * @param id
+     */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Pedidos pedido;
@@ -71,7 +88,12 @@ public class FragmentPedidos extends Fragment implements AdapterView.OnItemClick
     class TareaWSRecuperarPedidos extends AsyncTask<Object, Void, Boolean> {
         JSONArray listadoPedidosJSON;
 
-
+        /**
+         * Al lanzar la tarea cargará este método, obteniendo así todos los pedidos del usuario en
+         * concreto e insertandolos en el objeto JSONarray
+         * @param params
+         * @return
+         */
         @Override
         protected Boolean doInBackground(Object... params) {
             BufferedReader reader;
@@ -97,6 +119,10 @@ public class FragmentPedidos extends Fragment implements AdapterView.OnItemClick
             return result;
         }
 
+        /**
+         * En el caso de que hayan pedidos introduciremos los pedidos en un listview
+         * @param result
+         */
 
         @Override
         protected void onPostExecute(Boolean result) {
@@ -119,6 +145,12 @@ public class FragmentPedidos extends Fragment implements AdapterView.OnItemClick
             }
         }
 
+        /**
+         * Rellenaremos el array con Pedidos obteniendolos del servidor, en el caso que hayan pedidos
+         * devuelve true
+         * @return
+         * @throws JSONException
+         */
         private boolean rellenarArray() throws JSONException {
             boolean estado;
             listaPedidos = new ArrayList();

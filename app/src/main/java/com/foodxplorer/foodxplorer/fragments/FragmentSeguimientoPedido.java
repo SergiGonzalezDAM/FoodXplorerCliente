@@ -58,6 +58,13 @@ public class FragmentSeguimientoPedido extends Fragment implements View.OnClickL
         return view;
     }
 
+    /**
+     * Método onClick en el cual se gestionan los clicks del fragment, en este caso como solo
+     * tenemos un botón no es necesario identificar el click(id), al clicar en el botón nos ejecuta
+     * la tarea que extiende de AsyncTask, en el caso que al finalizar la tarea numeroPedidoEncontrado
+     * sea true cambiaremos de fragment
+     * @param view
+     */
     @Override
     public void onClick(View view) {
         numPedido = String.valueOf(editTextNumPedido.getText());
@@ -66,11 +73,19 @@ public class FragmentSeguimientoPedido extends Fragment implements View.OnClickL
 
     }
 
+    /**
+     * Creamos una clase anonima que extienda de AsyncTask para poder ejecutar las consultas lanzadas
+     * por el rest
+     */
     class TareaWSRecuperarPedidosSeguimiento extends AsyncTask<Object, Void, Boolean> {
         JSONObject pedidoJSON;
         public AsyncResponse delegate = null;
 
-
+        /**
+         * Método que se ejecuta al lanzar la AsyncTask, rellenamos el objeto JSON con los datos de la consulta
+         * @param params
+         * @return
+         */
         @Override
         protected Boolean doInBackground(Object... params) {
             try {
@@ -86,7 +101,13 @@ public class FragmentSeguimientoPedido extends Fragment implements View.OnClickL
             return true;
         }
 
-
+        /**
+         * Método que le pasamos un objeto Reader y leemos el contenido del mismo hasta que no hayan
+         * más datos disponibles para leer, todo esto leido se pasa como String en el return
+         * @param rd
+         * @return
+         * @throws IOException
+         */
         private String readAll(Reader rd) throws IOException {
             StringBuilder sb = new StringBuilder();
             int cp;
@@ -96,6 +117,13 @@ public class FragmentSeguimientoPedido extends Fragment implements View.OnClickL
             return sb.toString();
         }
 
+        /**
+         * Método en el cual le pasamos una url y nos obtiene todos los datos de esa url
+         * @param url
+         * @return objeto JSON
+         * @throws IOException
+         * @throws JSONException
+         */
         private JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
             InputStream is = new URL(url).openStream();
             try {
@@ -108,6 +136,13 @@ public class FragmentSeguimientoPedido extends Fragment implements View.OnClickL
             }
         }
 
+        /**
+         * Cuando ha acabado la tarea de ejecutarse se llama a este método que verificamos que:
+         * 1. Esté logueado, si no lo está manda un error por pantalla
+         * 2. Si está ejecutado verifica que el número de pedido exista
+         * 3. Si existe, cambia la variable numeroPedidoEncontrado a true
+         * @param result
+         */
         @Override
         protected void onPostExecute(Boolean result) {
             if (result) {
@@ -134,6 +169,11 @@ public class FragmentSeguimientoPedido extends Fragment implements View.OnClickL
             }
         }
 
+        /**
+         * Verifica que un numero de pedido exista y devuelve el boolean si es true o false
+         * @return
+         * @throws JSONException
+         */
         private boolean rellenarObjeto() throws JSONException {
             boolean estado;
             if (pedidoJSON != null) {

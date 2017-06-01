@@ -58,10 +58,18 @@ public class FragmentResumenPedido extends Fragment {
         this.pedido = pedido;
     }
 
+    /**
+     * Cuando carga el fragment identifica los componentes del fragment y lanza las tareas
+     * correspondientes
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_resumen_pedido, container, false);
         listView = (ListView) view.findViewById(R.id.listViewInfoPedido);
         nombreCliente = (TextView) view.findViewById(R.id.textViewNombreCliente);
@@ -80,9 +88,18 @@ public class FragmentResumenPedido extends Fragment {
         return view;
     }
 
+    /**
+     * Generamos una clase anonima que extienda de AsyncTask para poder lanzar consultas
+     */
     class TareaWSRecuperarDireccion extends AsyncTask<Object, Void, Boolean> {
         JSONObject direccionJSON;
 
+        /**
+         * Se lanza este método al ejecutar la consulta lo que hacemos es rellenar un objeto JSON
+         * con los datos recibidos del servidor
+         * @param params
+         * @return
+         */
         @Override
         protected Boolean doInBackground(Object... params) {
             try {
@@ -97,7 +114,13 @@ public class FragmentResumenPedido extends Fragment {
             return true;
         }
 
-
+        /**
+         * Método que le pasamos un objeto Reader y leemos el contenido del mismo hasta que no hayan
+         * más datos disponibles para leer, todo esto leido se pasa como String en el return
+         * @param rd
+         * @return
+         * @throws IOException
+         */
         private String readAll(Reader rd) throws IOException {
             StringBuilder sb = new StringBuilder();
             int cp;
@@ -107,6 +130,13 @@ public class FragmentResumenPedido extends Fragment {
             return sb.toString();
         }
 
+        /**
+         * Método en el cual le pasamos una url y nos obtiene todos los datos de esa url
+         * @param url
+         * @return objeto JSON
+         * @throws IOException
+         * @throws JSONException
+         */
         private JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
             InputStream is = new URL(url).openStream();
             try {
@@ -119,6 +149,12 @@ public class FragmentResumenPedido extends Fragment {
             }
         }
 
+        /**
+         * Después de ejecutar la tarea verifica si la dirección existe y si está logueado, en el
+         * caso de que esas condiciones se cumplen obtenemos los datos del JSON y pintamos en el
+         * fragment la dirección del cliente
+         * @param result
+         */
         @Override
         protected void onPostExecute(Boolean result) {
             if (result) {
@@ -134,6 +170,11 @@ public class FragmentResumenPedido extends Fragment {
             }
         }
 
+        /**
+         * En el caso de que el objeto JSON tenga datos, los cargamos en un objeto dirección y devolvemos true
+         * @return
+         * @throws JSONException
+         */
         private boolean rellenarObjeto() throws JSONException {
             boolean estado;
             if (direccionJSON != null) {
@@ -150,6 +191,12 @@ public class FragmentResumenPedido extends Fragment {
     class TareaWSRecuperarLineasPedido extends AsyncTask<Object, Void, Boolean> {
         JSONArray lineasPedidoJSON;
 
+        /**
+         *Cuando lanzamos la tarea se ejecuta este método que lo configuramos de tal forma que
+         * hacemos método GET y leemos los datos que nos llegan de la url
+         * @param params
+         * @return
+         */
         @Override
         protected Boolean doInBackground(Object... params) {
             BufferedReader reader;
@@ -171,7 +218,13 @@ public class FragmentResumenPedido extends Fragment {
             return true;
         }
 
-
+        /**
+         * Una vez finalizada la tarea, verificamos si el servidor nos ha devuelto algo, en caso
+         * de que esta respuesta sea sí, hacemos un for para recorrer el array de las lineasPedido y
+         * vamos sumando el precio del producto
+         *
+         * @param result
+         */
         @Override
         protected void onPostExecute(Boolean result) {
             if (result) {
@@ -191,6 +244,12 @@ public class FragmentResumenPedido extends Fragment {
     class TareaWSRecuperarEstado extends AsyncTask<Object, Void, Boolean> {
         JSONObject estadoJSON;
 
+        /**
+         * Al lanzar la tarea rellenamos un objeto JSON con los datos obtenidos del servidor
+         *
+         * @param params
+         * @return
+         */
         @Override
         protected Boolean doInBackground(Object... params) {
             try {
@@ -205,7 +264,12 @@ public class FragmentResumenPedido extends Fragment {
             return true;
         }
 
-
+        /**
+         * Leemos los datos, obtenidos hasta que no queden más datos y los devolvemos comos String
+         * @param rd
+         * @return
+         * @throws IOException
+         */
         private String readAll(Reader rd) throws IOException {
             StringBuilder sb = new StringBuilder();
             int cp;
@@ -215,6 +279,13 @@ public class FragmentResumenPedido extends Fragment {
             return sb.toString();
         }
 
+        /**
+         * Tellenamos un objeto JSON con los datos obtenidos por el servidor
+         * @param url
+         * @return
+         * @throws IOException
+         * @throws JSONException
+         */
         private JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
             InputStream is = new URL(url).openStream();
             try {
@@ -227,6 +298,11 @@ public class FragmentResumenPedido extends Fragment {
             }
         }
 
+        /**
+         * Una vez hemos finalizado la tarea verificamos que todo haya ido correctamente y pintamos
+         * el estado en el fragment
+         * @param result
+         */
         @Override
         protected void onPostExecute(Boolean result) {
             if (result) {
@@ -242,6 +318,11 @@ public class FragmentResumenPedido extends Fragment {
             }
         }
 
+        /**
+         * Verificamos que el objeto JSON no sea null y creamos un objeto Estado con los datos del JSON
+         * @return
+         * @throws JSONException
+         */
         private boolean rellenarObjeto() throws JSONException {
             boolean estado;
             if (estadoJSON != null) {
@@ -257,6 +338,12 @@ public class FragmentResumenPedido extends Fragment {
     class TareaWSRecuperarProductosPedido extends AsyncTask<Object, Void, Boolean> {
         JSONArray productosJSON;
 
+        /**
+         * Al ejecutar la tarea se lanza este método, con el obtenemos los datos del servidor y los
+         * almacenamos en un objeto JSON
+         * @param params
+         * @return
+         */
         @Override
         protected Boolean doInBackground(Object... params) {
             try {
@@ -274,7 +361,11 @@ public class FragmentResumenPedido extends Fragment {
             return true;
         }
 
-
+        /**
+         * Una vez finalizada la tarea verificamos que haya ido todo correctamente y en el caso de
+         * que la respuesta sea sí, cargamos el adaptador en el listview de resumenPedido
+         * @param result
+         */
         @Override
         protected void onPostExecute(Boolean result) {
             if (result) {
@@ -296,6 +387,11 @@ public class FragmentResumenPedido extends Fragment {
             }
         }
 
+        /**
+         * Rellenamos el array de listaProductos con tantos productos como tenga el objetoJSON
+         * @return
+         * @throws JSONException
+         */
         private boolean rellenarArray() throws JSONException {
             boolean estado;
             listaProductos = new ArrayList<>();

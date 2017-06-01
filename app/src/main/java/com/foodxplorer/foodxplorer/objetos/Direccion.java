@@ -13,7 +13,15 @@ public class Direccion {
 
     public Direccion() {
     }
-
+    /**
+     * Cada pedido tiene una dirección asignada que estará introducida en la base de datos, generamos
+     * una clase Dirección para poder trabajar con la base de datos
+     * @param idDireccion
+     * @param calle
+     * @param piso
+     * @param poblacion
+     * @param codPostal
+     */
     public Direccion(long idDireccion, String calle, String piso, String poblacion, String codPostal) {
         this.idDireccion = idDireccion;
         this.calle = calle;

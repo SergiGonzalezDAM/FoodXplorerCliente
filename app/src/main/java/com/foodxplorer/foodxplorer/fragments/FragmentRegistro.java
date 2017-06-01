@@ -1,6 +1,5 @@
 package com.foodxplorer.foodxplorer.fragments;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -10,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -29,10 +27,11 @@ import java.net.URL;
 
 import static com.foodxplorer.foodxplorer.helpers.Settings.LOGTAG;
 
+interface AsyncResponse {
+    void processFinish(boolean response);
+}
 
-public class FragmentRegistro extends Fragment implements View.OnClickListener {
-    private DrawerLayout drawerLayout;
-    private NavigationView navView;
+public class FragmentRegistro extends Fragment implements View.OnClickListener, AsyncResponse {
     private EditText contrasena;
     private EditText correo;
     private Button btnRegistro;
@@ -46,6 +45,13 @@ public class FragmentRegistro extends Fragment implements View.OnClickListener {
         this.tienda = tienda;
     }
 
+    /**
+     * Cuando cargamos el fragment lo primero que hacemos es detectar los componentes del fragment
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -58,20 +64,46 @@ public class FragmentRegistro extends Fragment implements View.OnClickListener {
         return view;
     }
 
-
+    /**
+     * En el metodo onCLick detectamos los clicks de los botones, para hacer más correcta la
+     * codificación miramos por el id si es el botón seleccionado, en el caso de que sea el correcto,
+     * lanceremos la tarea Registrar.
+     *
+     * @param view
+     */
     @Override
     public void onClick(View view) {
         if (R.id.btnRegistrarRegistro == view.getId()) {
-            InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputManager.hideSoftInputFromWindow((null == getActivity().getCurrentFocus()) ? null : getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             TareaWSRegistrarUsuario tareaRegistrar = new TareaWSRegistrarUsuario();
+            tareaRegistrar.delegate = this;
             tareaRegistrar.execute(correo.getText(), contrasena.getText());
         }
     }
 
+    /**
+     * Cuando el registro sea correcto, nos llevará al fragment promociones
+     * @param response
+     */
+    @Override
+    public void processFinish(boolean response) {
+        if (response) {
+            Log.e(LOGTAG, "Registro ok");
+            this.tienda.goTo(MainActivity.PROMOCIONES);
+        } else {
+            Log.e(LOGTAG, "Registro fail");
+        }
+    }
+
     class TareaWSRegistrarUsuario extends AsyncTask<Object, Integer, Boolean> {
+        public AsyncResponse delegate = null;
 
-
+        /**
+         *  Al ejecutar la tarea, abrimos la conexión con el servidor, obtenemos los datos que se
+         *  han escrito en el fragment y se los pasamos al servidor para que los trate con el método
+         *  introducido en la url
+         * @param params
+         * @return
+         */
         @Override
         protected Boolean doInBackground(Object... params) {
             boolean insertadoEnDBexterna = true;
@@ -99,6 +131,13 @@ public class FragmentRegistro extends Fragment implements View.OnClickListener {
             return insertadoEnDBexterna;
         }
 
+        /**
+         * Le pasamos los parametros para insertarlos en la base de datos.
+         * @param params
+         * @return
+         * @throws JSONException
+         * @throws UnsupportedEncodingException
+         */
         private String getStringJSON(Object... params) throws JSONException, UnsupportedEncodingException {
             JSONObject dato = new JSONObject();
             dato.put("correo", params[0]);
@@ -110,12 +149,7 @@ public class FragmentRegistro extends Fragment implements View.OnClickListener {
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
-                     if (aBoolean) {
-                Log.e(LOGTAG, "Registro ok");
-                tienda.goTo(MainActivity.PROMOCIONES);
-            } else {
-                Log.e(LOGTAG, "Registro fail");
-            }
+            delegate.processFinish(aBoolean);
         }
     }
 }

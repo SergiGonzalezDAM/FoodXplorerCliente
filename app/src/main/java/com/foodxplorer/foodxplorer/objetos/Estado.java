@@ -11,7 +11,13 @@ public class Estado {
 
     public Estado() {
     }
-
+    /**
+     * Cada estado tiene un tiempo por defecto en la base de datos, por lo tanto, generamos una clase estado para poder
+     * recuperar esos datos
+     * @param idEstado
+     * @param nomEstado
+     * @param tiempo
+     */
     public Estado(long idEstado, String nomEstado, double tiempo) {
         this.idEstado = idEstado;
         this.nomEstado = nomEstado;
