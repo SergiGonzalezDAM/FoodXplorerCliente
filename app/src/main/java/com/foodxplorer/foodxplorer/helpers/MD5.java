@@ -13,6 +13,7 @@ import java.security.NoSuchAlgorithmException;
 public class MD5 {
 
     public String md5(String s) {
+        String result = "";
         try {
             // Create MD5 Hash
             MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
@@ -23,11 +24,11 @@ public class MD5 {
             StringBuffer hexString = new StringBuffer();
             for (int i = 0; i < messageDigest.length; i++)
                 hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
-            return hexString.toString();
+            result = hexString.toString();
 
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        return "";
+        return result;
     }
 }

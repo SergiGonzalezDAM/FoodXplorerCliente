@@ -24,17 +24,13 @@ import com.foodxplorer.foodxplorer.fragments.FragmentProductos;
 import com.foodxplorer.foodxplorer.fragments.FragmentPromociones;
 import com.foodxplorer.foodxplorer.fragments.FragmentRegistro;
 import com.foodxplorer.foodxplorer.fragments.FragmentSeguimientoPedido;
-import com.foodxplorer.foodxplorer.objetos.Carrito;
 import com.foodxplorer.foodxplorer.helpers.Settings;
+import com.foodxplorer.foodxplorer.objetos.Carrito;
 import com.foodxplorer.foodxplorer.objetos.Producto;
 
 
 public class MainActivity extends AppCompatActivity implements FragmentPromociones.OnAddToCart, FragmentProductos.OnAddToCart{
 
-
-    private DrawerLayout drawerLayout;
-    private NavigationView navView;
-    public Carrito carrito;
 
     public static final String PROMOCIONES = "Promociones";
     public static final String SEGUIMIENTO = "Seguimiento";
@@ -48,6 +44,9 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
     public static final int  LOGIN_ID = 9865556;
     public static final int LOGOUT_ID = 9568632;
     public static final int MIS_PEDIDOS_ID = 965889;
+    public Carrito carrito;
+    private DrawerLayout drawerLayout;
+    private NavigationView navView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -215,6 +214,7 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
             if (fragment != null) {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content_frame, fragment)
+                        .addToBackStack(null)
                         .commit();
             }
 
