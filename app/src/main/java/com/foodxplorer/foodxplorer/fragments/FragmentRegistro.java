@@ -2,9 +2,9 @@ package com.foodxplorer.foodxplorer.fragments;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +16,7 @@ import android.widget.EditText;
 
 import com.foodxplorer.foodxplorer.MainActivity;
 import com.foodxplorer.foodxplorer.R;
+import com.foodxplorer.foodxplorer.helpers.MD5;
 import com.foodxplorer.foodxplorer.helpers.Settings;
 
 import org.json.JSONException;
@@ -101,7 +102,8 @@ public class FragmentRegistro extends Fragment implements View.OnClickListener {
         private String getStringJSON(Object... params) throws JSONException, UnsupportedEncodingException {
             JSONObject dato = new JSONObject();
             dato.put("correo", params[0]);
-            dato.put("contrasena", params[1]);
+            MD5 md5cypher = new MD5();
+            dato.put("contrasena", md5cypher.md5((String) params[1]));
             Log.d(LOGTAG, "El usuario que se insertara es:" + dato.toString());
             return String.valueOf(dato);
         }
