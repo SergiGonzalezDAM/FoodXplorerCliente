@@ -49,10 +49,19 @@ public class FragmentProductos extends Fragment implements AdapterView.OnItemCli
     public FragmentProductos(MainActivity tienda) {
 this.tienda=tienda;
     }
+    /**
+     * Hacemos la llamada a la interface para añadir productos al carrito
+     */
     public interface OnAddToCart {
         void onAddToCart(Producto producto, int cantidad);
     }
-
+    /**
+     * AL cargar el fragment lo primero que nos hará será lanzar la tarea e identificar el listview
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -64,7 +73,14 @@ this.tienda=tienda;
         return view;
 
     }
-
+    /**
+     * Al hacer click sobre un producto obtenemos el producto determinado pero lanzada
+     * mediante un Dialog para poder asignar más, menos productos o añadir al carrito
+     * @param parent
+     * @param view
+     * @param position
+     * @param id
+     */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -124,7 +140,12 @@ this.tienda=tienda;
         public AsyncResponse delegate = null;
         private AdaptadorProducto adaptador;
 
-
+        /**
+         * Una vez lanzamos la tarea cargará este método, con el cual obtenemos los datos del método
+         * codificado en el rest y lo llenaremos en una array de objetos JSON
+         * @param params
+         * @return
+         */
         @Override
         protected Boolean doInBackground(Object... params) {
             BufferedReader reader;
@@ -156,7 +177,10 @@ this.tienda=tienda;
             }
             return result;
         }
-
+        /**
+         * Una vesz hemos llenado el array correctamente, insertamso el adaptador en el listview
+         * @param result
+         */
         @Override
         protected void onPostExecute(Boolean result) {
 
@@ -174,7 +198,10 @@ this.tienda=tienda;
 
 
         }
-
+        /**
+         * Rellenamos el array con objetos Producto en función a los productos obtenidos del servidor.
+         * @throws JSONException
+         */
         private void rellenarArray() throws JSONException {
             listaProductos = new ArrayList();
             for (int i = 0; i < listadoProductosJSON.length(); i++) {

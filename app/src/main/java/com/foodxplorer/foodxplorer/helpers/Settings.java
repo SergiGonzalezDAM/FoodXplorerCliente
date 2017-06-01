@@ -7,6 +7,9 @@ package com.foodxplorer.foodxplorer.helpers;
  * Created by IES on 19/05/2017.
  */
 
+/**
+ * La clase Settings almacenamos información importante para toda la aplicación.
+ */
 public class Settings {
 
     //public static final  String DIRECCIO_SERVIDOR="http://192.168.120.59:40223/";

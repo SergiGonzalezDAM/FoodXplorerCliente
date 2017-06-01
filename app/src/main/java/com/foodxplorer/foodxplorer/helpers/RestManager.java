@@ -1,6 +1,5 @@
 package com.foodxplorer.foodxplorer.helpers;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -33,22 +32,32 @@ public RestManager(String direccio) throws IOException {
     conn.setConnectTimeout(Settings.SERVER_CONNECT_TIMEOUT);
     conn.setRequestProperty("Content-Type", "application/json");
 
-
 }
 
-public void setRequestMethod(String Method) throws ProtocolException {
-    if(Method==POST){
-        conn.setDoOutput(true);
-    }
+    /**
+     * Método para configurar metodo GET/POST
+     * @param Method
+     * @throws ProtocolException
+     */
+    public void setRequestMethod(String Method) throws ProtocolException {
     conn.setRequestMethod(Method);
 }
 
-
-public InputStreamReader getInputStream() throws IOException {
+    /**
+     * Método para enviar datos al servidor
+     * @return
+     * @throws IOException
+     */
+    public InputStreamReader getInputStream() throws IOException {
     return  new InputStreamReader(conn.getInputStream());
 }
 
-public BufferedReader getBufferedReader() throws IOException {
+    /**
+     * Metodo para leer datos del servidor
+     * @return
+     * @throws IOException
+     */
+    public BufferedReader getBufferedReader() throws IOException {
     return new BufferedReader(new InputStreamReader(conn.getInputStream()));
 }
 
@@ -59,14 +68,5 @@ public OutputStreamWriter getOutputStreamWriter() throws IOException {
 public void disconnect(){
     conn.disconnect();
 }
-
-public int getResponseCode() throws IOException {
-    return conn.getResponseCode();
-}
-
-public String getResponseMessage() throws IOException {
-        return conn.getResponseMessage();
-    }
-
 
 }
