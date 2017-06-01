@@ -47,7 +47,7 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
     MainActivity tienda;
     private ArrayList<String> direccionsClient = new ArrayList<>();
     JSONArray jsonarrayDireccions = new JSONArray();
-    Spinner mySpinner;
+    Spinner spinnerDirecciones;
     TextView direccio;
 
 
@@ -65,15 +65,24 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_confirmacion_pedido, container, false);
-        mySpinner = (Spinner) view.findViewById(R.id.spinnerDireccionesConfirmarPedido);
-        mySpinner.setOnItemSelectedListener(this);
-        List<String> lista = new ArrayList();
-        ArrayList<Producto> productosenCarrito = (ArrayList) tienda.carrito.getProductosEnCarrito();
-        ArrayList<Integer> cantidadesenCarrito = (ArrayList) tienda.carrito.getCantidades();
+        spinnerDirecciones = (Spinner) view.findViewById(R.id.spinnerDireccionesConfirmarPedido);
+        spinnerDirecciones.setOnItemSelectedListener(this);
+
 
         TareaObtenerDirecciones obtenerDirecciones = new TareaObtenerDirecciones();
         obtenerDirecciones.execute();
+        rellenarPantallaDePedido(view);
 
+        Button boto = (Button) view.findViewById(R.id.botonPagar);
+        boto.setOnClickListener(FragmentCarrito.this);
+
+        return view;
+    }
+
+    private void rellenarPantallaDePedido(View view) {
+        List<String> lista = new ArrayList();
+        ArrayList<Producto> productosenCarrito = (ArrayList) tienda.carrito.getProductosEnCarrito();
+        ArrayList<Integer> cantidadesenCarrito = (ArrayList) tienda.carrito.getCantidades();
         if (productosenCarrito.size() == 0) {
             lista.add("No tienes ningun producto en el carrito aun.");
         }
@@ -84,13 +93,9 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
         }
         TextView subTotal = (TextView) view.findViewById(R.id.txtLabelImporteTotal);
         subTotal.setText(String.format("%.2f", precioTotal) + "€");
-        ListView listView = (ListView) view.findViewById(R.id.listViewConfPedido);
+        ListView listViewContenidoPedido = (ListView) view.findViewById(R.id.listViewConfPedido);
         ArrayAdapter<String> adaptador = new ArrayAdapter(view.getContext(), android.R.layout.simple_list_item_1, lista);
-        listView.setAdapter(adaptador);
-        Button boto = (Button) view.findViewById(R.id.botonPagar);
-        boto.setOnClickListener(FragmentCarrito.this);
-
-        return view;
+        listViewContenidoPedido.setAdapter(adaptador);
     }
 
     @Override
@@ -117,14 +122,22 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
 
     @Override
     public void onClick(View view) {
-        TareaInsertarPedido tarea = new TareaInsertarPedido();
-        tarea.execute();
+        if(this.tienda.carrito.getProductosEnCarrito().size()>0) {
+            TareaInsertarPedido tarea = new TareaInsertarPedido();
+            tarea.execute();
+        }
+        else{
+            Toast.makeText(tienda, "Tu carrito esta vacio.", Toast.LENGTH_LONG).show();
+        }
 
     }
 
     public void pedidoInsertado(int numeroPedido) {
         Toast.makeText(tienda, "Pedido " + numeroPedido + " realizado.", Toast.LENGTH_LONG).show();
         Log.d(Settings.LOGTAG, "Pedido " + numeroPedido + " realizado.");
+        this.tienda.carrito.clearCarrito();
+        this.tienda.actualizarIconoCarrito();
+        rellenarPantallaDePedido(getView());
     }
 
 
@@ -204,37 +217,46 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
         protected Boolean doInBackground(Object... objects) {
             OutputStreamWriter osw;
             BufferedInputStream isr;
-            RestManager restManager;
-            int result = 1;
+            RestManager restManager2;
+            boolean result = true;
             try {
-                String aux = (Settings.DIRECCIO_SERVIDOR + Settings.PATH + "pedido/insertar/");
-                restManager = new RestManager(aux);
-                restManager.setRequestMethod(RestManager.POST);
-                osw = restManager.getOutputStreamWriter();
-                osw.write(getStringJSON((LineasPedido) objects[0]));
+                String aux = (Settings.DIRECCIO_SERVIDOR + Settings.PATH + "lineasPedido/insertar/");
+                System.err.println(aux);
+                restManager2 = new RestManager(aux);
+                restManager2.setRequestMethod(RestManager.POST);
+                osw = restManager2.getOutputStreamWriter();
+                String linea = getStringJSON((LineasPedido) objects[0]);
+                System.err.println("Vamos a insertar la linea:    " + linea);
+                osw.write(linea);
+                osw.flush();
+                BufferedReader bfr = restManager2.getBufferedReader();
+                if (!restManager2.getResponseMessage().equals("OK")) {
+                    result = false;
+                }
             } catch (java.net.ProtocolException ex) {
                 Log.e(Settings.LOGTAG, "Error de protocol: " + ex);
-                result = 0;
+                result = false;
             } catch (java.io.FileNotFoundException | java.net.MalformedURLException ex) {
-                Log.e(Settings.LOGTAG, "Error de ruta d'acces: " + ex);
-                result = 0;
+                Log.e(Settings.LOGTAG, "Error de ruta d'acces: " + ex.getCause());
+                result = false;
             } catch (java.net.SocketTimeoutException ex) {
                 Log.e(Settings.LOGTAG, "Temps d'espera esgotat al iniciar la conexio " + ex);
-                result = 0;
+                result = false;
             } catch (java.io.IOException ex) {
                 Log.e(Settings.LOGTAG, "Undefined error: " + ex);
-                result = 0;
+                result = false;
             } catch (JSONException e) {
                 Log.e(Settings.LOGTAG, "Error de manipulacio de l'objecte JSON: " + e.getStackTrace());
             }
-            return false;
+            return result;
         }
 
         private String getStringJSON(LineasPedido lineas) throws JSONException, UnsupportedEncodingException {
             JSONObject dato = new JSONObject();
-            dato.put("idPedido",lineas.getIdPedido() );
+            dato.put("idPedido", lineas.getIdPedido());
             dato.put("idProducto", lineas.getIdProducto());
-            dato.put("cantidad", lineas.getPrecio());
+            dato.put("cantidad", lineas.getCantidad());
+            dato.put("precio", lineas.getPrecio());
             dato.put("iva", lineas.getIva());
             return String.valueOf(dato);
         }
@@ -259,6 +281,7 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
                 String fechaPedido = df.format(today);
                 pedido.setIdDireccion(obtenerIdDireccion());
                 if (pedido.getIdDireccion() <= 0) {
+                    Log.d(Settings.LOGTAG, "Error al obtenir la direccio de l'spinner");
                     return result;
                 }
                 pedido.setFechaPedido(fechaPedido);
@@ -269,12 +292,12 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
 
                 osw.write(getStringJSON(pedido));
                 osw.flush();
-                osw.close();
+
                 BufferedReader bfr = restManager.getBufferedReader();
                 result = Integer.valueOf(bfr.readLine());
                 System.err.println(restManager.getResponseMessage());
                 System.err.println(restManager.getResponseCode());
-                restManager.disconnect();
+
             } catch (java.net.ProtocolException ex) {
                 Log.e(Settings.LOGTAG, "Error de protocol: " + ex);
                 result = 0;
@@ -308,8 +331,8 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
 
         public int obtenerIdDireccion() throws JSONException {
             int result = 0;
-            if (mySpinner.getSelectedItem().toString().equals("Nueva direccion de entrega") || mySpinner.getSelectedItem().toString().equals("Selecciona la direccion de entrega")) {
-                if (mySpinner.getSelectedItem().toString().equals("Nueva direccion de entrega")) {
+            if (spinnerDirecciones.getSelectedItem().toString().equals("Nueva direccion de entrega") || spinnerDirecciones.getSelectedItem().toString().equals("Selecciona la direccion de entrega")) {
+                if (spinnerDirecciones.getSelectedItem().toString().equals("Nueva direccion de entrega")) {
                     System.err.println("Nueva direccion");
                 } else {
                     System.err.println("Selecciona una direccion de entrega.");
@@ -317,7 +340,7 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
                 }
             } else {
                 System.err.println("Ya tenemos direccion");
-                JSONObject jsonobject = jsonarrayDireccions.getJSONObject(mySpinner.getSelectedItemPosition() - 1);
+                JSONObject jsonobject = jsonarrayDireccions.getJSONObject(spinnerDirecciones.getSelectedItemPosition() - 1);
                 result = jsonobject.getInt("idDireccion");
 
             }
@@ -348,9 +371,8 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
 
                 for (LineasPedido linea : lineas) {
                     System.out.println("Tarea!");
-                    System.out.println("Vamos a insertar la linea:"+linea.toString());
                     InsertarLinea tarea = new InsertarLinea();
-                    tarea.execute(linea, numeroPedido);
+                    tarea.execute(linea);
                 }
                 pedidoInsertado(numeroPedido);
             }

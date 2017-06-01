@@ -157,9 +157,12 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
     public void onAddToCart(Producto producto, int cantidad) {
         Log.i(Settings.LOGTAG, producto.toString() + "cantidad:"+cantidad);
         this.carrito.addProducto(producto,cantidad);
+        actualizarIconoCarrito();
+    }
+
+    public void actualizarIconoCarrito(){
         TextView tv = (TextView) findViewById(R.id.actionbar_notifcation_textview);
         tv.setText(String.valueOf(carrito.getTotalProductos()));
-
     }
 
     /**

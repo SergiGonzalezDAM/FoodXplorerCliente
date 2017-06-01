@@ -98,6 +98,13 @@ public class Carrito {
         }
     }
 
+    /**
+     * Resetea el carrito a 0
+     */
+    public void clearCarrito(){
+    this.cantidades.clear();
+    this.productosEnCarrito.clear();
+}
 
     public int getTotalProductos() {
         int cantidad = 0;

@@ -33,9 +33,13 @@ public RestManager(String direccio) throws IOException {
     conn.setConnectTimeout(Settings.SERVER_CONNECT_TIMEOUT);
     conn.setRequestProperty("Content-Type", "application/json");
 
+
 }
 
 public void setRequestMethod(String Method) throws ProtocolException {
+    if(Method==POST){
+        conn.setDoOutput(true);
+    }
     conn.setRequestMethod(Method);
 }
 
