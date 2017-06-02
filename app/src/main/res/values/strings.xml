@@ -16,4 +16,9 @@
     <string name="fragment2">Fragment 2</string>
     <string name="fragment3">Fragment 3</string>
     <string name="LOGIN_FAIL">Login fail</string>
+    <string name="calle_y_numero">Calle y numero</string>
+    <string name="piso">Piso</string>
+    <string name="poblacion">Poblacion</string>
+    <string name="codigo_postal">Codigo Postal</string>
+    <string name="procesar">Procesar</string>
 </resources>

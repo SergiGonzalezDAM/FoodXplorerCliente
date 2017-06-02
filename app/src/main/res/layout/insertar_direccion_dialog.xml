@@ -1,25 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clickable="false"
-    android:descendantFocusability="blocksDescendants"
-    android:focusable="false"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
-
-
-    <LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentTop="true"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/txtViewCalleDireccion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Calle y numero"
+            android:text="@string/calle_y_numero"
             android:textAppearance="@android:style/TextAppearance.Material.Medium" />
 
         <EditText
@@ -33,7 +25,7 @@
             android:id="@+id/txtViewPiso"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Piso"
+            android:text="@string/piso"
             android:textAppearance="@android:style/TextAppearance.Material.Medium" />
 
         <EditText
@@ -47,11 +39,11 @@
             android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Poblacion"
+            android:text="@string/poblacion"
             android:textAppearance="@android:style/TextAppearance.Material.Medium" />
 
         <EditText
-            android:id="@+id/editText2"
+            android:id="@+id/etPoblacionInsertarDireccion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -61,11 +53,11 @@
             android:id="@+id/tvCodigoPostal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Codigo Postal"
+            android:text="@string/codigo_postal"
             android:textAppearance="@android:style/TextAppearance.Material.Medium" />
 
         <EditText
-            android:id="@+id/editText3"
+            android:id="@+id/etCodigoPostalInsertarDireccion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -75,6 +67,5 @@
             android:id="@+id/btInsertarDireccion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Procesar" />
+            android:text="@string/procesar" />
     </LinearLayout>
-</RelativeLayout>

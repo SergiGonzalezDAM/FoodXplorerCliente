@@ -145,7 +145,6 @@ public class FragmentRegistro extends Fragment implements View.OnClickListener, 
 
             if (aBoolean) {
                 Log.e(LOGTAG, "Registro ok");
-                tienda.carrito.setUsuarioLogueado(correo.getText().toString());
                 tienda.goTo(MainActivity.PROMOCIONES);
             } else {
                 Log.e(LOGTAG, "Registro fail");

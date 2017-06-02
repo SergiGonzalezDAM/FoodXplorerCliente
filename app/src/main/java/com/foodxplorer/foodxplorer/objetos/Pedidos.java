@@ -4,7 +4,7 @@ package com.foodxplorer.foodxplorer.objetos;
 public class Pedidos {
     private long idPedido;
     private String fechaPedido;
-    private long idDireccion;
+    private long idDireccion = -3;
     private long idEstado;
 
     /**
@@ -25,29 +25,28 @@ public class Pedidos {
         return fechaPedido;
     }
 
+    public void setFechaPedido(String fechaPedido) {
+        this.fechaPedido = fechaPedido;
+    }
+
     public long getIdPedido() {
         return idPedido;
+    }
+
+    public void setIdPedido(long idPedido) {
+        this.idPedido = idPedido;
     }
 
     public long getIdDireccion() {
         return idDireccion;
     }
 
-    public long getIdEstado() {
-        return idEstado;
-    }
-
-
-    public void setIdPedido(long idPedido) {
-        this.idPedido = idPedido;
-    }
-
-    public void setFechaPedido(String fechaPedido) {
-        this.fechaPedido = fechaPedido;
-    }
-
     public void setIdDireccion(long idDireccion) {
         this.idDireccion = idDireccion;
+    }
+
+    public long getIdEstado() {
+        return idEstado;
     }
 
     public void setIdEstado(long idEstado) {
