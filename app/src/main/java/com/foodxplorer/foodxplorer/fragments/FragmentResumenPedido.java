@@ -91,7 +91,7 @@ public class FragmentResumenPedido extends Fragment {
     /**
      * Generamos una clase anonima que extienda de AsyncTask para poder lanzar consultas
      */
-    class TareaWSRecuperarDireccion extends AsyncTask<Object, Void, Boolean> {
+    private class TareaWSRecuperarDireccion extends AsyncTask<Object, Void, Boolean> {
         JSONObject direccionJSON;
 
         /**
@@ -119,7 +119,7 @@ public class FragmentResumenPedido extends Fragment {
          * más datos disponibles para leer, todo esto leido se pasa como String en el return
          * @param rd
          * @return
-         * @throws IOException
+         * @throws IOException Error
          */
         private String readAll(Reader rd) throws IOException {
             StringBuilder sb = new StringBuilder();
@@ -132,18 +132,17 @@ public class FragmentResumenPedido extends Fragment {
 
         /**
          * Método en el cual le pasamos una url y nos obtiene todos los datos de esa url
-         * @param url
+         * @param url la url para cargar
          * @return objeto JSON
-         * @throws IOException
-         * @throws JSONException
+         * @throws IOException Error
+         * @throws JSONException Error Json
          */
         private JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
             InputStream is = new URL(url).openStream();
             try {
                 BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
                 String jsonText = readAll(rd);
-                JSONObject json = new JSONObject(jsonText);
-                return json;
+                return new JSONObject(jsonText);
             } finally {
                 is.close();
             }
@@ -188,7 +187,7 @@ public class FragmentResumenPedido extends Fragment {
         }
     }
 
-    class TareaWSRecuperarLineasPedido extends AsyncTask<Object, Void, Boolean> {
+    private class TareaWSRecuperarLineasPedido extends AsyncTask<Object, Void, Boolean> {
         JSONArray lineasPedidoJSON;
 
         /**
@@ -241,7 +240,7 @@ public class FragmentResumenPedido extends Fragment {
         }
     }
 
-    class TareaWSRecuperarEstado extends AsyncTask<Object, Void, Boolean> {
+    private class TareaWSRecuperarEstado extends AsyncTask<Object, Void, Boolean> {
         JSONObject estadoJSON;
 
         /**
@@ -335,7 +334,7 @@ public class FragmentResumenPedido extends Fragment {
         }
     }
 
-    class TareaWSRecuperarProductosPedido extends AsyncTask<Object, Void, Boolean> {
+    private class TareaWSRecuperarProductosPedido extends AsyncTask<Object, Void, Boolean> {
         JSONArray productosJSON;
 
         /**
@@ -379,6 +378,12 @@ public class FragmentResumenPedido extends Fragment {
                     }
                     else {
                         adapProducto = new AdaptadorProducto(getActivity(), listaProductos);
+                        Double totalPedido = 0.0;
+                        for (Producto producto : listaProductos) {
+                            totalPedido += producto.getPrecio() - (producto.getPrecio() * producto.getOfertaProducto()) / 100;
+                        }
+                        TextView precio = (TextView) getActivity().findViewById(R.id.textViewImporte);
+                        precio.setText(String.valueOf(totalPedido));
                         listView.setAdapter(adapProducto);
                     }
                 } catch (JSONException e) {
