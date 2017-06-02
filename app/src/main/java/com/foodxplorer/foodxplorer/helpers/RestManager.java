@@ -3,19 +3,17 @@ package com.foodxplorer.foodxplorer.helpers;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.util.Set;
 
 public class RestManager {
 
-    private HttpURLConnection conn;
     public static final String GET = "GET";
     public static final String POST = "POST";
+    public static final String PUT = "PUT";
+    private HttpURLConnection conn;
 
     public RestManager(String direccio) throws IOException {
         URL url = new URL(direccio);
@@ -29,7 +27,7 @@ public class RestManager {
     }
 
     public void setRequestMethod(String Method) throws ProtocolException {
-        if(Method==POST){
+        if (Method.equals(POST) || Method.equals(PUT)) {
             conn.setDoOutput(true);
         }
         conn.setRequestMethod(Method);

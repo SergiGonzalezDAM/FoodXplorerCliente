@@ -13,6 +13,7 @@ import android.widget.EditText;
 import com.foodxplorer.foodxplorer.MainActivity;
 import com.foodxplorer.foodxplorer.R;
 import com.foodxplorer.foodxplorer.helpers.MD5;
+import com.foodxplorer.foodxplorer.helpers.RestManager;
 import com.foodxplorer.foodxplorer.helpers.Settings;
 
 import org.json.JSONException;
@@ -20,8 +21,6 @@ import org.json.JSONObject;
 
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 import static com.foodxplorer.foodxplorer.helpers.Settings.LOGTAG;
 
@@ -86,14 +85,15 @@ public class FragmentRegistro extends Fragment implements View.OnClickListener, 
     public void processFinish(boolean response) {
         if (response) {
             Log.e(LOGTAG, "Registro ok");
+            this.tienda.carrito.setUsuarioLogueado(correo.getText().toString());
             this.tienda.goTo(MainActivity.PROMOCIONES);
         } else {
             Log.e(LOGTAG, "Registro fail");
         }
     }
 
-    class TareaWSRegistrarUsuario extends AsyncTask<Object, Integer, Boolean> {
-        public AsyncResponse delegate = null;
+    private class TareaWSRegistrarUsuario extends AsyncTask<Object, Integer, Boolean> {
+        AsyncResponse delegate = null;
 
         /**
          *  Al ejecutar la tarea, abrimos la conexión con el servidor, obtenemos los datos que se
@@ -107,18 +107,14 @@ public class FragmentRegistro extends Fragment implements View.OnClickListener, 
             boolean insertadoEnDBexterna = true;
             OutputStreamWriter osw;
             try {
-                URL url = new URL(Settings.DIRECCIO_SERVIDOR + "ServcioFoodXPlorer/webresources/generic/InsertarUsuario");
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("PUT");
-                conn.setDoOutput(true);
-                conn.setReadTimeout(1000 /*milliseconds*/);
-                conn.setConnectTimeout(500);
-                conn.setRequestProperty("Content-Type", "application/json");
-                osw = new OutputStreamWriter(conn.getOutputStream());
+                String url = Settings.DIRECCIO_SERVIDOR + Settings.PATH + "InsertarUsuario";
+                RestManager restManager = new RestManager(url);
+                restManager.setRequestMethod(RestManager.PUT);
+                osw = restManager.getOutputStreamWriter();
                 osw.write(getStringJSON(params));
                 osw.flush();
                 osw.close();
-                System.err.println(conn.getResponseMessage());
+                System.err.println(restManager.getResponseMessage());
             } catch (java.io.IOException ex) {
                 Log.e(LOGTAG, "Temps d'espera esgotat al iniciar la conexio amb la BBDD extena");
                 insertadoEnDBexterna = false;
@@ -132,21 +128,28 @@ public class FragmentRegistro extends Fragment implements View.OnClickListener, 
         /**
          * Le pasamos los parametros para insertarlos en la base de datos.
          * @param params
-         * @return
-         * @throws JSONException
-         * @throws UnsupportedEncodingException
+         * @return Representacio en string de l'objecte usuari
+         * @throws JSONException En cas d'error en la transformacio JSON
+         * @throws UnsupportedEncodingException Encoding de dades erronis
          */
         private String getStringJSON(Object... params) throws JSONException, UnsupportedEncodingException {
             JSONObject dato = new JSONObject();
             dato.put("correo", params[0]);
             dato.put("contrasena", MD5.hash((String) params[1]));
-            Log.d(LOGTAG, "El usuario que se insertara es:" + dato.toString());
             return String.valueOf(dato);
         }
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
-            delegate.processFinish(aBoolean);
+            //delegate.processFinish(aBoolean);
+
+            if (aBoolean) {
+                Log.e(LOGTAG, "Registro ok");
+                tienda.carrito.setUsuarioLogueado(correo.getText().toString());
+                tienda.goTo(MainActivity.PROMOCIONES);
+            } else {
+                Log.e(LOGTAG, "Registro fail");
+            }
         }
     }
 }
