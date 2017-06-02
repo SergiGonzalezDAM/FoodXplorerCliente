@@ -21,4 +21,10 @@
     <string name="poblacion">Poblacion</string>
     <string name="codigo_postal">Codigo Postal</string>
     <string name="procesar">Procesar</string>
+    <string name="no_products_in_cart">No tienes ningun producto en el carrito aun.</string>
+    <string name="Cantidad">cantidad:</string>
+    <string name="Importe">Importe:</string>
+    <string name="no_direction_Selected">Selecciona una direccion de entrega.</string>
+    <string name="empty_Cart">Tu carrito esta vacio.</string>
+    <string name="new_direction">Nueva direccion de entrega</string>
 </resources>

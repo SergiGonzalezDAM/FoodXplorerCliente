@@ -7,85 +7,85 @@
     tools:context="com.foodxplorer.foodxplorer.MainActivity">
 
     <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:layout_marginTop="15dp"
         android:id="@+id/editTextNumeroSeguimiento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/textViewShowUsername"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:ems="10"
+        android:inputType="textWebEmailAddress" />
 
     <TextView
-        android:text="Usuario"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
         android:id="@+id/textViewShowUsername"
-        android:textSize="18sp"
-        android:textColor="@android:color/background_dark"
-        android:textAlignment="center"
-        android:layout_below="@+id/imageView"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:text="Contraseña"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="21dp"
-        android:id="@+id/textViewLoginPassword"
+        android:layout_below="@+id/imageView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="36dp"
+        android:text="Usuario"
+        android:textAlignment="center"
         android:textColor="@android:color/background_dark"
-        android:textSize="18sp"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/textViewLoginPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/editTextNumeroSeguimiento"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="21dp"
+        android:text="Contraseña"
+        android:textColor="@android:color/background_dark"
+        android:textSize="18sp" />
 
     <EditText
+        android:id="@+id/editTextPasswordLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:layout_marginTop="26dp"
-        android:id="@+id/editTextPasswordLogin"
-        android:layout_below="@+id/textViewLoginPassword"
         android:layout_alignLeft="@+id/imageView"
-        android:layout_alignStart="@+id/imageView" />
+        android:layout_alignStart="@+id/imageView"
+        android:layout_below="@+id/textViewLoginPassword"
+        android:layout_marginTop="26dp"
+        android:ems="10"
+        android:inputType="textPassword" />
 
     <Button
-        android:text="Registrarse"
+        android:id="@+id/btnRegistrar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btnRegistrar"
         android:layout_alignBaseline="@+id/btnLogin"
         android:layout_alignBottom="@+id/btnLogin"
+        android:layout_toEndOf="@+id/textViewShowUsername"
         android:layout_toRightOf="@+id/textViewShowUsername"
-        android:layout_toEndOf="@+id/textViewShowUsername" />
+        android:text="Registrarse" />
 
     <Button
-        android:text="Login"
+        android:id="@+id/btnLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btnLogin"
         android:layout_below="@+id/textViewOlvidarPassword"
+        android:layout_marginTop="27dp"
         android:layout_toLeftOf="@+id/textViewLoginPassword"
         android:layout_toStartOf="@+id/textViewLoginPassword"
-        android:layout_marginTop="27dp" />
+        android:text="Login" />
 
     <ImageView
+        android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/logopizzaxplorer"
-        android:layout_marginTop="18dp"
-        android:id="@+id/imageView"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp"
+        app:srcCompat="@drawable/logopizzaxplorer" />
 
     <TextView
-        android:text="¿Has olvidado tu contraseña?"
+        android:id="@+id/textViewOlvidarPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textViewOlvidarPassword"
+        android:layout_below="@+id/editTextPasswordLogin"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="22dp"
         android:clickable="true"
-        android:layout_below="@+id/editTextPasswordLogin"
-        android:layout_centerHorizontal="true" />
+        android:text="¿Has olvidado tu contraseña?" />
 </RelativeLayout>

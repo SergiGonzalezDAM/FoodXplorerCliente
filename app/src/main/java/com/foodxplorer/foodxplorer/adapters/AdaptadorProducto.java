@@ -2,6 +2,7 @@ package com.foodxplorer.foodxplorer.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +10,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.foodxplorer.foodxplorer.objetos.Producto;
 import com.foodxplorer.foodxplorer.R;
+import com.foodxplorer.foodxplorer.objetos.Producto;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -66,7 +67,13 @@ public class AdaptadorProducto extends BaseAdapter
         TextView nombre = (TextView) v.findViewById(R.id.textViewNombrePromocion);
         nombre.setText(dir.getNombre());
         TextView precio = (TextView) v.findViewById(R.id.textViewPrecioPromocion);
-        precio.setText(""+dir.getPrecio()+" €");
+        if (dir.getOfertaProducto() != 0) {
+            double precioDescontado = dir.getPrecio() - (dir.getPrecio() * dir.getOfertaProducto()) / 100;
+            String lineaprecio = "<strike>" + dir.getPrecio() + "€</strike>" + "<font color=red>  -" + dir.getOfertaProducto() + "%" + "</font> \n Ahora: " + String.format("%.2f", precioDescontado);
+            precio.setText(Html.fromHtml(lineaprecio));
+        } else {
+            precio.setText("" + dir.getPrecio() + " €");
+        }
         TextView descripcion = (TextView) v.findViewById(R.id.textViewDescripcionPromociones);
         descripcion.setText(dir.getDescripcion());
 

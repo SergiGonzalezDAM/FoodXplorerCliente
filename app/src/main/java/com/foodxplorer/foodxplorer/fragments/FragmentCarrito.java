@@ -50,13 +50,11 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
     MainActivity tienda;
     JSONArray jsonarrayDireccions = new JSONArray();
     Spinner spinnerDirecciones;
-    TextView direccio;
     Pedidos pedido = new Pedidos();
     private ArrayList<String> direccionsClient = new ArrayList<>();
 
 
     public FragmentCarrito(MainActivity tienda) {
-
         this.tienda = tienda;
     }
 
@@ -86,15 +84,21 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
         ArrayList<Producto> productosenCarrito = (ArrayList) tienda.carrito.getProductosEnCarrito();
         ArrayList<Integer> cantidadesenCarrito = (ArrayList) tienda.carrito.getCantidades();
         if (productosenCarrito.size() == 0) {
-            lista.add("No tienes ningun producto en el carrito aun.");
+            lista.add(getString(R.string.no_products_in_cart));
         }
-        double precioTotal = 0;
+        double precioAcumulado = 0;
         for (int i = 0; i < productosenCarrito.size(); i++) {
-            lista.add(productosenCarrito.get(i).getNombre() + " cantidad: " + cantidadesenCarrito.get(i) + " Importe: " + String.format("%.2f", productosenCarrito.get(i).getPrecio() * cantidadesenCarrito.get(i)));
-            precioTotal = precioTotal + productosenCarrito.get(i).getPrecio() * cantidadesenCarrito.get(i);
+            double precioDescontado = (productosenCarrito.get(i).getPrecio() - (productosenCarrito.get(i).getPrecio() * productosenCarrito.get(i).getOfertaProducto()) / 100) * cantidadesenCarrito.get(i);
+
+            String aux = cantidadesenCarrito.get(i) + "X " + productosenCarrito.get(i).getNombre() + "\n" + String.format("%.2f", precioDescontado) + "€";
+            lista.add(aux);
+
+
+            //lista.add(productosenCarrito.get(i).getNombre() + getString(R.string.Cantidad) + cantidadesenCarrito.get(i) + getString(R.string.Importe) + String.format("%.2f", productosenCarrito.get(i).getPrecio() * cantidadesenCarrito.get(i)));
+            precioAcumulado = precioAcumulado + precioDescontado;
         }
         TextView subTotal = (TextView) view.findViewById(R.id.txtLabelImporteTotal);
-        subTotal.setText(String.format("%.2f", precioTotal) + "€");
+        subTotal.setText(String.format("%.2f", precioAcumulado) + "€");
         ListView listViewContenidoPedido = (ListView) view.findViewById(R.id.listViewConfPedido);
         ArrayAdapter<String> adaptador = new ArrayAdapter(view.getContext(), android.R.layout.simple_list_item_1, lista);
         listViewContenidoPedido.setAdapter(adaptador);
@@ -130,7 +134,7 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
                 aux = obtenerIdDireccion();
                 if (aux < 0) {
                     Log.e(Settings.LOGTAG, "Selecciona una direccion de entrega.");
-                    Toast.makeText(tienda, "Selecciona una direccion de entrega.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(tienda, R.string.no_direction_Selected, Toast.LENGTH_LONG).show();
 
                 } else if (aux == 0) {
 
@@ -166,7 +170,7 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
             }
 
         } else {
-            Toast.makeText(tienda, "Tu carrito esta vacio.", Toast.LENGTH_LONG).show();
+            Toast.makeText(tienda, R.string.empty_Cart, Toast.LENGTH_LONG).show();
 
         }
     }
@@ -203,8 +207,8 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
      */
     int obtenerIdDireccion() throws JSONException {
         int result;
-        if (spinnerDirecciones.getSelectedItem().toString().equals("Nueva direccion de entrega") || spinnerDirecciones.getSelectedItem().toString().equals("Selecciona la direccion de entrega")) {
-            if (spinnerDirecciones.getSelectedItem().toString().equals("Nueva direccion de entrega")) {
+        if (spinnerDirecciones.getSelectedItem().toString().equals(getString(R.string.new_direction)) || spinnerDirecciones.getSelectedItem().toString().equals("Selecciona la direccion de entrega")) {
+            if (spinnerDirecciones.getSelectedItem().toString().equals(getString(R.string.new_direction))) {
                 System.err.println("Nueva direccion");
                 result = 0;
             } else {
@@ -325,7 +329,6 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
                         restManager2.setRequestMethod(RestManager.POST);
                         osw = restManager2.getOutputStreamWriter();
                         String linea2 = getStringJSON(linea);
-                        System.err.println("Vamos a insertar la linea:    " + linea);
                         osw.write(linea2);
                         osw.flush();
                         BufferedReader bfr2 = restManager2.getBufferedReader();
@@ -373,7 +376,7 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
             dato.put("idDireccion", pedido.getIdDireccion());
             dato.put("idEstado", 1);
             dato.put("fechaSalida", pedido.getFechaPedido());
-            if (tienda.carrito.getUsuarioLogueado().equals("")) {
+            if (!tienda.carrito.getUsuarioLogueado().equals("")) {
                 dato.put("correo", tienda.carrito.getUsuarioLogueado());
             }
             Log.d(LOGTAG, "El pedido a insertar es:" + dato.toString());

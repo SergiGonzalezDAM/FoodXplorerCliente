@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,12 +19,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.foodxplorer.foodxplorer.MainActivity;
-import com.foodxplorer.foodxplorer.objetos.Producto;
 import com.foodxplorer.foodxplorer.R;
 import com.foodxplorer.foodxplorer.adapters.AdaptadorProducto;
 import com.foodxplorer.foodxplorer.helpers.AsyncResponse;
 import com.foodxplorer.foodxplorer.helpers.RestManager;
 import com.foodxplorer.foodxplorer.helpers.Settings;
+import com.foodxplorer.foodxplorer.objetos.Producto;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -47,16 +48,12 @@ public class FragmentProductos extends Fragment implements AdapterView.OnItemCli
     }
 
     public FragmentProductos(MainActivity tienda) {
-this.tienda=tienda;
+        this.tienda = tienda;
     }
-    /**
-     * Hacemos la llamada a la interface para añadir productos al carrito
-     */
-    public interface OnAddToCart {
-        void onAddToCart(Producto producto, int cantidad);
-    }
+
     /**
      * AL cargar el fragment lo primero que nos hará será lanzar la tarea e identificar el listview
+     *
      * @param inflater
      * @param container
      * @param savedInstanceState
@@ -73,9 +70,11 @@ this.tienda=tienda;
         return view;
 
     }
+
     /**
      * Al hacer click sobre un producto obtenemos el producto determinado pero lanzada
      * mediante un Dialog para poder asignar más, menos productos o añadir al carrito
+     *
      * @param parent
      * @param view
      * @param position
@@ -95,7 +94,13 @@ this.tienda=tienda;
         TextView nombre = (TextView) mView.findViewById(R.id.textViewNombrePromocion);
         nombre.setText(producto.getNombre());
         TextView precio = (TextView) mView.findViewById(R.id.textViewPrecioPromocion);
-        precio.setText(producto.getPrecio() + " €");
+        if (producto.getOfertaProducto() != 0) {
+            double precioDescontado = producto.getPrecio() - (producto.getPrecio() * producto.getOfertaProducto()) / 100;
+            String lineaprecio = "<strike>" + producto.getPrecio() + "€</strike>" + "<font color=red>  -" + producto.getOfertaProducto() + "%" + "</font> \n Ahora: " + String.format("%.2f", precioDescontado);
+            precio.setText(Html.fromHtml(lineaprecio));
+        } else {
+            precio.setText(producto.getPrecio() + " €");
+        }
         TextView descripcion = (TextView) mView.findViewById(R.id.textViewDescripcionPromociones);
         descripcion.setText(producto.getDescripcion());
 
@@ -108,7 +113,7 @@ this.tienda=tienda;
             @Override
             public void onClick(View view) {
 
-                int aux= Integer.valueOf(cantidad.getText().toString());
+                int aux = Integer.valueOf(cantidad.getText().toString());
                 cantidad.setText(String.valueOf(++aux));
             }
         });
@@ -118,8 +123,8 @@ this.tienda=tienda;
         addless.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int aux= Integer.valueOf(cantidad.getText().toString());
-                if(aux>0){
+                int aux = Integer.valueOf(cantidad.getText().toString());
+                if (aux > 0) {
                     cantidad.setText(String.valueOf(--aux));
                 }
             }
@@ -135,25 +140,39 @@ this.tienda=tienda;
         dialog.show();
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mOnAddToCart = (OnAddToCart) context;
+    }
+
+    /**
+     * Hacemos la llamada a la interface para añadir productos al carrito
+     */
+    public interface OnAddToCart {
+        void onAddToCart(Producto producto, int cantidad);
+    }
+
     class TareaWSRecuperarTodosProductos extends AsyncTask<Object, Void, Boolean> {
-        private JSONArray listadoProductosJSON;
         public AsyncResponse delegate = null;
+        private JSONArray listadoProductosJSON;
         private AdaptadorProducto adaptador;
 
         /**
          * Una vez lanzamos la tarea cargará este método, con el cual obtenemos los datos del método
          * codificado en el rest y lo llenaremos en una array de objetos JSON
+         *
          * @param params
          * @return
          */
         @Override
         protected Boolean doInBackground(Object... params) {
             BufferedReader reader;
-            Boolean result=true;
+            Boolean result = true;
             try {
-                String url =Settings.DIRECCIO_SERVIDOR + Settings.PATH + "listarTodosLosProductos";
+                String url = Settings.DIRECCIO_SERVIDOR + Settings.PATH + "listarTodosLosProductos";
                 RestManager restManager = new RestManager(url);
-                restManager.setRequestMethod(restManager.GET);
+                restManager.setRequestMethod(RestManager.GET);
                 reader = restManager.getBufferedReader();
                 listadoProductosJSON = new JSONArray(reader.readLine());
             } catch (java.net.ProtocolException ex) {
@@ -177,8 +196,10 @@ this.tienda=tienda;
             }
             return result;
         }
+
         /**
          * Una vesz hemos llenado el array correctamente, insertamso el adaptador en el listview
+         *
          * @param result
          */
         @Override
@@ -198,8 +219,10 @@ this.tienda=tienda;
 
 
         }
+
         /**
          * Rellenamos el array con objetos Producto en función a los productos obtenidos del servidor.
+         *
          * @throws JSONException
          */
         private void rellenarArray() throws JSONException {
@@ -210,11 +233,5 @@ this.tienda=tienda;
                 listaProductos.add(producto);
             }
         }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mOnAddToCart = (OnAddToCart) context;
     }
 }

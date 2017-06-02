@@ -11,16 +11,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.foodxplorer.foodxplorer.objetos.Direccion;
-import com.foodxplorer.foodxplorer.objetos.Estado;
-import com.foodxplorer.foodxplorer.objetos.LineasPedido;
 import com.foodxplorer.foodxplorer.MainActivity;
-import com.foodxplorer.foodxplorer.objetos.Pedidos;
-import com.foodxplorer.foodxplorer.objetos.Producto;
 import com.foodxplorer.foodxplorer.R;
 import com.foodxplorer.foodxplorer.adapters.AdaptadorProducto;
 import com.foodxplorer.foodxplorer.helpers.RestManager;
 import com.foodxplorer.foodxplorer.helpers.Settings;
+import com.foodxplorer.foodxplorer.objetos.Direccion;
+import com.foodxplorer.foodxplorer.objetos.Estado;
+import com.foodxplorer.foodxplorer.objetos.LineasPedido;
+import com.foodxplorer.foodxplorer.objetos.Pedidos;
+import com.foodxplorer.foodxplorer.objetos.Producto;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,6 +38,8 @@ import java.util.ArrayList;
 import static com.foodxplorer.foodxplorer.helpers.Settings.LOGTAG;
 
 public class FragmentResumenPedido extends Fragment {
+    AdaptadorProducto adapProducto;
+    ListView listView;
     private MainActivity tienda;
     private TextView nombreCliente, importe, direccion, estado;
     private double importeTotal;
@@ -46,8 +48,6 @@ public class FragmentResumenPedido extends Fragment {
     private Estado estadoObjeto;
     private ArrayList<LineasPedido> listaLineasPedido;
     private ArrayList<Producto> listaProductos;
-    AdaptadorProducto adapProducto;
-    ListView listView;
 
     public FragmentResumenPedido() {
         // Required empty public constructor
@@ -162,7 +162,7 @@ public class FragmentResumenPedido extends Fragment {
                     if (!rellenarObjeto() || tienda.carrito.getUsuarioLogueado() == null || tienda.carrito.getUsuarioLogueado().equals("")) {
                         Toast.makeText(tienda, "NO EXISTE ESE NUMERO DE PEDIDO", Toast.LENGTH_SHORT).show();
                     } else {
-                        direccion.setText(direccionObject.getPiso() + "\n" + direccionObject.getCalle() + "\n" + direccionObject.getPoblacion());
+                        direccion.setText(direccionObject.getCalle() + direccionObject.getPiso() + "\n" + direccionObject.getPoblacion() + "\n" + direccionObject.getCodPostal());
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

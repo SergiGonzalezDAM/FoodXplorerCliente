@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,11 +18,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.foodxplorer.foodxplorer.MainActivity;
-import com.foodxplorer.foodxplorer.objetos.Producto;
 import com.foodxplorer.foodxplorer.R;
 import com.foodxplorer.foodxplorer.adapters.AdaptadorProducto;
 import com.foodxplorer.foodxplorer.helpers.RestManager;
 import com.foodxplorer.foodxplorer.helpers.Settings;
+import com.foodxplorer.foodxplorer.objetos.Producto;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -35,18 +36,10 @@ import static com.foodxplorer.foodxplorer.helpers.Settings.LOGTAG;
 
 public class FragmentPromociones extends Fragment implements AdapterView.OnItemClickListener {
 
-    /**
-     * Hacemos la llamada a la interface para añadir productos al carrito
-     */
-    public interface OnAddToCart {
-        void onAddToCart(Producto producto, int cantidad);
-    }
-
     private OnAddToCart mOnAddToCart;
     private ListView lista;
     private ArrayList<Producto> listadoPromociones;
     private MainActivity tienda;
-
     public FragmentPromociones() {
 
     }
@@ -97,7 +90,9 @@ public class FragmentPromociones extends Fragment implements AdapterView.OnItemC
         TextView nombre = (TextView) mView.findViewById(R.id.textViewNombrePromocion);
         nombre.setText(producto.getNombre());
         TextView precio = (TextView) mView.findViewById(R.id.textViewPrecioPromocion);
-        precio.setText(producto.getPrecio() + " €");
+        double precioDescontado = producto.getPrecio() - (producto.getPrecio() * producto.getOfertaProducto()) / 100;
+        String lineaprecio = "<strike>" + producto.getPrecio() + "€</strike>" + "<font color=red>  -" + producto.getOfertaProducto() + "%" + "</font> \n Ahora: " + String.format("%.2f", precioDescontado);
+        precio.setText(Html.fromHtml(lineaprecio));
         TextView descripcion = (TextView) mView.findViewById(R.id.textViewDescripcionPromociones);
         descripcion.setText(producto.getDescripcion());
 
@@ -137,6 +132,19 @@ public class FragmentPromociones extends Fragment implements AdapterView.OnItemC
 
 
         dialog.show();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mOnAddToCart = (OnAddToCart) context;
+    }
+
+    /**
+     * Hacemos la llamada a la interface para añadir productos al carrito
+     */
+    public interface OnAddToCart {
+        void onAddToCart(Producto producto, int cantidad);
     }
 
     class TareaWSRecuperarProductos extends AsyncTask<Object, Void, Boolean> {
@@ -216,11 +224,5 @@ public class FragmentPromociones extends Fragment implements AdapterView.OnItemC
                 listadoPromociones.add(producto);
             }
         }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mOnAddToCart = (OnAddToCart) context;
     }
 }
