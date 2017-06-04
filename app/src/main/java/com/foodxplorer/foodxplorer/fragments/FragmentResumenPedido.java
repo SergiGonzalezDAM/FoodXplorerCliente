@@ -18,7 +18,6 @@ import com.foodxplorer.foodxplorer.helpers.RestManager;
 import com.foodxplorer.foodxplorer.helpers.Settings;
 import com.foodxplorer.foodxplorer.objetos.Direccion;
 import com.foodxplorer.foodxplorer.objetos.Estado;
-import com.foodxplorer.foodxplorer.objetos.LineasPedido;
 import com.foodxplorer.foodxplorer.objetos.Pedidos;
 import com.foodxplorer.foodxplorer.objetos.Producto;
 
@@ -42,11 +41,9 @@ public class FragmentResumenPedido extends Fragment {
     ListView listView;
     private MainActivity tienda;
     private TextView nombreCliente, importe, direccion, estado;
-    private double importeTotal;
     private Pedidos pedido;
     private Direccion direccionObject;
     private Estado estadoObjeto;
-    private ArrayList<LineasPedido> listaLineasPedido;
     private ArrayList<Producto> listaProductos;
 
     public FragmentResumenPedido() {
@@ -61,6 +58,7 @@ public class FragmentResumenPedido extends Fragment {
     /**
      * Cuando carga el fragment identifica los componentes del fragment y lanza las tareas
      * correspondientes
+     *
      * @param inflater
      * @param container
      * @param savedInstanceState
@@ -76,15 +74,54 @@ public class FragmentResumenPedido extends Fragment {
         importe = (TextView) view.findViewById(R.id.textViewImporte);
         direccion = (TextView) view.findViewById(R.id.textViewDireccion);
         estado = (TextView) view.findViewById(R.id.textViewEstadoResumenPedido);
-        nombreCliente.setText(tienda.carrito.getUsuarioLogueado());
-        TareaWSRecuperarDireccion tareaRecDir = new TareaWSRecuperarDireccion();
-        tareaRecDir.execute();
-        TareaWSRecuperarLineasPedido tareaLines = new TareaWSRecuperarLineasPedido();
-        tareaLines.execute();
-        TareaWSRecuperarEstado tareaEstado = new TareaWSRecuperarEstado();
-        tareaEstado.execute();
-        TareaWSRecuperarProductosPedido tareaProductos = new TareaWSRecuperarProductosPedido();
-        tareaProductos.execute();
+
+        //Posibles casos:
+        boolean mostrar;
+        //USuario anonimo
+        if (!tienda.carrito.isUserLogedIn()) {
+            //Comprobar que el pedido sea anonimo.
+            if (pedido.getUser() == null) {
+                //Si -> mostrar pedido
+                nombreCliente.setText("Usuario no registrado");
+                mostrar = true;
+            } else {
+                //No -> mostrar error. "Logueate para ver este pedido"
+                Toast.makeText(tienda, "Error al recuperar el pedido, usuario incorrecto o pedido inexistente.", Toast.LENGTH_SHORT).show();
+                tienda.goTo(MainActivity.SEGUIMIENTO);
+                mostrar = false;
+            }
+        }
+        //Usuario registrado
+        else {
+            //Es su pedido?
+            if (pedido.getUser().equals(tienda.carrito.getUsuarioLogueado())) {
+                nombreCliente.setText(tienda.carrito.getUsuarioLogueado());
+                mostrar = true;
+            } else {
+                mostrar = false;
+                Toast.makeText(tienda, R.string.PEDIDO_O_USUARIO_NOT_FOUND, Toast.LENGTH_SHORT).show();
+                tienda.goTo(MainActivity.SEGUIMIENTO);
+            }
+        }
+/**
+ //Usuario registrado
+ //Es su pedido
+ if (pedido.getUser().equals(tienda.carrito.getUsuarioLogueado())) {
+ nombreCliente.setText(tienda.carrito.getUsuarioLogueado());
+ }
+ //Es pedido anonimo
+ else if (tienda.carrito.isUserLogedIn()) {
+ nombreCliente.setText("Usuario no registrado");
+ }
+ //No es su pedido*/
+        if (mostrar) {
+            TareaWSRecuperarDireccion tareaRecDir = new TareaWSRecuperarDireccion();
+            tareaRecDir.execute();
+            TareaWSRecuperarEstado tareaEstado = new TareaWSRecuperarEstado();
+            tareaEstado.execute();
+            TareaWSRecuperarProductosPedido tareaProductos = new TareaWSRecuperarProductosPedido();
+            tareaProductos.execute();
+        }
         return view;
     }
 
@@ -97,15 +134,16 @@ public class FragmentResumenPedido extends Fragment {
         /**
          * Se lanza este método al ejecutar la consulta lo que hacemos es rellenar un objeto JSON
          * con los datos recibidos del servidor
+         *
          * @param params
          * @return
          */
         @Override
         protected Boolean doInBackground(Object... params) {
             try {
-                direccionJSON = readJsonFromUrl(Settings.DIRECCIO_SERVIDOR + Settings.PATH+"direccion/obtener2/" + pedido.getIdDireccion());
+                direccionJSON = readJsonFromUrl(Settings.DIRECCIO_SERVIDOR + Settings.PATH + "direccion/obtener2/" + pedido.getIdDireccion());
             } catch (java.io.FileNotFoundException ex) {
-                Log.e(LOGTAG, "Error al obtener la direccion:"+Settings.DIRECCIO_SERVIDOR + Settings.PATH+"direccion/obtener2/" + pedido.getIdDireccion());
+                Log.e(LOGTAG, "Error al obtener la direccion:" + Settings.DIRECCIO_SERVIDOR + Settings.PATH + "direccion/obtener2/" + pedido.getIdDireccion());
             } catch (java.io.IOException ex) {
                 Log.e(LOGTAG, "Temps d'espera esgotat al iniciar la conexio amb la BBDD externa:");
             } catch (JSONException e) {
@@ -117,6 +155,7 @@ public class FragmentResumenPedido extends Fragment {
         /**
          * Método que le pasamos un objeto Reader y leemos el contenido del mismo hasta que no hayan
          * más datos disponibles para leer, todo esto leido se pasa como String en el return
+         *
          * @param rd
          * @return
          * @throws IOException Error
@@ -132,9 +171,10 @@ public class FragmentResumenPedido extends Fragment {
 
         /**
          * Método en el cual le pasamos una url y nos obtiene todos los datos de esa url
+         *
          * @param url la url para cargar
          * @return objeto JSON
-         * @throws IOException Error
+         * @throws IOException   Error
          * @throws JSONException Error Json
          */
         private JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
@@ -152,15 +192,18 @@ public class FragmentResumenPedido extends Fragment {
          * Después de ejecutar la tarea verifica si la dirección existe y si está logueado, en el
          * caso de que esas condiciones se cumplen obtenemos los datos del JSON y pintamos en el
          * fragment la dirección del cliente
+         *
          * @param result
          */
         @Override
         protected void onPostExecute(Boolean result) {
             if (result) {
                 try {
-                    if (!rellenarObjeto() || tienda.carrito.getUsuarioLogueado() == null || tienda.carrito.getUsuarioLogueado().equals("")) {
-                        Toast.makeText(tienda, "NO EXISTE ESE NUMERO DE PEDIDO", Toast.LENGTH_SHORT).show();
+                    if (tienda.carrito.getUsuarioLogueado() == null || tienda.carrito.getUsuarioLogueado().equals("")) {
+                        rellenarObjeto();
+                        direccion.setText("Pedido de usuario anonimo.\nDirección oculta por seguridad");
                     } else {
+                        rellenarObjeto();
                         direccion.setText(direccionObject.getCalle() + direccionObject.getPiso() + "\n" + direccionObject.getPoblacion() + "\n" + direccionObject.getCodPostal());
                     }
                 } catch (JSONException e) {
@@ -171,6 +214,7 @@ public class FragmentResumenPedido extends Fragment {
 
         /**
          * En el caso de que el objeto JSON tenga datos, los cargamos en un objeto dirección y devolvemos true
+         *
          * @return
          * @throws JSONException
          */
@@ -187,59 +231,6 @@ public class FragmentResumenPedido extends Fragment {
         }
     }
 
-    private class TareaWSRecuperarLineasPedido extends AsyncTask<Object, Void, Boolean> {
-        JSONArray lineasPedidoJSON;
-
-        /**
-         *Cuando lanzamos la tarea se ejecuta este método que lo configuramos de tal forma que
-         * hacemos método GET y leemos los datos que nos llegan de la url
-         * @param params
-         * @return
-         */
-        @Override
-        protected Boolean doInBackground(Object... params) {
-            BufferedReader reader;
-            String url=null;
-            try {
-                url = Settings.DIRECCIO_SERVIDOR + Settings.PATH+ "pedido/obtenerDetalles/" + pedido.getIdPedido();
-                RestManager restManager = new RestManager(url);
-                restManager.setRequestMethod(RestManager.GET);
-                reader = restManager.getBufferedReader();
-                lineasPedidoJSON = new JSONArray(reader.readLine());
-
-            } catch (java.io.FileNotFoundException ex) {
-                Log.e(LOGTAG, "Error al obtener los detalles:" + url);
-            } catch (java.io.IOException ex) {
-                Log.e(LOGTAG, "Temps d'espera esgotat al iniciar la conexio amb la BBDD externa:");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return true;
-        }
-
-        /**
-         * Una vez finalizada la tarea, verificamos si el servidor nos ha devuelto algo, en caso
-         * de que esta respuesta sea sí, hacemos un for para recorrer el array de las lineasPedido y
-         * vamos sumando el precio del producto
-         *
-         * @param result
-         */
-        @Override
-        protected void onPostExecute(Boolean result) {
-            if (result) {
-                if(listaLineasPedido!=null) {
-                    for (LineasPedido linea : listaLineasPedido) {
-                        importeTotal += linea.getPrecio();
-                    }
-                    importe.setText(String.valueOf(importeTotal) + "€");
-                }
-                else{
-                    Log.e(LOGTAG, "Error. ListalineasPedidos null;");
-                }
-            }
-        }
-    }
-
     private class TareaWSRecuperarEstado extends AsyncTask<Object, Void, Boolean> {
         JSONObject estadoJSON;
 
@@ -252,9 +243,9 @@ public class FragmentResumenPedido extends Fragment {
         @Override
         protected Boolean doInBackground(Object... params) {
             try {
-                estadoJSON = readJsonFromUrl(Settings.DIRECCIO_SERVIDOR + Settings.PATH+"obtenerEstado/" + pedido.getIdEstado());
+                estadoJSON = readJsonFromUrl(Settings.DIRECCIO_SERVIDOR + Settings.PATH + "obtenerEstado/" + pedido.getIdEstado());
             } catch (java.io.FileNotFoundException ex) {
-                Log.e(LOGTAG, "Error al obtener el estado: "+Settings.DIRECCIO_SERVIDOR + Settings.PATH+"obtenerEstado/" + pedido.getIdEstado());
+                Log.e(LOGTAG, "Error al obtener el estado: " + Settings.DIRECCIO_SERVIDOR + Settings.PATH + "obtenerEstado/" + pedido.getIdEstado());
             } catch (java.io.IOException ex) {
                 Log.e(LOGTAG, "Temps d'espera esgotat al iniciar la conexio amb la BBDD externa:");
             } catch (JSONException e) {
@@ -265,6 +256,7 @@ public class FragmentResumenPedido extends Fragment {
 
         /**
          * Leemos los datos, obtenidos hasta que no queden más datos y los devolvemos comos String
+         *
          * @param rd
          * @return
          * @throws IOException
@@ -280,6 +272,7 @@ public class FragmentResumenPedido extends Fragment {
 
         /**
          * Tellenamos un objeto JSON con los datos obtenidos por el servidor
+         *
          * @param url
          * @return
          * @throws IOException
@@ -299,13 +292,14 @@ public class FragmentResumenPedido extends Fragment {
         /**
          * Una vez hemos finalizado la tarea verificamos que todo haya ido correctamente y pintamos
          * el estado en el fragment
+         *
          * @param result
          */
         @Override
         protected void onPostExecute(Boolean result) {
             if (result) {
                 try {
-                    if (!rellenarObjeto() || tienda.carrito.getUsuarioLogueado() == null || tienda.carrito.getUsuarioLogueado().equals("")) {
+                    if (!rellenarObjeto()) {
                         Toast.makeText(tienda, "ERROR CON EL ESTADO", Toast.LENGTH_SHORT).show();
                     } else {
                         estado.setText(estadoObjeto.getNomEstado());
@@ -318,6 +312,7 @@ public class FragmentResumenPedido extends Fragment {
 
         /**
          * Verificamos que el objeto JSON no sea null y creamos un objeto Estado con los datos del JSON
+         *
          * @return
          * @throws JSONException
          */
@@ -339,6 +334,7 @@ public class FragmentResumenPedido extends Fragment {
         /**
          * Al ejecutar la tarea se lanza este método, con el obtenemos los datos del servidor y los
          * almacenamos en un objeto JSON
+         *
          * @param params
          * @return
          */
@@ -362,6 +358,7 @@ public class FragmentResumenPedido extends Fragment {
         /**
          * Una vez finalizada la tarea verificamos que haya ido todo correctamente y en el caso de
          * que la respuesta sea sí, cargamos el adaptador en el listview de resumenPedido
+         *
          * @param result
          */
         @Override
@@ -371,18 +368,13 @@ public class FragmentResumenPedido extends Fragment {
                     if (!rellenarArray()) {
                         Toast.makeText(tienda, "Error en la obtencion de datos.", Toast.LENGTH_SHORT).show();
                         tienda.goTo(MainActivity.PROMOCIONES);
-                    }
-                    else if (tienda.carrito.getUsuarioLogueado() == null || tienda.carrito.getUsuarioLogueado().equals("")){
-                        Toast.makeText(tienda, "Undefined Error", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
+                    } else {
                         adapProducto = new AdaptadorProducto(getActivity(), listaProductos);
                         Double totalPedido = 0.0;
                         for (Producto producto : listaProductos) {
                             totalPedido += producto.getPrecio() - (producto.getPrecio() * producto.getOfertaProducto()) / 100;
                         }
-                        TextView precio = (TextView) getActivity().findViewById(R.id.textViewImporte);
-                        precio.setText(String.valueOf(totalPedido));
+                        importe.setText(String.valueOf(totalPedido));
                         listView.setAdapter(adapProducto);
                     }
                 } catch (JSONException e) {
@@ -393,6 +385,7 @@ public class FragmentResumenPedido extends Fragment {
 
         /**
          * Rellenamos el array de listaProductos con tantos productos como tenga el objetoJSON
+         *
          * @return
          * @throws JSONException
          */

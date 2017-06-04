@@ -27,4 +27,5 @@
     <string name="no_direction_Selected">Selecciona una direccion de entrega.</string>
     <string name="empty_Cart">Tu carrito esta vacio.</string>
     <string name="new_direction">Nueva direccion de entrega</string>
+    <string name="PEDIDO_O_USUARIO_NOT_FOUND">Error al recuperar el pedido, usuario incorrecto o pedido inexistente.</string>
 </resources>

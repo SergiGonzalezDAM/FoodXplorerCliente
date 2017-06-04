@@ -20,6 +20,6 @@ public class Settings {
     public static final  String LOGTAG="FoodXplorer Client";
 
 
-    static final int SERVER_READ_TIMEOUT = 1000;
+    static final int SERVER_READ_TIMEOUT = 2500;
     static final int SERVER_CONNECT_TIMEOUT = 2500;
 }

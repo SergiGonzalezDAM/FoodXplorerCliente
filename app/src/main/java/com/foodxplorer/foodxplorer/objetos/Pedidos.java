@@ -6,6 +6,7 @@ public class Pedidos {
     private String fechaPedido;
     private long idDireccion = -3;
     private long idEstado;
+    private String user;
 
     /**
      * Generamos la clase Pedidos con un constructor vacio y otro con los datos necesarios para poder recuperarlos de la base de datos
@@ -51,5 +52,23 @@ public class Pedidos {
 
     public void setIdEstado(long idEstado) {
         this.idEstado = idEstado;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "Pedidos{" +
+                "idPedido=" + idPedido +
+                ", fechaPedido='" + fechaPedido + '\'' +
+                ", idDireccion=" + idDireccion +
+                ", idEstado=" + idEstado +
+                '}';
     }
 }

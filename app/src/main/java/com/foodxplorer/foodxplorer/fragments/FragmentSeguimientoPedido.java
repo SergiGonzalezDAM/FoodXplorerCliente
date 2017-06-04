@@ -35,9 +35,8 @@ public class FragmentSeguimientoPedido extends Fragment implements View.OnClickL
     Button btnBuscarPedidoParaSeguir;
     MainActivity tienda;
     String numPedido;
-    private boolean numeroPedidoEncontrado;
-    private TareaWSRecuperarPedidosSeguimiento tarea;
     Pedidos pedido;
+    private TareaWSRecuperarPedidosSeguimiento tarea;
 
     public FragmentSeguimientoPedido() {
         // Required empty public constructor
@@ -78,8 +77,8 @@ public class FragmentSeguimientoPedido extends Fragment implements View.OnClickL
      * por el rest
      */
     class TareaWSRecuperarPedidosSeguimiento extends AsyncTask<Object, Void, Boolean> {
-        JSONObject pedidoJSON;
         public AsyncResponse delegate = null;
+        JSONObject pedidoJSON;
 
         /**
          * Método que se ejecuta al lanzar la AsyncTask, rellenamos el objeto JSON con los datos de la consulta
@@ -147,22 +146,18 @@ public class FragmentSeguimientoPedido extends Fragment implements View.OnClickL
         protected void onPostExecute(Boolean result) {
             if (result) {
                 try {
-                    if (tienda.carrito.getUsuarioLogueado().equals("")) {
-                        Toast.makeText(tienda, "Logueate para ver pedidos.", Toast.LENGTH_SHORT).show();
-                    } else {
+
                         if (!rellenarObjeto()) {
-                            //TODO en produccion, el mensaje tiene que ser un error generico
-                            Toast.makeText(tienda, "No existe ese numero de pedido", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(tienda, R.string.PEDIDO_O_USUARIO_NOT_FOUND, Toast.LENGTH_SHORT).show();
                         } else {
-                            numeroPedidoEncontrado = true;
-                            Log.d(Settings.LOGTAG, "PostExecuteSeguimiento. Pedido encontrado");
+                            Log.d(Settings.LOGTAG, "PostExecuteSeguimiento. Pedido encontrado" + pedido.toString());
                                 Fragment fragment = new FragmentResumenPedido(tienda, pedido);
                                 tienda.getSupportFragmentManager().beginTransaction()
                                         .replace(R.id.content_frame, fragment)
                                         .commit();
                           }
-                        }
-                    }
+
+                }
                  catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -179,6 +174,9 @@ public class FragmentSeguimientoPedido extends Fragment implements View.OnClickL
             if (pedidoJSON != null) {
                 pedido = new Pedidos(pedidoJSON.getLong("idPedido"), pedidoJSON.getString("fechaSalida"),
                         pedidoJSON.getLong("idDireccion"), pedidoJSON.getLong("idEstado"));
+                if (!pedidoJSON.isNull("correo")) {
+                    pedido.setUser(pedidoJSON.getString("correo"));
+                }
                 estado = true;
                 System.out.println("Encontrado");
             } else {
