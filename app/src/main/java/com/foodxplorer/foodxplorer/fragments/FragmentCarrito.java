@@ -198,24 +198,21 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
         }
     }
 
+    /**
+     * Al finalizar la inserción de un pedido, procesa su pago.
+     *
+     * @param numeroPedido
+     */
     public void pedidoInsertado(int numeroPedido) {
-
-
         pedido.setIdPedido(numeroPedido);
         PayPalPayment payment = new PayPalPayment(new BigDecimal(precioAcumulado), "EUR", "Pago del pedido:" + numeroPedido,
                 PayPalPayment.PAYMENT_INTENT_SALE);
 
         Intent intent = new Intent(tienda, PaymentActivity.class);
-
         // send the same configuration for restart resiliency
         intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, MainActivity.config);
-
         intent.putExtra(PaymentActivity.EXTRA_PAYMENT, payment);
-
         startActivityForResult(intent, 0);
-
-
-
     }
 
     @Override
@@ -237,13 +234,13 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
                     rellenarPantallaDePedido(getView());
 
                 } catch (JSONException e) {
-                    Log.e("paymentExample", "an extremely unlikely failure occurred: ", e);
+                    Log.e(LOGTAG, "an extremely unlikely failure occurred: ", e);
                 }
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
-            Log.i("paymentExample", "The user canceled.");
+            Log.i(LOGTAG, "The user canceled.");
         } else if (resultCode == PaymentActivity.RESULT_EXTRAS_INVALID) {
-            Log.i("paymentExample", "An invalid Payment or PayPalConfiguration was submitted. Please see the docs.");
+            Log.i(LOGTAG, "An invalid Payment or PayPalConfiguration was submitted. Please see the docs.");
         }
     }
 
@@ -287,6 +284,9 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
         return result;
     }
 
+    /**
+     * Obtiene las diferentes direcciones y las carga en el spinner.
+     */
     private class TareaObtenerDirecciones extends AsyncTask<Object, Void, Boolean> {
 
         @Override
@@ -339,6 +339,9 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
         }
     }
 
+    /**
+     * Tarea que se encarga de insertar el pedido y las lineas que lo componen a la BBDD.
+     */
     private class TareaInsertarPedido extends AsyncTask<Object, Void, Integer> {
 
 
@@ -348,7 +351,6 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
             OutputStreamWriter osw;
             BufferedInputStream isr;
             RestManager restManager;
-
             try {
                 String aux = (Settings.DIRECCIO_SERVIDOR + Settings.PATH + "pedido/insertar/");
                 DateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
@@ -386,7 +388,6 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
                         Producto poducto = productos.get(i);
                         lineas.add(new LineasPedido(numeroPedido, poducto.getIdProducto(), cantidades.get(i), poducto.getPrecio(), poducto.getIva()));
                     }
-
                     for (LineasPedido linea : lineas) {
                         RestManager restManager2;
                         String aux2 = (Settings.DIRECCIO_SERVIDOR + Settings.PATH + "lineasPedido/insertar/");
@@ -401,8 +402,6 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
                             return -2;
                         }
                     }
-
-
                 }
             } catch (java.net.ProtocolException ex) {
                 Log.e(Settings.LOGTAG, "Error de protocol: " + ex);
@@ -436,6 +435,14 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
             }
         }
 
+        /**
+         * Trasnforma un objeto Pedido en un String Json  util para nuestro rest
+         *
+         * @param pedido
+         * @return
+         * @throws JSONException
+         * @throws UnsupportedEncodingException
+         */
         private String getStringJSON(Pedidos pedido) throws JSONException, UnsupportedEncodingException {
             JSONObject dato = new JSONObject();
             dato.put("idDireccion", pedido.getIdDireccion());
@@ -448,6 +455,14 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
             return String.valueOf(dato);
         }
 
+        /**
+         * Trasnforma un objeto LineaPedido en un String Json  util para nuestro rest
+         *
+         * @param lineas
+         * @return
+         * @throws JSONException
+         * @throws UnsupportedEncodingException
+         */
         private String getStringJSON(LineasPedido lineas) throws JSONException, UnsupportedEncodingException {
             JSONObject dato = new JSONObject();
             dato.put("idPedido", lineas.getIdPedido());
@@ -461,6 +476,9 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
 
     }
 
+    /**
+     * Inserta una direccion a la BBDD
+     */
     private class TareaInsertarDireccion extends AsyncTask<Object, Void, Boolean> {
 
 
@@ -469,7 +487,6 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
             boolean result = true;
 
             OutputStreamWriter osw;
-            BufferedInputStream isr;
             RestManager restManager;
             try {
                 String aux = (Settings.DIRECCIO_SERVIDOR + Settings.PATH + "direccion/insertar/");
@@ -485,41 +502,34 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
             } catch (java.net.ProtocolException ex) {
                 Log.e(Settings.LOGTAG, "Error de protocol: " + ex);
                 result = false;
-            } catch (java.io.FileNotFoundException |
-                    java.net.MalformedURLException ex)
-
-            {
+            } catch (java.io.FileNotFoundException | java.net.MalformedURLException ex) {
                 Log.e(Settings.LOGTAG, "Error de ruta d'acces: " + ex);
                 result = false;
-            } catch (
-                    java.net.SocketTimeoutException ex)
-
-            {
+            } catch (java.net.SocketTimeoutException ex) {
                 Log.e(Settings.LOGTAG, "Temps d'espera esgotat al iniciar la conexio amb la BBDD extena: " + ex);
                 result = false;
-            } catch (
-                    java.io.IOException ex)
-
-            {
+            } catch (java.io.IOException ex) {
                 Log.e(Settings.LOGTAG, "Undefined error: " + ex);
                 result = false;
-            } catch (
-                    JSONException e)
-
-            {
+            } catch (JSONException e) {
                 Log.e(Settings.LOGTAG, "Error de manipulacio de l'objecte JSON: " + Arrays.toString(e.getStackTrace()));
             }
-
             return result;
         }
 
+        /**
+         * Trasnforma un objeto Direccion en un String Json  util para nuestro rest
+         * @param direccion
+         * @return
+         * @throws JSONException
+         * @throws UnsupportedEncodingException
+         */
         private String getStringJSON(Direccion direccion) throws JSONException, UnsupportedEncodingException {
             JSONObject dato = new JSONObject();
             dato.put("calle", direccion.getCalle());
             dato.put("piso", direccion.getPiso());
             dato.put("poblacion", direccion.getPoblacion());
             dato.put("codPostal", direccion.getCodPostal());
-            //TODO coger el usuario adecuado. Puede ser que el usuario sea null (pedido anonimo)
             if (tienda.carrito.isUserLogedIn()) {
                 dato.put("idUsuario", tienda.carrito.getIdUsuarioLogueado());
             }
@@ -535,4 +545,4 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
             }
         }
     }
-    }
+}
