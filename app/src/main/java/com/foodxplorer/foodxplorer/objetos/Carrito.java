@@ -20,6 +20,7 @@ public class Carrito {
     private String usuarioLogueado = "";
     private List<Producto> productosEnCarrito;
     private List<Integer> cantidades;
+    private int idUsuarioLogueado = -1;
 
     public Carrito() {
         productosEnCarrito = new ArrayList<>();
@@ -116,6 +117,19 @@ public class Carrito {
         }
 
         return cantidad;
+    }
+
+    public int getIdUsuarioLogueado() {
+        return idUsuarioLogueado;
+    }
+
+    public void setIdUsuarioLogueado(int idUsuarioLogueado) {
+        this.idUsuarioLogueado = idUsuarioLogueado;
+    }
+
+    public boolean isUserLogedIn() {
+        System.out.println("ID usuario logueado:" + getIdUsuarioLogueado());
+        return (getIdUsuarioLogueado() != -1);
     }
 }
 

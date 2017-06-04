@@ -1,5 +1,7 @@
 package com.foodxplorer.foodxplorer.fragments;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -26,6 +28,10 @@ import com.foodxplorer.foodxplorer.objetos.Direccion;
 import com.foodxplorer.foodxplorer.objetos.LineasPedido;
 import com.foodxplorer.foodxplorer.objetos.Pedidos;
 import com.foodxplorer.foodxplorer.objetos.Producto;
+import com.paypal.android.sdk.payments.PayPalPayment;
+import com.paypal.android.sdk.payments.PayPalService;
+import com.paypal.android.sdk.payments.PaymentActivity;
+import com.paypal.android.sdk.payments.PaymentConfirmation;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,6 +41,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -51,6 +58,7 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
     JSONArray jsonarrayDireccions = new JSONArray();
     Spinner spinnerDirecciones;
     Pedidos pedido = new Pedidos();
+    double precioAcumulado;
     private ArrayList<String> direccionsClient = new ArrayList<>();
 
 
@@ -86,7 +94,7 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
         if (productosenCarrito.size() == 0) {
             lista.add(getString(R.string.no_products_in_cart));
         }
-        double precioAcumulado = 0;
+        precioAcumulado = 0;
         for (int i = 0; i < productosenCarrito.size(); i++) {
             double precioDescontado = (productosenCarrito.get(i).getPrecio() - (productosenCarrito.get(i).getPrecio() * productosenCarrito.get(i).getOfertaProducto()) / 100) * cantidadesenCarrito.get(i);
 
@@ -176,11 +184,52 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
     }
 
     public void pedidoInsertado(int numeroPedido) {
-        Toast.makeText(tienda, "Pedido " + numeroPedido + " realizado.", Toast.LENGTH_LONG).show();
-        Log.d(Settings.LOGTAG, "Pedido " + numeroPedido + " realizado.");
-        this.tienda.carrito.clearCarrito();
-        this.tienda.actualizarIconoCarrito();
-        rellenarPantallaDePedido(getView());
+
+
+        pedido.setIdPedido(numeroPedido);
+        PayPalPayment payment = new PayPalPayment(new BigDecimal(precioAcumulado), "EUR", "Pago del pedido:" + numeroPedido,
+                PayPalPayment.PAYMENT_INTENT_SALE);
+
+        Intent intent = new Intent(tienda, PaymentActivity.class);
+
+        // send the same configuration for restart resiliency
+        intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, MainActivity.config);
+
+        intent.putExtra(PaymentActivity.EXTRA_PAYMENT, payment);
+
+        startActivityForResult(intent, 0);
+
+
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            PaymentConfirmation confirm = data.getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
+            if (confirm != null) {
+                try {
+                    Log.i("paymentExample", confirm.toJSONObject().toString(4));
+
+                    // TODO: send 'confirm' to your server for verification.
+                    // see https://developer.paypal.com/webapps/developer/docs/integration/mobile/verify-mobile-payment/
+                    // for more details.
+
+                    Toast.makeText(tienda, "Pedido " + pedido.getIdPedido() + " realizado.", Toast.LENGTH_LONG).show();
+                    Log.d(Settings.LOGTAG, "Pedido " + pedido.getIdPedido() + " realizado.");
+                    this.tienda.carrito.clearCarrito();
+                    this.tienda.actualizarIconoCarrito();
+                    rellenarPantallaDePedido(getView());
+
+                } catch (JSONException e) {
+                    Log.e("paymentExample", "an extremely unlikely failure occurred: ", e);
+                }
+            }
+        } else if (resultCode == Activity.RESULT_CANCELED) {
+            Log.i("paymentExample", "The user canceled.");
+        } else if (resultCode == PaymentActivity.RESULT_EXTRAS_INVALID) {
+            Log.i("paymentExample", "An invalid Payment or PayPalConfiguration was submitted. Please see the docs.");
+        }
     }
 
 
@@ -284,6 +333,7 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
             OutputStreamWriter osw;
             BufferedInputStream isr;
             RestManager restManager;
+
             try {
                 String aux = (Settings.DIRECCIO_SERVIDOR + Settings.PATH + "pedido/insertar/");
                 DateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
@@ -455,7 +505,9 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
             dato.put("poblacion", direccion.getPoblacion());
             dato.put("codPostal", direccion.getCodPostal());
             //TODO coger el usuario adecuado. Puede ser que el usuario sea null (pedido anonimo)
-            dato.put("idUsuario", "1");
+            if (tienda.carrito.isUserLogedIn()) {
+                dato.put("idUsuario", tienda.carrito.getIdUsuarioLogueado());
+            }
             Log.d(LOGTAG, "La direccion a insertar es:" + dato.toString());
             return String.valueOf(dato);
         }

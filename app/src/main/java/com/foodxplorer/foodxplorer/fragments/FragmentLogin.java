@@ -49,9 +49,10 @@ public class FragmentLogin extends Fragment implements View.OnClickListener, Asy
      */
 
     @Override
-    public void processFinish(boolean response) {
-        if (response) {
+    public void processFinish(int response) {
+        if (response != -1) {
             Log.d(Settings.LOGTAG, "Login ok");
+            this.tienda.carrito.setIdUsuarioLogueado(response);
             this.tienda.login(etUsuario.getText().toString());
             Toast.makeText(tienda, "Hola de nuevo, "+ etUsuario.getText(), Toast.LENGTH_LONG).show();
             this.tienda.goTo(MainActivity.PROMOCIONES);
@@ -111,7 +112,7 @@ public class FragmentLogin extends Fragment implements View.OnClickListener, Asy
     }
 }
 
-class TareaWScomprobarLogin extends AsyncTask<Object, Void, Boolean> {
+class TareaWScomprobarLogin extends AsyncTask<Object, Void, Integer> {
 
     AsyncResponse delegate = null;
 
@@ -121,8 +122,8 @@ class TareaWScomprobarLogin extends AsyncTask<Object, Void, Boolean> {
      * @return
      */
     @Override
-    protected Boolean doInBackground(Object... params) {
-        boolean result = true;
+    protected Integer doInBackground(Object... params) {
+        Integer result = -1;
         InputStreamReader osw;
         RestManager restManager;
         try {
@@ -139,30 +140,33 @@ class TareaWScomprobarLogin extends AsyncTask<Object, Void, Boolean> {
                 data = osw.read();
                 res = res + current;
             }
-            if (!res.equals("true")) {
+            if (res.equals("-1")) {
                 Log.e(Settings.LOGTAG, "Error de login para user: " + user.getUsername());
-                result = false;
+                result = -1;
+            } else {
+                System.out.println("Usuario con id:" + res + "logueado");
+                result = Integer.valueOf(res);
             }
             osw.close();
             restManager.disconnect();
         } catch (java.net.ProtocolException ex) {
             Log.e(Settings.LOGTAG, "Error de protocol: " + ex);
-            result = false;
+            result = -1;
         } catch (java.io.FileNotFoundException | java.net.MalformedURLException ex) {
             Log.e(Settings.LOGTAG, "Error de ruta d'acces: " + ex);
-            result = false;
+            result = -1;
         } catch (java.net.SocketTimeoutException ex) {
             Log.e(Settings.LOGTAG, "Temps d'espera esgotat al iniciar la conexio amb la BBDD extena: " + ex);
-            result = false;
+            result = -1;
         } catch (java.io.IOException ex) {
             Log.e(Settings.LOGTAG, "Undefined error: " + ex);
-            result = false;
+            result = -1;
         }
         return result;
     }
 
     @Override
-    protected void onPostExecute(Boolean result) {
+    protected void onPostExecute(Integer result) {
         delegate.processFinish(result);
     }
 }

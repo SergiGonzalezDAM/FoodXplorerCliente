@@ -1,6 +1,7 @@
 package com.foodxplorer.foodxplorer;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -27,6 +28,8 @@ import com.foodxplorer.foodxplorer.fragments.FragmentSeguimientoPedido;
 import com.foodxplorer.foodxplorer.helpers.Settings;
 import com.foodxplorer.foodxplorer.objetos.Carrito;
 import com.foodxplorer.foodxplorer.objetos.Producto;
+import com.paypal.android.sdk.payments.PayPalConfiguration;
+import com.paypal.android.sdk.payments.PayPalService;
 
 
 public class MainActivity extends AppCompatActivity implements FragmentPromociones.OnAddToCart, FragmentProductos.OnAddToCart{
@@ -44,15 +47,39 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
     public static final int  LOGIN_ID = 9865556;
     public static final int LOGOUT_ID = 9568632;
     public static final int MIS_PEDIDOS_ID = 965889;
+    /**
+     * Objeto de configuracion de paypal
+     */
+    public static PayPalConfiguration config = new PayPalConfiguration()
+
+            // Start with mock environment.  When ready, switch to sandbox (ENVIRONMENT_SANDBOX)
+            // or live (ENVIRONMENT_PRODUCTION)
+            .environment(PayPalConfiguration.ENVIRONMENT_NO_NETWORK)
+            .clientId("<YOUR_CLIENT_ID>")
+            .languageOrLocale("es");
     public Carrito carrito;
     private DrawerLayout drawerLayout;
     private NavigationView navView;
+
+    @Override
+    public void onDestroy() {
+        stopService(new Intent(this, PayPalService.class));
+        super.onDestroy();
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+
+        //Paypal Intent. Requerido por la API de Paypal
+        Intent intent = new Intent(this, PayPalService.class);
+        intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
+        startService(intent);
+
+
         Toolbar appbar = (Toolbar) findViewById(R.id.appbar);
         setSupportActionBar(appbar);
 

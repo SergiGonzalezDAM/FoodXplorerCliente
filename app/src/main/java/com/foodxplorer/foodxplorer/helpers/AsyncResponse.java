@@ -12,5 +12,5 @@ public interface AsyncResponse {
      * Interface que utilizaremos para saber si un proceso a finalizado o no
      * @param response
      */
-    void processFinish(boolean response);
+    void processFinish(int response);
 }
