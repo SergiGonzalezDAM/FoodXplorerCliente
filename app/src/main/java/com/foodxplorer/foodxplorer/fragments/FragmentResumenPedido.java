@@ -103,17 +103,6 @@ public class FragmentResumenPedido extends Fragment {
                 tienda.goTo(MainActivity.SEGUIMIENTO);
             }
         }
-/**
- //Usuario registrado
- //Es su pedido
- if (pedido.getUser().equals(tienda.carrito.getUsuarioLogueado())) {
- nombreCliente.setText(tienda.carrito.getUsuarioLogueado());
- }
- //Es pedido anonimo
- else if (tienda.carrito.isUserLogedIn()) {
- nombreCliente.setText("Usuario no registrado");
- }
- //No es su pedido*/
         if (mostrar) {
             TareaWSRecuperarDireccion tareaRecDir = new TareaWSRecuperarDireccion();
             tareaRecDir.execute();

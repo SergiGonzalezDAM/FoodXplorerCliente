@@ -253,12 +253,13 @@ public class MainActivity extends AppCompatActivity implements FragmentPromocion
 
     private void logout(){
         this.carrito.setUsuarioLogueado("");
+        this.carrito.setIdUsuarioLogueado(-1);
         navView.getMenu().removeItem(LOGOUT_ID);
         navView.getMenu().removeItem(MIS_PEDIDOS_ID);
         TextView txtNavViewUser = (TextView) navView.findViewById(R.id.navViewUser);
         txtNavViewUser.setText(R.string.unregistered_User);
-        this.goTo(PROMOCIONES);
         invalidateOptionsMenu();
+        this.goTo(PROMOCIONES);
     }
 
     public void login(String login){

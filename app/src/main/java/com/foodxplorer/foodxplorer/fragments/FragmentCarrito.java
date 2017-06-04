@@ -77,8 +77,11 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
         View view = inflater.inflate(R.layout.fragment_confirmacion_pedido, container, false);
         spinnerDirecciones = (Spinner) view.findViewById(R.id.spinnerDireccionesConfirmarPedido);
         spinnerDirecciones.setOnItemSelectedListener(this);
+        //Al cargar el view, obtenemos las diferentes direcciones del usuario logueado.
         TareaObtenerDirecciones obtenerDirecciones = new TareaObtenerDirecciones();
         obtenerDirecciones.execute();
+
+        //Rellenamos los datos del pedido, usando como origen el carrito.
         rellenarPantallaDePedido(view);
 
         Button boto = (Button) view.findViewById(R.id.botonPagar);
@@ -87,6 +90,11 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
         return view;
     }
 
+    /**
+     * A partir del carrito, rellena el listview que muestra al usuario el contenido del carrito
+     *
+     * @param view el view en el que se realizara la insercion de datos
+     */
     private void rellenarPantallaDePedido(View view) {
         List<String> lista = new ArrayList();
         ArrayList<Producto> productosenCarrito = (ArrayList) tienda.carrito.getProductosEnCarrito();
@@ -95,18 +103,20 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
             lista.add(getString(R.string.no_products_in_cart));
         }
         precioAcumulado = 0;
+        //Calculamos el precio acumulado del pedido, para poder actulizar el total del mismo
         for (int i = 0; i < productosenCarrito.size(); i++) {
             double precioDescontado = (productosenCarrito.get(i).getPrecio() - (productosenCarrito.get(i).getPrecio() * productosenCarrito.get(i).getOfertaProducto()) / 100) * cantidadesenCarrito.get(i);
 
             String aux = cantidadesenCarrito.get(i) + "X " + productosenCarrito.get(i).getNombre() + "\n" + String.format("%.2f", precioDescontado) + "€";
             lista.add(aux);
-
-
-            //lista.add(productosenCarrito.get(i).getNombre() + getString(R.string.Cantidad) + cantidadesenCarrito.get(i) + getString(R.string.Importe) + String.format("%.2f", productosenCarrito.get(i).getPrecio() * cantidadesenCarrito.get(i)));
             precioAcumulado = precioAcumulado + precioDescontado;
         }
+
+        //Finalemnte mostramos el precio del pedido total
         TextView subTotal = (TextView) view.findViewById(R.id.txtLabelImporteTotal);
         subTotal.setText(String.format("%.2f", precioAcumulado) + "€");
+
+        //Cargamos el list View con los diferentes prodcutos que conforman el pedido del carrito
         ListView listViewContenidoPedido = (ListView) view.findViewById(R.id.listViewConfPedido);
         ArrayAdapter<String> adaptador = new ArrayAdapter(view.getContext(), android.R.layout.simple_list_item_1, lista);
         listViewContenidoPedido.setAdapter(adaptador);
@@ -118,11 +128,16 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
         System.out.println("carregat el view");
     }
 
+    /**
+     * Carga el Spinner que muestra las diferentes direccions del usuario.
+     */
     public void carregarSpinnerDireccions() {
         try {
+            //Si hay direcciones guardadas, solicitamos al usuario seleccionar una de ellas.
             if (direccionsClient.size() > 0) {
                 direccionsClient.add(0, "Selecciona la direccion de entrega");
             }
+            // La ultima opcion siempre sera añadir una opcion nueva
             direccionsClient.add("Nueva direccion de entrega");
             Spinner mySpinner = (Spinner) getView().findViewById(R.id.spinnerDireccionesConfirmarPedido);
             mySpinner.setAdapter(new ArrayAdapter<>(getView().getContext(),
@@ -131,11 +146,11 @@ public class FragmentCarrito extends Fragment implements AdapterView.OnClickList
         } catch (IndexOutOfBoundsException ex) {
             Log.e(Settings.LOGTAG, "Unexpected error while loading");
         }
-        //Boolea de control per determinar si s'ha rebut totes les dades extenes
     }
 
     @Override
     public void onClick(View view) {
+        //Si el carrito no esta vacio
         if (this.tienda.carrito.getProductosEnCarrito().size() > 0) {
             int aux;
             try {

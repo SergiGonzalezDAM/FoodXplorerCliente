@@ -159,6 +159,9 @@ public class FragmentPedidos extends Fragment implements AdapterView.OnItemClick
                     JSONObject jsonobject = listadoPedidosJSON.getJSONObject(i);
                     Pedidos pedido = new Pedidos(jsonobject.getLong("idPedido"), jsonobject.getString("fechaSalida"),
                             jsonobject.getLong("idDireccion"), jsonobject.getLong("idEstado"));
+                    if (!jsonobject.isNull("correo")) {
+                        pedido.setUser(jsonobject.getString("correo"));
+                    }
                     listaPedidos.add(pedido);
                 }
                 estado = true;
